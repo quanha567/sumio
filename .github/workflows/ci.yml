@@ -98,12 +98,17 @@ jobs:
           name: sumio-fe-dist
           path: sumio-fe/dist/
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.2"
+
       - name: Ensure Cloudflare Pages project exists
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          npx wrangler pages project create sumio-dev --production-branch main || true
+          bun x wrangler pages project create sumio-dev --production-branch main || true
 
       - name: Deploy Preview to Cloudflare Pages
         id: deploy
@@ -111,7 +116,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          OUTPUT=$(npx wrangler pages deploy dist --project-name=sumio-dev --branch="${{ github.head_ref }}" --commit-dirty=true)
+          OUTPUT=$(bun x wrangler pages deploy dist --project-name=sumio-dev --branch="${{ github.head_ref }}" --commit-dirty=true)
           echo "$OUTPUT"
           PREVIEW_URL=$(echo "$OUTPUT" | grep -Eo 'https://[a-zA-Z0-9.-]+\.sumio-dev\.pages\.dev' | head -n 1)
           if [ -z "$PREVIEW_URL" ]; then
