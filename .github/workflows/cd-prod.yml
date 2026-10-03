@@ -1,0 +1,76 @@
+name: CD Production
+
+on:
+  push:
+    branches: [production]
+    paths:
+      - 'sumio-fe/**'
+      - '.github/workflows/cd-prod.yml'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: cd-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy-prod:
+    name: Deploy to Production (sumio) & Create Release
+    runs-on: ubuntu-24.04
+    environment:
+      name: production
+      url: https://sumio.pages.dev
+    permissions:
+      contents: write
+      deployments: write
+    defaults:
+      run:
+        working-directory: sumio-fe
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version: "24"
+          cache: true
+
+      - name: Install dependencies
+        run: vp install
+
+      - name: Build Project for Production
+        run: vp build
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.2"
+
+      - name: Ensure Cloudflare Pages project exists
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          bun x wrangler pages project create sumio --production-branch main || true
+
+      - name: Deploy to Cloudflare Pages (Production)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          bun x wrangler pages deploy dist --project-name=sumio --branch=main --commit-dirty=true
+
+      - name: Generate Changelog & Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RELEASE_TAG="v$(date +'%Y.%m.%d-%H%M')"
+          gh release create "$RELEASE_TAG" \
+            --target production \
+            --generate-notes \
+            --title "Production Release $RELEASE_TAG"

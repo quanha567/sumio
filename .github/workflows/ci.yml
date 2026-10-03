@@ -2,12 +2,12 @@ name: CI & PR Preview
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, production]
     paths:
       - 'sumio-fe/**'
       - '.github/workflows/ci.yml'
   pull_request:
-    branches: [main, master]
+    branches: [main, master, production]
     paths:
       - 'sumio-fe/**'
       - '.github/workflows/ci.yml'

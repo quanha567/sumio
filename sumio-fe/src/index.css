@@ -1,11 +1,255 @@
 @import "tailwindcss";
+@import "@heroui/styles";
 
-@layer base {
-  :root {
-    color-scheme: light dark;
-  }
+/*
+ * HeroUI Theme Customization
+ * Summer Finance Theme
+ *
+ * Visual direction:
+ * Ocean + Sunshine + Tropical Green + Coral
+ *
+ * Primary: Teal
+ * Background: Soft Sky
+ * Surface: Warm White
+ * Success: Tropical Green
+ * Danger: Coral
+ * Warning: Sunshine
+ *
+ * @see https://heroui.com/docs/react/getting-started/theming
+ */
 
-  body {
-    @apply m-0 min-h-screen bg-slate-950 font-sans text-slate-100 antialiased;
-  }
+:root,
+.light,
+.default,
+[data-theme="light"],
+[data-theme="default"] {
+  /* ─────────────────────────────────────────────
+   * Theme Colors (Light Mode)
+   * ───────────────────────────────────────────── */
+
+  /* Summer Teal — primary brand / CTA */
+  --accent: oklch(61.5% 0.125 170);
+  --accent-foreground: oklch(99% 0.005 170);
+
+  /* Soft Summer Sky */
+  --background: oklch(97.5% 0.018 205);
+
+  /* Soft Aqua Border */
+  --border: oklch(89.5% 0.025 190);
+
+  /* Summer Coral — expenses / destructive */
+  --danger: oklch(69% 0.175 25);
+  --danger-foreground: oklch(99% 0.005 25);
+
+  /* Neutral */
+  --default: oklch(94.5% 0.018 190);
+  --default-foreground: oklch(25% 0.045 185);
+
+  /* ─────────────────────────────────────────────
+   * Fields
+   * ───────────────────────────────────────────── */
+
+  --field-background: oklch(99.5% 0.008 90);
+  --field-border: transparent;
+
+  --field-foreground: oklch(25% 0.045 185);
+  --field-placeholder: oklch(58% 0.025 190);
+
+  /* Focus uses primary brand color */
+  --focus: oklch(61.5% 0.125 170);
+
+  /* ─────────────────────────────────────────────
+   * Typography
+   * ───────────────────────────────────────────── */
+
+  /* Deep teal instead of pure black */
+  --foreground: oklch(25% 0.045 185);
+  --muted: oklch(58% 0.025 190);
+
+  /* ─────────────────────────────────────────────
+   * Overlay
+   * ───────────────────────────────────────────── */
+
+  --overlay: oklch(99.5% 0.008 90);
+  --overlay-foreground: oklch(25% 0.045 185);
+
+  /* ─────────────────────────────────────────────
+   * Scrollbar
+   * ───────────────────────────────────────────── */
+
+  --scrollbar: oklch(82% 0.035 190);
+
+  /* ─────────────────────────────────────────────
+   * Segments
+   * ───────────────────────────────────────────── */
+
+  --segment: oklch(99% 0.008 190);
+  --segment-foreground: oklch(25% 0.045 185);
+
+  /* ─────────────────────────────────────────────
+   * Separators
+   * ───────────────────────────────────────────── */
+
+  --separator: oklch(92% 0.018 190);
+
+  /* ─────────────────────────────────────────────
+   * Semantic Colors
+   * ───────────────────────────────────────────── */
+
+  /* Tropical Green — income / positive */
+  --success: oklch(66% 0.145 153);
+  --success-foreground: oklch(99% 0.005 153);
+
+  /* ─────────────────────────────────────────────
+   * Surfaces
+   * ───────────────────────────────────────────── */
+
+  /* Warm Cloud White */
+  --surface: oklch(99.5% 0.008 90);
+  --surface-foreground: oklch(25% 0.045 185);
+
+  /* Soft Aqua */
+  --surface-secondary: oklch(96% 0.022 190);
+  --surface-secondary-foreground: oklch(25% 0.045 185);
+
+  /* Slightly stronger Summer Aqua */
+  --surface-tertiary: oklch(93.5% 0.032 190);
+  --surface-tertiary-foreground: oklch(27% 0.045 185);
+
+  /* ─────────────────────────────────────────────
+   * Sunshine Yellow — savings / attention
+   * ───────────────────────────────────────────── */
+
+  --warning: oklch(82% 0.145 82);
+  --warning-foreground: oklch(28% 0.045 82);
+
+  /* ─────────────────────────────────────────────
+   * Border Radius
+   * ───────────────────────────────────────────── */
+
+  --radius: 0.625rem;
+  --field-radius: 0.625rem;
+
+  /* ─────────────────────────────────────────────
+   * Font Family
+   * ───────────────────────────────────────────── */
+
+  --font-sans: var(--font-inter);
+}
+
+/* ═══════════════════════════════════════════════
+ * DARK MODE
+ * ═══════════════════════════════════════════════ */
+
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* ─────────────────────────────────────────────
+   * Theme Colors (Dark Mode)
+   * ───────────────────────────────────────────── */
+
+  /* Slightly brighter Teal for dark surfaces */
+  --accent: oklch(68% 0.125 170);
+  --accent-foreground: oklch(17% 0.035 170);
+
+  /* Deep Ocean */
+  --background: oklch(14.5% 0.025 190);
+
+  /* Aqua border */
+  --border: oklch(28% 0.035 190);
+
+  /* Summer Coral */
+  --danger: oklch(68% 0.165 25);
+  --danger-foreground: oklch(99% 0.005 25);
+
+  /* Neutral */
+  --default: oklch(25% 0.035 190);
+  --default-foreground: oklch(94% 0.015 190);
+
+  /* ─────────────────────────────────────────────
+   * Fields
+   * ───────────────────────────────────────────── */
+
+  --field-background: oklch(20% 0.03 190);
+  --field-border: transparent;
+
+  --field-foreground: oklch(94% 0.015 190);
+  --field-placeholder: oklch(68% 0.025 190);
+
+  --focus: oklch(68% 0.125 170);
+
+  /* ─────────────────────────────────────────────
+   * Typography
+   * ───────────────────────────────────────────── */
+
+  --foreground: oklch(94% 0.015 190);
+  --muted: oklch(68% 0.025 190);
+
+  /* ─────────────────────────────────────────────
+   * Overlay
+   * ───────────────────────────────────────────── */
+
+  --overlay: oklch(20% 0.03 190);
+  --overlay-foreground: oklch(94% 0.015 190);
+
+  /* ─────────────────────────────────────────────
+   * Scrollbar
+   * ───────────────────────────────────────────── */
+
+  --scrollbar: oklch(40% 0.035 190);
+
+  /* ─────────────────────────────────────────────
+   * Segments
+   * ───────────────────────────────────────────── */
+
+  --segment: oklch(23% 0.035 190);
+  --segment-foreground: oklch(94% 0.015 190);
+
+  /* ─────────────────────────────────────────────
+   * Separators
+   * ───────────────────────────────────────────── */
+
+  --separator: oklch(26% 0.035 190);
+
+  /* ─────────────────────────────────────────────
+   * Semantic Colors
+   * ───────────────────────────────────────────── */
+
+  /* Tropical Green */
+  --success: oklch(68% 0.14 153);
+  --success-foreground: oklch(17% 0.035 153);
+
+  /* Sunshine Yellow */
+  --warning: oklch(82% 0.135 82);
+  --warning-foreground: oklch(20% 0.035 82);
+
+  /* ─────────────────────────────────────────────
+   * Surfaces
+   * ───────────────────────────────────────────── */
+
+  /* Deep Ocean Surface */
+  --surface: oklch(19% 0.028 190);
+  --surface-foreground: oklch(94% 0.015 190);
+
+  /* Secondary Ocean Surface */
+  --surface-secondary: oklch(22.5% 0.035 190);
+  --surface-secondary-foreground: oklch(93% 0.015 190);
+
+  /* Tertiary Ocean Surface */
+  --surface-tertiary: oklch(26% 0.04 190);
+  --surface-tertiary-foreground: oklch(92% 0.015 190);
+
+  /* ─────────────────────────────────────────────
+   * Border Radius
+   * ───────────────────────────────────────────── */
+
+  --radius: 0.625rem;
+  --field-radius: 0.625rem;
+
+  /* ─────────────────────────────────────────────
+   * Font Family
+   * ───────────────────────────────────────────── */
+
+  --font-sans: var(--font-inter);
 }

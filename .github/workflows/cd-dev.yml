@@ -1,0 +1,104 @@
+name: CD Dev & Promote
+
+on:
+  workflow_run:
+    workflows: ["CI & PR Preview"]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: cd-dev-main
+  cancel-in-progress: false
+
+jobs:
+  deploy-dev:
+    name: Deploy to Dev (sumio-dev) & Open Promotion PR
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    environment:
+      name: development
+      url: https://sumio-dev.pages.dev
+    permissions:
+      contents: write
+      pull-requests: write
+      deployments: write
+    defaults:
+      run:
+        working-directory: sumio-fe
+
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version: "24"
+          cache: true
+
+      - name: Install dependencies
+        run: vp install
+
+      - name: Build Project for Dev
+        run: vp build
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.2"
+
+      - name: Ensure Cloudflare Pages project exists
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          bun x wrangler pages project create sumio-dev --production-branch main || true
+
+      - name: Deploy to Cloudflare Pages (Dev)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          bun x wrangler pages deploy dist --project-name=sumio-dev --branch=main --commit-dirty=true
+
+      - name: Create or Update Promotion PR to Production
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const { data: openPRs } = await github.rest.pulls.list({
+              owner,
+              repo,
+              head: `${owner}:main`,
+              base: 'production',
+              state: 'open',
+            });
+
+            if (openPRs.length > 0) {
+              console.log(`Promotion PR already exists: ${openPRs[0].html_url}`);
+            } else {
+              try {
+                const { data: newPR } = await github.rest.pulls.create({
+                  owner,
+                  repo,
+                  title: '🚀 Release: Promote `main` to `production`',
+                  head: 'main',
+                  base: 'production',
+                  body: `## 🚀 Production Release Promotion\n\nThis PR was automatically created after the latest changes on \`main\` were verified and deployed to **Dev** (\`sumio-dev\`).\n\n### 🔍 Verification\n- Dev URL: https://sumio-dev.pages.dev\n\nMerging this PR into \`production\` will automatically deploy to **Production** (\`sumio\`) and generate a new GitHub Release with changelog notes.`,
+                });
+                console.log(`Created promotion PR: ${newPR.html_url}`);
+              } catch (error) {
+                if (error.message && error.message.includes('No commits between')) {
+                  console.log('No new commits to promote from main to production.');
+                } else {
+                  throw error;
+                }
+              }
+            }
