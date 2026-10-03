@@ -43,101 +43,104 @@ const categories: SpendingCategory[] = [
   { name: "Others", percentage: 10, amount: "$ 174.00", color: "var(--muted)" },
 ];
 
-export function SpendingOverviewChart() {
-  const radius = 64;
-  const strokeWidth = 24;
-  const circumference = 2 * Math.PI * radius;
+const radius = 64;
+const strokeWidth = 24;
+const circumference = 2 * Math.PI * radius;
 
-  let cumulativePercent = 0;
+function computeDonutSegments() {
+  let offset = 0;
+  return categories.map((cat) => {
+    const currentOffset = offset;
+    offset += cat.percentage;
+    return {
+      name: cat.name,
+      color: cat.color,
+      strokeDasharray: `${(cat.percentage / 100) * circumference} ${circumference}`,
+      strokeDashoffset: -((currentOffset / 100) * circumference),
+    };
+  });
+}
 
+const donutSegments = computeDonutSegments();
+
+function SpendingHeader() {
   return (
-    <Card className="flex flex-col justify-between p-5">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h2 className="text-foreground text-base font-bold">
-            Spending Overview
-          </h2>
-          <p className="text-muted text-xs">Where your money goes this month</p>
-        </div>
-        <button
-          type="button"
-          className="border-border bg-surface-secondary text-foreground hover:bg-surface flex cursor-pointer items-center gap-1 rounded-xl border px-2.5 py-1 text-xs font-medium transition-colors"
-        >
-          <span>This month</span>
-          <ChevronDown className="text-muted h-3.5 w-3.5" />
-        </button>
+    <div className="flex items-start justify-between">
+      <div>
+        <h2 className="text-foreground text-base font-bold">Spending Overview</h2>
+        <p className="text-muted text-xs">Where your money goes this month</p>
       </div>
+      <button
+        type="button"
+        className="border-border bg-surface-secondary text-foreground hover:bg-surface flex cursor-pointer items-center gap-1 rounded-xl border px-2.5 py-1 text-xs font-medium transition-colors"
+      >
+        <span>This month</span>
+        <ChevronDown className="text-muted h-3.5 w-3.5" />
+      </button>
+    </div>
+  );
+}
 
-      {/* Content: Donut + Legend */}
-      <div className="mt-4 flex flex-col items-center gap-6 sm:flex-row">
-        {/* Donut Chart */}
-        <div className="relative flex shrink-0 items-center justify-center">
-          <svg
-            width="160"
-            height="160"
-            viewBox="0 0 160 160"
-            className="-rotate-90"
-          >
-            {categories.map((cat) => {
-              const strokeDasharray = `${(cat.percentage / 100) * circumference} ${circumference}`;
-              const strokeDashoffset = -(
-                (cumulativePercent / 100) *
-                circumference
-              );
-              cumulativePercent += cat.percentage;
+function DonutChart() {
+  return (
+    <div className="relative flex shrink-0 items-center justify-center">
+      <svg width="160" height="160" viewBox="0 0 160 160" className="-rotate-90">
+        {donutSegments.map((seg) => (
+          <circle
+            key={seg.name}
+            cx="80"
+            cy="80"
+            r={radius}
+            stroke={seg.color}
+            strokeWidth={strokeWidth}
+            fill="none"
+            strokeDasharray={seg.strokeDasharray}
+            strokeDashoffset={seg.strokeDashoffset}
+            className="transition-all duration-300 hover:opacity-85"
+          />
+        ))}
+      </svg>
 
-              return (
-                <circle
-                  key={cat.name}
-                  cx="80"
-                  cy="80"
-                  r={radius}
-                  stroke={cat.color}
-                  strokeWidth={strokeWidth}
-                  fill="none"
-                  strokeDasharray={strokeDasharray}
-                  strokeDashoffset={strokeDashoffset}
-                  className="transition-all duration-300 hover:opacity-85"
-                />
-              );
-            })}
-          </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <span className="text-foreground text-base font-extrabold">$ 1,750.00</span>
+        <span className="text-muted text-[10px] font-medium">Total Expenses</span>
+      </div>
+    </div>
+  );
+}
 
-          {/* Donut Center Label */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span className="text-foreground text-base font-extrabold">
-              $ 1,750.00
-            </span>
-            <span className="text-muted text-[10px] font-medium">
-              Total Expenses
-            </span>
+function CategoryLegend() {
+  return (
+    <div className="w-full flex-1 space-y-2">
+      {categories.map((cat) => (
+        <div
+          key={cat.name}
+          className="hover:bg-surface-secondary/50 flex items-center justify-between rounded-sm py-0.5 text-xs transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <span
+              className="h-2.5 w-2.5 shrink-0 rounded-full"
+              style={{ backgroundColor: cat.color }}
+            />
+            <span className="text-foreground font-medium">{cat.name}</span>
+          </div>
+          <div className="flex items-center gap-4 text-right">
+            <span className="text-muted font-mono">{cat.percentage}%</span>
+            <span className="text-foreground w-16 font-semibold">{cat.amount}</span>
           </div>
         </div>
+      ))}
+    </div>
+  );
+}
 
-        {/* Legend List */}
-        <div className="w-full flex-1 space-y-2">
-          {categories.map((cat) => (
-            <div
-              key={cat.name}
-              className="hover:bg-surface-secondary/50 flex items-center justify-between rounded-sm py-0.5 text-xs transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <span
-                  className="h-2.5 w-2.5 shrink-0 rounded-full"
-                  style={{ backgroundColor: cat.color }}
-                />
-                <span className="text-foreground font-medium">{cat.name}</span>
-              </div>
-              <div className="flex items-center gap-4 text-right">
-                <span className="text-muted font-mono">{cat.percentage}%</span>
-                <span className="text-foreground w-16 font-semibold">
-                  {cat.amount}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+export function SpendingOverviewChart() {
+  return (
+    <Card className="flex flex-col justify-between p-5">
+      <SpendingHeader />
+      <div className="mt-4 flex flex-col items-center gap-6 sm:flex-row">
+        <DonutChart />
+        <CategoryLegend />
       </div>
     </Card>
   );

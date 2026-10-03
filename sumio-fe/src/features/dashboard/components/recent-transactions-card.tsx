@@ -66,6 +66,33 @@ const transactions: TransactionItem[] = [
   },
 ];
 
+function TransactionItemRow({ tx }: { tx: TransactionItem }) {
+  const Icon = tx.icon;
+
+  return (
+    <div className="group hover:bg-surface-secondary -mx-1.5 flex cursor-pointer items-center justify-between rounded-xl p-1.5 transition-colors">
+      <div className="flex items-center gap-3">
+        <div
+          className={`flex h-9 w-9 items-center justify-center rounded-xl ${tx.iconBg} ${tx.iconColor}`}
+        >
+          <Icon className="h-4.5 w-4.5" />
+        </div>
+        <div>
+          <p className="text-foreground text-xs font-semibold">{tx.title}</p>
+          <p className="text-muted text-[11px]">
+            {tx.category} • {tx.date}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-1.5">
+        <span className="text-danger text-xs font-bold">{tx.amount}</span>
+        <ChevronRight className="text-muted group-hover:text-accent h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+      </div>
+    </div>
+  );
+}
+
 export function RecentTransactionsCard() {
   return (
     <Card className="p-5">
@@ -82,34 +109,9 @@ export function RecentTransactionsCard() {
       </div>
 
       <div className="mt-4 space-y-3">
-        {transactions.map((tx) => {
-          const Icon = tx.icon;
-          return (
-            <div
-              key={tx.id}
-              className="group hover:bg-surface-secondary -mx-1.5 flex cursor-pointer items-center justify-between rounded-xl p-1.5 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className={`flex h-9 w-9 items-center justify-center rounded-xl ${tx.iconBg} ${tx.iconColor}`}
-                >
-                  <Icon className="h-4.5 w-4.5" />
-                </div>
-                <div>
-                  <p className="text-foreground text-xs font-semibold">{tx.title}</p>
-                  <p className="text-muted text-[11px]">
-                    {tx.category} • {tx.date}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <span className="text-danger text-xs font-bold">{tx.amount}</span>
-                <ChevronRight className="text-muted group-hover:text-accent h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-              </div>
-            </div>
-          );
-        })}
+        {transactions.map((tx) => (
+          <TransactionItemRow key={tx.id} tx={tx} />
+        ))}
       </div>
     </Card>
   );
