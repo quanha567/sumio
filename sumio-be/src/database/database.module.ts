@@ -9,7 +9,10 @@ import { UserOrmEntity } from "../modules/user/infrastructure/persistence/entiti
 export const ORM_ENTITIES = [UserOrmEntity, UserIdentityOrmEntity, UserSettingsOrmEntity];
 
 export const createDataSource = (): DataSource => {
-  const databaseUrl = process.env.DATABASE_URL;
+  const rawDatabaseUrl = process.env.DATABASE_URL;
+  const databaseUrl = rawDatabaseUrl
+    ? rawDatabaseUrl.replaceAll(/%(?![0-9a-fA-F]{2})/gu, "%25")
+    : undefined;
 
   return new DataSource({
     type: "postgres",
