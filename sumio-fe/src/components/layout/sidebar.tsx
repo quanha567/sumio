@@ -1,7 +1,9 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { LogOut } from "lucide-react";
 
 import plantCat from "@/assets/illustrations/sidebar-plant-cat.jpg";
 import { Button, ProgressRing } from "@/components/ui";
+import { useAuth } from "@/features/auth";
 import { formatCurrency } from "@/lib/format";
 
 import { BrandLogo } from "./brand-logo";
@@ -18,10 +20,21 @@ interface SidebarProps {
 
 export function Sidebar({ savingsSaved = 2040, savingsTarget = 3000 }: SidebarProps) {
   const percent = Math.round((savingsSaved / savingsTarget) * 100);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      void navigate({ to: "/login" });
+    } catch {
+      // ignore
+    }
+  };
 
   return (
     <aside className="flex h-full flex-col justify-between gap-6">
-      <div className="space-y-8">
+      <div className="space-y-6">
         <BrandLogo className="px-1" />
 
         <nav className="space-y-1" aria-label="Main">
@@ -50,6 +63,17 @@ export function Sidebar({ savingsSaved = 2040, savingsTarget = 3000 }: SidebarPr
               </Button>
             ),
           )}
+
+          <div className="pt-2">
+            <Button
+              variant="ghost"
+              onClick={() => void handleLogout()}
+              className={`${itemBase} text-muted hover:bg-danger/10 hover:text-danger h-auto cursor-pointer justify-start`}
+            >
+              <LogOut className="h-[18px] w-[18px]" />
+              Sign out
+            </Button>
+          </div>
         </nav>
       </div>
 

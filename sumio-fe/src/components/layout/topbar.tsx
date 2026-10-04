@@ -1,4 +1,5 @@
-import { Bell } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { Bell, LogOut } from "lucide-react";
 
 import {
   Avatar,
@@ -9,6 +10,7 @@ import {
   SearchField,
   Text,
 } from "@/components/ui";
+import { useAuth } from "@/features/auth";
 
 export interface TopbarUser {
   name: string;
@@ -30,6 +32,18 @@ function initials(name: string) {
 }
 
 export function Topbar({ user }: TopbarProps) {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      void navigate({ to: "/login" });
+    } catch {
+      // ignore
+    }
+  };
+
   return (
     <header className="flex items-center justify-between gap-4">
       <SearchField aria-label="Search" className="max-w-md flex-1">
@@ -51,7 +65,7 @@ export function Topbar({ user }: TopbarProps) {
           <span className="bg-danger ring-surface absolute top-2 right-2.5 h-2 w-2 rounded-full ring-2" />
         </Button>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           <Avatar className="h-10 w-10">
             {user.avatarUrl && <AvatarImage src={user.avatarUrl} alt={user.name} />}
             <AvatarFallback>{initials(user.name)}</AvatarFallback>
@@ -62,6 +76,16 @@ export function Topbar({ user }: TopbarProps) {
             </Text>
             <Text variant="caption">{user.subtitle}</Text>
           </div>
+          <Button
+            isIconOnly
+            variant="ghost"
+            aria-label="Log out"
+            title="Log out"
+            onClick={() => void handleLogout()}
+            className="text-muted hover:text-danger hover:bg-danger/10 cursor-pointer transition-colors"
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
         </div>
       </div>
     </header>

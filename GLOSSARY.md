@@ -24,6 +24,10 @@ _Avoid_: Budget (a budget limits spending; a goal accumulates savings)
 The page chrome shared by every authenticated page: sidebar navigation and top bar around a content slot.
 _Avoid_: Layout (ambiguous with page grid layout)
 
+**Auth Shell**:
+The page layout enclosing unauthenticated authentication flows (Sign In, Sign Up, Password Recovery), featuring brand storytelling and illustration backdrops, completely separated from the authenticated App Shell.
+_Avoid_: Login layout, auth wrapper
+
 ## Design system language
 
 **Mint Theme**:

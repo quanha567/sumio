@@ -5,13 +5,16 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import type { Request } from "express";
+import type { FastifyRequest } from "fastify";
 
 import { SyncUserUseCase } from "../../application/commands/sync-user/sync-user.use-case.js";
 import {
   type ITokenVerifier,
   TOKEN_VERIFIER,
 } from "../../application/ports/token-verifier.port.js";
+import { User } from "../../domain/entities/user.entity.js";
+
+type AuthenticatedRequest = FastifyRequest & { user?: User };
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
@@ -23,7 +26,7 @@ export class FirebaseAuthGuard implements CanActivate {
   ) {}
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const authHeader = request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -50,7 +53,7 @@ export class FirebaseAuthGuard implements CanActivate {
     });
 
     // Attach to request for @CurrentUser() decorator
-    (request as unknown as Record<string, unknown>).user = domainUser;
+    request.user = domainUser;
 
     return true;
   }
