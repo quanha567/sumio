@@ -95,7 +95,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           if [ -n "${{ secrets.DATABASE_URL }}" ]; then
-            echo "${{ secrets.DATABASE_URL }}" | bun x --cwd sumio-be wrangler secret put DATABASE_URL --env dev
+            echo "${{ secrets.DATABASE_URL }}" | bun run --cwd sumio-be wrangler secret put DATABASE_URL --env dev
           else
             echo "::warning ::DATABASE_URL secret not provided in development environment."
           fi
