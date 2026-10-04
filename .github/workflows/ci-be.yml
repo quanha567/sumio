@@ -1,0 +1,74 @@
+name: CI Backend & Contract Quality Gate
+
+on:
+  push:
+    branches: [main, production]
+    paths:
+      - 'sumio-be/**'
+      - 'packages/contract/**'
+      - '.github/workflows/ci-be.yml'
+  pull_request:
+    branches: [main, production]
+    paths:
+      - 'sumio-be/**'
+      - 'packages/contract/**'
+      - '.github/workflows/ci-be.yml'
+  merge_group:
+    types: [checks_requested]
+
+permissions: {}
+
+concurrency:
+  group: ci-be-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gate-backend:
+    name: Backend Quality Gate (Format, Lint, Types, Tests, Bundle)
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Verify Contract Types
+        run: bun run --cwd packages/contract typecheck
+
+      - name: Check Code Formatting
+        run: bun run --cwd sumio-be fmt:check
+
+      - name: Run Linter (Oxlint)
+        run: bun run --cwd sumio-be lint
+
+      - name: Static Type Check
+        run: bun run --cwd sumio-be typecheck
+
+      - name: Run Unit Tests
+        run: bun run --cwd sumio-be test
+
+      - name: Validate NestJS Build
+        run: bun run --cwd sumio-be build
+
+      - name: Validate Cloudflare Worker Dev Bundle
+        run: bun run --cwd sumio-be wrangler deploy --dry-run --env dev
+
+      - name: Validate Cloudflare Worker Prod Bundle
+        run: bun run --cwd sumio-be wrangler deploy --dry-run --env production

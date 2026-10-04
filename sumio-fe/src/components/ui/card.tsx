@@ -20,7 +20,7 @@ export function Card({ className, children, ...props }: CardProps) {
   return (
     <HeroUICard
       className={cn(
-        "rounded-2xl border border-border bg-surface text-surface-foreground shadow-surface transition-all duration-200",
+        "rounded-xl border border-border bg-surface text-surface-foreground shadow-xs transition-all duration-200",
         className,
       )}
       {...props}
@@ -32,7 +32,7 @@ export function Card({ className, children, ...props }: CardProps) {
 
 export function CardHeader({ className, children, ...props }: CardHeaderProps) {
   return (
-    <HeroUICardHeader className={cn("p-5 pb-3", className)} {...props}>
+    <HeroUICardHeader className={cn("p-4 pb-2.5 sm:p-5 sm:pb-3", className)} {...props}>
       {children}
     </HeroUICardHeader>
   );
@@ -41,7 +41,7 @@ export function CardHeader({ className, children, ...props }: CardHeaderProps) {
 export function CardTitle({ className, children, ...props }: CardTitleProps) {
   return (
     <HeroUICardTitle
-      className={cn("text-base font-semibold text-foreground", className)}
+      className={cn("text-sm font-semibold text-foreground sm:text-base", className)}
       {...props}
     >
       {children}
@@ -59,7 +59,7 @@ export function CardDescription({ className, children, ...props }: CardDescripti
 
 export function CardContent({ className, children, ...props }: CardContentProps) {
   return (
-    <HeroUICardContent className={cn("p-5 pt-0", className)} {...props}>
+    <HeroUICardContent className={cn("p-4 pt-0 sm:p-5 sm:pt-0", className)} {...props}>
       {children}
     </HeroUICardContent>
   );
@@ -67,7 +67,7 @@ export function CardContent({ className, children, ...props }: CardContentProps)
 
 export function CardFooter({ className, children, ...props }: CardFooterProps) {
   return (
-    <HeroUICardFooter className={cn("p-5 pt-0", className)} {...props}>
+    <HeroUICardFooter className={cn("p-4 pt-0 sm:p-5 sm:pt-0", className)} {...props}>
       {children}
     </HeroUICardFooter>
   );

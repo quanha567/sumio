@@ -1,0 +1,16 @@
+{
+  "name": "sumio",
+  "private": true,
+  "workspaces": [
+    "sumio-fe",
+    "sumio-be",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:fe": "bun --filter sumio-fe dev",
+    "dev:be": "bun --filter sumio-be start:dev",
+    "lint": "bun --filter '*' lint",
+    "fmt": "bun --filter '*' fmt",
+    "test": "bun --filter '*' test"
+  }
+}
