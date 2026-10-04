@@ -3,7 +3,10 @@ import { DataSource } from "typeorm";
 
 import { ORM_ENTITIES } from "./database.module.js";
 
-const databaseUrl = process.env.DATABASE_URL;
+const rawDatabaseUrl = process.env.DATABASE_URL;
+const databaseUrl = rawDatabaseUrl
+  ? rawDatabaseUrl.replaceAll(/%(?![0-9a-fA-F]{2})/gu, "%25")
+  : undefined;
 
 export default new DataSource({
   type: "postgres",
