@@ -1,3 +1,11 @@
+if (typeof process.loadEnvFile === "function") {
+  try {
+    process.loadEnvFile();
+  } catch {
+    // .env might not exist in production/CI, ignore
+  }
+}
+
 import { NestFactory } from "@nestjs/core";
 
 import { AppModule } from "./app.module.js";

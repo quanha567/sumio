@@ -12,7 +12,7 @@ export class JoseFirebaseTokenVerifier implements ITokenVerifier {
   private readonly jwks = createRemoteJWKSet(GOOGLE_JWKS_URL);
 
   public async verifyIdToken(token: string): Promise<VerifiedToken> {
-    const projectId = process.env.FIREBASE_PROJECT_ID || "sumio-app";
+    const projectId = process.env.FIREBASE_PROJECT_ID;
 
     try {
       const { payload } = await jwtVerify(token, this.jwks, {
