@@ -1,0 +1,46 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sumio-be",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-03-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "NODE_ENV": "production",
+    "DATABASE_SSL": "true",
+    "FIREBASE_PROJECT_ID": "scrum-poker-44555",
+    "CORS_ORIGINS": "https://sumio.pages.dev,https://sumio-dev.pages.dev",
+  },
+  "alias": {
+    "@sumio/contract": "../packages/contract/src/index.ts",
+    "typeorm": "typeorm/index.js",
+    "app-root-path": "./src/stubs/app-root-path.ts",
+    "class-validator": "./src/stubs/empty.ts",
+    "class-transformer": "./src/stubs/empty.ts",
+    "@nestjs/microservices": "./src/stubs/empty.ts",
+    "@nestjs/microservices/microservices-module.js": "./src/stubs/empty.ts",
+    "@nestjs/websockets/socket-module.js": "./src/stubs/empty.ts",
+    "@fastify/multipart": "./src/stubs/empty.ts",
+    "@fastify/static": "./src/stubs/empty.ts",
+    "@fastify/view": "./src/stubs/empty.ts",
+  },
+  "env": {
+    "dev": {
+      "name": "sumio-be-dev",
+      "vars": {
+        "NODE_ENV": "development",
+        "DATABASE_SSL": "true",
+        "FIREBASE_PROJECT_ID": "scrum-poker-44555",
+        "CORS_ORIGINS": "http://localhost:5173,https://sumio-dev.pages.dev",
+      },
+    },
+    "production": {
+      "name": "sumio-be",
+      "vars": {
+        "NODE_ENV": "production",
+        "DATABASE_SSL": "true",
+        "FIREBASE_PROJECT_ID": "scrum-poker-44555",
+        "CORS_ORIGINS": "https://sumio.pages.dev,https://sumio.app",
+      },
+    },
+  },
+}

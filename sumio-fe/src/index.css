@@ -1,11 +1,149 @@
 @import "tailwindcss";
+@import "@heroui/styles";
 
-@layer base {
-  :root {
-    color-scheme: light dark;
+/*
+ * HeroUI Theme Customization
+ * Sumio "Mint" Theme
+ *
+ * Visual direction: calm mint greens, white cards, soft shadows.
+ * Components must use these tokens (never hard-coded colors).
+ *
+ * @see https://heroui.com/docs/react/getting-started/theming
+ */
+
+:root,
+.light,
+.default,
+[data-theme="light"],
+[data-theme="default"] {
+  /* Brand */
+  --accent: oklch(50% 0.115 155);
+  --accent-foreground: oklch(99% 0.005 155);
+
+  /* Page background: very light mint */
+  --background: oklch(97.8% 0.015 155);
+  --border: oklch(92% 0.02 155);
+
+  /* Expenses / destructive */
+  --danger: oklch(64% 0.2 25);
+  --danger-foreground: oklch(99% 0.005 25);
+
+  --default: oklch(95% 0.015 155);
+  --default-foreground: oklch(25% 0.04 160);
+
+  /* Fields */
+  --field-background: oklch(100% 0 0);
+  --field-border: transparent;
+  --field-foreground: oklch(25% 0.04 160);
+  --field-placeholder: oklch(62% 0.02 160);
+  --focus: oklch(50% 0.115 155);
+
+  /* Typography */
+  --foreground: oklch(25% 0.04 160);
+  --muted: oklch(58% 0.025 160);
+
+  --overlay: oklch(100% 0 0);
+  --overlay-foreground: oklch(25% 0.04 160);
+  --scrollbar: oklch(85% 0.03 155);
+  --segment: oklch(100% 0 0);
+  --segment-foreground: oklch(25% 0.04 160);
+  --separator: oklch(94% 0.015 155);
+
+  /* Income / positive */
+  --success: oklch(58% 0.14 152);
+  --success-foreground: oklch(99% 0.005 152);
+
+  /* Surfaces */
+  --surface: oklch(100% 0 0);
+  --surface-foreground: oklch(25% 0.04 160);
+  --surface-secondary: oklch(97% 0.02 155);
+  --surface-secondary-foreground: oklch(25% 0.04 160);
+  --surface-tertiary: oklch(94% 0.035 155);
+  --surface-tertiary-foreground: oklch(27% 0.04 160);
+
+  --warning: oklch(80% 0.15 85);
+  --warning-foreground: oklch(28% 0.05 85);
+
+  /* Chart palette (green ramp, used by donut chart) */
+  --chart-1: oklch(40% 0.1 155);
+  --chart-2: oklch(50% 0.12 155);
+  --chart-3: oklch(60% 0.13 152);
+  --chart-4: oklch(70% 0.13 150);
+  --chart-5: oklch(80% 0.1 150);
+  --chart-6: oklch(89% 0.06 150);
+
+  --radius: 0.75rem;
+  --field-radius: 0.75rem;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Dark mode (not yet designed against the mockup; keeps the mint hue) */
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --accent: oklch(68% 0.12 155);
+  --accent-foreground: oklch(17% 0.035 155);
+  --background: oklch(15% 0.02 160);
+  --border: oklch(28% 0.03 160);
+  --danger: oklch(68% 0.17 25);
+  --danger-foreground: oklch(99% 0.005 25);
+  --default: oklch(25% 0.03 160);
+  --default-foreground: oklch(94% 0.015 160);
+  --field-background: oklch(20% 0.025 160);
+  --field-border: transparent;
+  --field-foreground: oklch(94% 0.015 160);
+  --field-placeholder: oklch(68% 0.025 160);
+  --focus: oklch(68% 0.12 155);
+  --foreground: oklch(94% 0.015 160);
+  --muted: oklch(68% 0.025 160);
+  --overlay: oklch(20% 0.025 160);
+  --overlay-foreground: oklch(94% 0.015 160);
+  --scrollbar: oklch(40% 0.03 160);
+  --segment: oklch(23% 0.03 160);
+  --segment-foreground: oklch(94% 0.015 160);
+  --separator: oklch(26% 0.03 160);
+  --success: oklch(70% 0.14 152);
+  --success-foreground: oklch(17% 0.035 152);
+  --warning: oklch(82% 0.135 85);
+  --warning-foreground: oklch(20% 0.035 85);
+  --surface: oklch(19% 0.025 160);
+  --surface-foreground: oklch(94% 0.015 160);
+  --surface-secondary: oklch(22.5% 0.03 160);
+  --surface-secondary-foreground: oklch(93% 0.015 160);
+  --surface-tertiary: oklch(26% 0.035 160);
+  --surface-tertiary-foreground: oklch(92% 0.015 160);
+}
+
+/* Motion & Animation Tokens */
+:root {
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  body {
-    @apply m-0 min-h-screen bg-slate-950 font-sans text-slate-100 antialiased;
+.animate-entrance {
+  animation: fade-slide-up 350ms var(--ease-spring) both;
+}
+
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
