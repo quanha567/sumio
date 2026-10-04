@@ -16,9 +16,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
-    "db:migrate": "bun x typeorm migration:run -d src/database/data-source.ts",
-    "db:migrate:revert": "bun x typeorm migration:revert -d src/database/data-source.ts",
-    "db:migrate:show": "bun x typeorm migration:show -d src/database/data-source.ts",
+    "db:migrate": "bun --bun x typeorm migration:run -d src/database/data-source.ts",
+    "db:migrate:revert": "bun --bun x typeorm migration:revert -d src/database/data-source.ts",
+    "db:migrate:show": "bun --bun x typeorm migration:show -d src/database/data-source.ts",
     "worker:dev": "wrangler dev",
     "worker:deploy": "wrangler deploy"
   },
