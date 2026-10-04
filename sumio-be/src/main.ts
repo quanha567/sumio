@@ -20,7 +20,6 @@ async function bootstrap() {
   const port = Number(process.env.PORT ?? 3000);
   await app.listen(port, "0.0.0.0");
   console.log(`🚀 Sumio Backend is running on: http://localhost:${port}`);
-  console.log(`🚀 Sumio Environment is running on: ${process.env.NODE_ENV}`);
 }
 
 await bootstrap();
