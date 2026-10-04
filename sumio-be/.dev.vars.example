@@ -1,0 +1,14 @@
+# ==========================================
+# Cloudflare Workers Local Secrets (.dev.vars)
+# Used by: bun run worker:dev (wrangler dev)
+# ==========================================
+
+# Database Connection (Supabase Transaction Pooler or local Postgres)
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/sumio
+DATABASE_SSL=false
+
+# Firebase Project ID for JWT verification via Google JWKS
+FIREBASE_PROJECT_ID=sumio-app
+
+# Environment
+NODE_ENV=development

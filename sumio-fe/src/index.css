@@ -3,17 +3,10 @@
 
 /*
  * HeroUI Theme Customization
- * Summer Finance Theme
+ * Sumio "Mint" Theme
  *
- * Visual direction:
- * Ocean + Sunshine + Tropical Green + Coral
- *
- * Primary: Teal
- * Background: Soft Sky
- * Surface: Warm White
- * Success: Tropical Green
- * Danger: Coral
- * Warning: Sunshine
+ * Visual direction: calm mint greens, white cards, soft shadows.
+ * Components must use these tokens (never hard-coded colors).
  *
  * @see https://heroui.com/docs/react/getting-started/theming
  */
@@ -23,233 +16,134 @@
 .default,
 [data-theme="light"],
 [data-theme="default"] {
-  /* ─────────────────────────────────────────────
-   * Theme Colors (Light Mode)
-   * ───────────────────────────────────────────── */
+  /* Brand */
+  --accent: oklch(50% 0.115 155);
+  --accent-foreground: oklch(99% 0.005 155);
 
-  /* Summer Teal — primary brand / CTA */
-  --accent: oklch(61.5% 0.125 170);
-  --accent-foreground: oklch(99% 0.005 170);
+  /* Page background: very light mint */
+  --background: oklch(97.8% 0.015 155);
+  --border: oklch(92% 0.02 155);
 
-  /* Soft Summer Sky */
-  --background: oklch(97.5% 0.018 205);
-
-  /* Soft Aqua Border */
-  --border: oklch(89.5% 0.025 190);
-
-  /* Summer Coral — expenses / destructive */
-  --danger: oklch(69% 0.175 25);
+  /* Expenses / destructive */
+  --danger: oklch(64% 0.2 25);
   --danger-foreground: oklch(99% 0.005 25);
 
-  /* Neutral */
-  --default: oklch(94.5% 0.018 190);
-  --default-foreground: oklch(25% 0.045 185);
+  --default: oklch(95% 0.015 155);
+  --default-foreground: oklch(25% 0.04 160);
 
-  /* ─────────────────────────────────────────────
-   * Fields
-   * ───────────────────────────────────────────── */
-
-  --field-background: oklch(99.5% 0.008 90);
+  /* Fields */
+  --field-background: oklch(100% 0 0);
   --field-border: transparent;
+  --field-foreground: oklch(25% 0.04 160);
+  --field-placeholder: oklch(62% 0.02 160);
+  --focus: oklch(50% 0.115 155);
 
-  --field-foreground: oklch(25% 0.045 185);
-  --field-placeholder: oklch(58% 0.025 190);
+  /* Typography */
+  --foreground: oklch(25% 0.04 160);
+  --muted: oklch(58% 0.025 160);
 
-  /* Focus uses primary brand color */
-  --focus: oklch(61.5% 0.125 170);
+  --overlay: oklch(100% 0 0);
+  --overlay-foreground: oklch(25% 0.04 160);
+  --scrollbar: oklch(85% 0.03 155);
+  --segment: oklch(100% 0 0);
+  --segment-foreground: oklch(25% 0.04 160);
+  --separator: oklch(94% 0.015 155);
 
-  /* ─────────────────────────────────────────────
-   * Typography
-   * ───────────────────────────────────────────── */
+  /* Income / positive */
+  --success: oklch(58% 0.14 152);
+  --success-foreground: oklch(99% 0.005 152);
 
-  /* Deep teal instead of pure black */
-  --foreground: oklch(25% 0.045 185);
-  --muted: oklch(58% 0.025 190);
+  /* Surfaces */
+  --surface: oklch(100% 0 0);
+  --surface-foreground: oklch(25% 0.04 160);
+  --surface-secondary: oklch(97% 0.02 155);
+  --surface-secondary-foreground: oklch(25% 0.04 160);
+  --surface-tertiary: oklch(94% 0.035 155);
+  --surface-tertiary-foreground: oklch(27% 0.04 160);
 
-  /* ─────────────────────────────────────────────
-   * Overlay
-   * ───────────────────────────────────────────── */
+  --warning: oklch(80% 0.15 85);
+  --warning-foreground: oklch(28% 0.05 85);
 
-  --overlay: oklch(99.5% 0.008 90);
-  --overlay-foreground: oklch(25% 0.045 185);
+  /* Chart palette (green ramp, used by donut chart) */
+  --chart-1: oklch(40% 0.1 155);
+  --chart-2: oklch(50% 0.12 155);
+  --chart-3: oklch(60% 0.13 152);
+  --chart-4: oklch(70% 0.13 150);
+  --chart-5: oklch(80% 0.1 150);
+  --chart-6: oklch(89% 0.06 150);
 
-  /* ─────────────────────────────────────────────
-   * Scrollbar
-   * ───────────────────────────────────────────── */
-
-  --scrollbar: oklch(82% 0.035 190);
-
-  /* ─────────────────────────────────────────────
-   * Segments
-   * ───────────────────────────────────────────── */
-
-  --segment: oklch(99% 0.008 190);
-  --segment-foreground: oklch(25% 0.045 185);
-
-  /* ─────────────────────────────────────────────
-   * Separators
-   * ───────────────────────────────────────────── */
-
-  --separator: oklch(92% 0.018 190);
-
-  /* ─────────────────────────────────────────────
-   * Semantic Colors
-   * ───────────────────────────────────────────── */
-
-  /* Tropical Green — income / positive */
-  --success: oklch(66% 0.145 153);
-  --success-foreground: oklch(99% 0.005 153);
-
-  /* ─────────────────────────────────────────────
-   * Surfaces
-   * ───────────────────────────────────────────── */
-
-  /* Warm Cloud White */
-  --surface: oklch(99.5% 0.008 90);
-  --surface-foreground: oklch(25% 0.045 185);
-
-  /* Soft Aqua */
-  --surface-secondary: oklch(96% 0.022 190);
-  --surface-secondary-foreground: oklch(25% 0.045 185);
-
-  /* Slightly stronger Summer Aqua */
-  --surface-tertiary: oklch(93.5% 0.032 190);
-  --surface-tertiary-foreground: oklch(27% 0.045 185);
-
-  /* ─────────────────────────────────────────────
-   * Sunshine Yellow — savings / attention
-   * ───────────────────────────────────────────── */
-
-  --warning: oklch(82% 0.145 82);
-  --warning-foreground: oklch(28% 0.045 82);
-
-  /* ─────────────────────────────────────────────
-   * Border Radius
-   * ───────────────────────────────────────────── */
-
-  --radius: 0.625rem;
-  --field-radius: 0.625rem;
-
-  /* ─────────────────────────────────────────────
-   * Font Family
-   * ───────────────────────────────────────────── */
-
-  --font-sans: var(--font-inter);
+  --radius: 0.75rem;
+  --field-radius: 0.75rem;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* ═══════════════════════════════════════════════
- * DARK MODE
- * ═══════════════════════════════════════════════ */
-
+/* Dark mode (not yet designed against the mockup; keeps the mint hue) */
 .dark,
 [data-theme="dark"] {
   color-scheme: dark;
 
-  /* ─────────────────────────────────────────────
-   * Theme Colors (Dark Mode)
-   * ───────────────────────────────────────────── */
-
-  /* Slightly brighter Teal for dark surfaces */
-  --accent: oklch(68% 0.125 170);
-  --accent-foreground: oklch(17% 0.035 170);
-
-  /* Deep Ocean */
-  --background: oklch(14.5% 0.025 190);
-
-  /* Aqua border */
-  --border: oklch(28% 0.035 190);
-
-  /* Summer Coral */
-  --danger: oklch(68% 0.165 25);
+  --accent: oklch(68% 0.12 155);
+  --accent-foreground: oklch(17% 0.035 155);
+  --background: oklch(15% 0.02 160);
+  --border: oklch(28% 0.03 160);
+  --danger: oklch(68% 0.17 25);
   --danger-foreground: oklch(99% 0.005 25);
-
-  /* Neutral */
-  --default: oklch(25% 0.035 190);
-  --default-foreground: oklch(94% 0.015 190);
-
-  /* ─────────────────────────────────────────────
-   * Fields
-   * ───────────────────────────────────────────── */
-
-  --field-background: oklch(20% 0.03 190);
+  --default: oklch(25% 0.03 160);
+  --default-foreground: oklch(94% 0.015 160);
+  --field-background: oklch(20% 0.025 160);
   --field-border: transparent;
+  --field-foreground: oklch(94% 0.015 160);
+  --field-placeholder: oklch(68% 0.025 160);
+  --focus: oklch(68% 0.12 155);
+  --foreground: oklch(94% 0.015 160);
+  --muted: oklch(68% 0.025 160);
+  --overlay: oklch(20% 0.025 160);
+  --overlay-foreground: oklch(94% 0.015 160);
+  --scrollbar: oklch(40% 0.03 160);
+  --segment: oklch(23% 0.03 160);
+  --segment-foreground: oklch(94% 0.015 160);
+  --separator: oklch(26% 0.03 160);
+  --success: oklch(70% 0.14 152);
+  --success-foreground: oklch(17% 0.035 152);
+  --warning: oklch(82% 0.135 85);
+  --warning-foreground: oklch(20% 0.035 85);
+  --surface: oklch(19% 0.025 160);
+  --surface-foreground: oklch(94% 0.015 160);
+  --surface-secondary: oklch(22.5% 0.03 160);
+  --surface-secondary-foreground: oklch(93% 0.015 160);
+  --surface-tertiary: oklch(26% 0.035 160);
+  --surface-tertiary-foreground: oklch(92% 0.015 160);
+}
 
-  --field-foreground: oklch(94% 0.015 190);
-  --field-placeholder: oklch(68% 0.025 190);
+/* Motion & Animation Tokens */
+:root {
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-  --focus: oklch(68% 0.125 170);
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  /* ─────────────────────────────────────────────
-   * Typography
-   * ───────────────────────────────────────────── */
+.animate-entrance {
+  animation: fade-slide-up 350ms var(--ease-spring) both;
+}
 
-  --foreground: oklch(94% 0.015 190);
-  --muted: oklch(68% 0.025 190);
-
-  /* ─────────────────────────────────────────────
-   * Overlay
-   * ───────────────────────────────────────────── */
-
-  --overlay: oklch(20% 0.03 190);
-  --overlay-foreground: oklch(94% 0.015 190);
-
-  /* ─────────────────────────────────────────────
-   * Scrollbar
-   * ───────────────────────────────────────────── */
-
-  --scrollbar: oklch(40% 0.035 190);
-
-  /* ─────────────────────────────────────────────
-   * Segments
-   * ───────────────────────────────────────────── */
-
-  --segment: oklch(23% 0.035 190);
-  --segment-foreground: oklch(94% 0.015 190);
-
-  /* ─────────────────────────────────────────────
-   * Separators
-   * ───────────────────────────────────────────── */
-
-  --separator: oklch(26% 0.035 190);
-
-  /* ─────────────────────────────────────────────
-   * Semantic Colors
-   * ───────────────────────────────────────────── */
-
-  /* Tropical Green */
-  --success: oklch(68% 0.14 153);
-  --success-foreground: oklch(17% 0.035 153);
-
-  /* Sunshine Yellow */
-  --warning: oklch(82% 0.135 82);
-  --warning-foreground: oklch(20% 0.035 82);
-
-  /* ─────────────────────────────────────────────
-   * Surfaces
-   * ───────────────────────────────────────────── */
-
-  /* Deep Ocean Surface */
-  --surface: oklch(19% 0.028 190);
-  --surface-foreground: oklch(94% 0.015 190);
-
-  /* Secondary Ocean Surface */
-  --surface-secondary: oklch(22.5% 0.035 190);
-  --surface-secondary-foreground: oklch(93% 0.015 190);
-
-  /* Tertiary Ocean Surface */
-  --surface-tertiary: oklch(26% 0.04 190);
-  --surface-tertiary-foreground: oklch(92% 0.015 190);
-
-  /* ─────────────────────────────────────────────
-   * Border Radius
-   * ───────────────────────────────────────────── */
-
-  --radius: 0.625rem;
-  --field-radius: 0.625rem;
-
-  /* ─────────────────────────────────────────────
-   * Font Family
-   * ───────────────────────────────────────────── */
-
-  --font-sans: var(--font-inter);
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

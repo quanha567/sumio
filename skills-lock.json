@@ -145,6 +145,12 @@
       "skillPath": "skills/in-progress/setup-ts-deep-modules/SKILL.md",
       "computedHash": "0b0e7124ad1272d59e44bcb4224275e76421351294a91480ada62234158c1023"
     },
+    "supabase-server": {
+      "source": "supabase/server",
+      "sourceType": "github",
+      "skillPath": "skills/supabase-server/SKILL.md",
+      "computedHash": "c4c29a1ac1c1c11da456604fb07127d69524afedbc358e4ac41540db013d0fef"
+    },
     "tdd": {
       "source": "mattpocock/skills",
       "sourceType": "github",

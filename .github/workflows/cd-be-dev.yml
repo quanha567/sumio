@@ -1,0 +1,163 @@
+name: CD Backend Dev & Promote
+
+on:
+  workflow_run:
+    workflows: ["CI Backend & Contract Quality Gate"]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: cd-be-dev-main
+  cancel-in-progress: false
+
+jobs:
+  migrate-dev:
+    name: Run Pre-Deployment DB Migrations (Dev)
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    environment:
+      name: development
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Execute TypeORM Migrations (Dev Session Pooler)
+        env:
+          DATABASE_URL: ${{ secrets.MIGRATION_DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::warning ::MIGRATION_DATABASE_URL not configured. Skipping migrations."
+          else
+            bun run --cwd sumio-be db:migrate
+          fi
+
+  deploy-dev:
+    name: Deploy to Cloudflare Workers (sumio-be-dev)
+    needs: [migrate-dev]
+    runs-on: ubuntu-24.04
+    environment:
+      name: development
+      url: ${{ vars.BACKEND_DEV_URL }}
+    permissions:
+      contents: write
+      pull-requests: write
+      deployments: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Synchronize Secret to Cloudflare Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "${{ secrets.DATABASE_URL }}" ]; then
+            echo "${{ secrets.DATABASE_URL }}" | bun x --cwd sumio-be wrangler secret put DATABASE_URL --env dev
+          else
+            echo "::warning ::DATABASE_URL secret not provided in development environment."
+          fi
+
+      - name: Deploy Worker to Dev Environment
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: bun run --cwd sumio-be wrangler deploy --env dev
+
+      - name: Post-Deployment Smoke Test
+        run: |
+          DEV_URL="${{ vars.BACKEND_DEV_URL }}"
+          if [ -z "$DEV_URL" ]; then
+            echo "BACKEND_DEV_URL not configured. Skipping smoke test."
+            exit 0
+          fi
+          echo "Executing health probe on $DEV_URL/health..."
+          for i in {1..5}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$DEV_URL/health" || true)
+            if [ "$STATUS" -eq 200 ]; then
+              echo "Health probe succeeded with HTTP 200!"
+              exit 0
+            fi
+            echo "Attempt $i: Received HTTP status $STATUS. Retrying in 5 seconds..."
+            sleep 5
+          done
+          echo "::warning ::Worker health probe did not return 200 within timeout."
+
+      - name: Create or Update Promotion PR to Production
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const { data: openPRs } = await github.rest.pulls.list({
+              owner,
+              repo,
+              head: `${owner}:main`,
+              base: 'production',
+              state: 'open',
+            });
+
+            if (openPRs.length > 0) {
+              console.log(`Promotion PR already exists: ${openPRs[0].html_url}`);
+            } else {
+              try {
+                const { data: newPR } = await github.rest.pulls.create({
+                  owner,
+                  repo,
+                  title: '🚀 Release: Promote `main` to `production`',
+                  head: 'main',
+                  base: 'production',
+                  body: `## 🚀 Production Release Promotion\n\nThis PR was automatically created after the latest changes on \`main\` were verified and deployed to **Dev** (Frontend: \`sumio-dev\`, Backend: \`sumio-be-dev\`).\n\n### 🔍 Verification\n- Frontend Dev: https://sumio-dev.pages.dev\n- Backend Dev Health: https://sumio-be-dev.workers.dev/health\n\nMerging this PR into \`production\` will automatically deploy to **Production** (\`sumio\` on Pages and \`sumio-be\` on Workers) and generate a new GitHub Release with changelog notes.`,
+                });
+                console.log(`Created promotion PR: ${newPR.html_url}`);
+              } catch (error) {
+                if (error.message && error.message.includes('No commits between')) {
+                  console.log('No new commits to promote from main to production.');
+                } else {
+                  throw error;
+                }
+              }
+            }

@@ -1,0 +1,14 @@
+import { initContract } from "@ts-rest/core";
+import { authContract } from "./auth/auth.contract.js";
+
+export * from "./auth/auth.contract.js";
+export * from "./auth/auth.schema.js";
+export * from "./common/response.schema.js";
+
+const c = initContract();
+
+export const apiContract = c.router({
+  auth: authContract,
+});
+
+export type ApiContract = typeof apiContract;
