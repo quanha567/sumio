@@ -52,6 +52,9 @@ jobs:
       - name: Verify Contract Types
         run: bun run --cwd packages/contract typecheck
 
+      - name: Build Contract Package
+        run: bun run --cwd packages/contract build
+
       - name: Check Code Formatting
         run: bun run --cwd sumio-be fmt:check
 
