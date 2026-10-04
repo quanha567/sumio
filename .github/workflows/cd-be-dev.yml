@@ -156,6 +156,8 @@ jobs:
               } catch (error) {
                 if (error.message && error.message.includes('No commits between')) {
                   console.log('No new commits to promote from main to production.');
+                } else if (error.message && error.message.includes('not permitted to create or approve pull requests')) {
+                  core.warning('GitHub Actions is not permitted to create pull requests. Please enable "Allow GitHub Actions to create and approve pull requests" in GitHub Repo Settings -> Actions -> General -> Workflow permissions.');
                 } else {
                   throw error;
                 }
