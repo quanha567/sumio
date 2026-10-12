@@ -1,8 +1,8 @@
-import { Entity } from "../../../../shared/domain/entity.base.js";
-import { Email } from "../value-objects/email.vo.js";
-import { UserId } from "../value-objects/user-id.vo.js";
-import { UserIdentity } from "./user-identity.entity.js";
-import { UserSettings } from "./user-settings.entity.js";
+import { Entity } from "../../../../shared/domain/entity.base";
+import type { Email } from "../value-objects/email.vo";
+import { UserId } from "../value-objects/user-id.vo";
+import { UserIdentity } from "./user-identity.entity";
+import { UserSettings } from "./user-settings.entity";
 
 export type UserStatus = "ACTIVE" | "SUSPENDED";
 

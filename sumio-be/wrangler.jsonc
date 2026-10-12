@@ -12,6 +12,7 @@
   },
   "alias": {
     "@sumio/contract": "../packages/contract/src/index.ts",
+    "@sumio/common": "../packages/common/src/index.ts",
     "typeorm": "typeorm/index.js",
     "app-root-path": "./src/stubs/app-root-path.ts",
     "class-validator": "./src/stubs/empty.ts",

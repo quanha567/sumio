@@ -1,5 +1,5 @@
-import { Entity } from "../../../../shared/domain/entity.base.js";
-import { Currency } from "../value-objects/currency.vo.js";
+import { Entity } from "../../../../shared/domain/entity.base";
+import { Currency } from "../value-objects/currency.vo";
 
 export interface UserSettingsProps {
   baseCurrency: Currency;

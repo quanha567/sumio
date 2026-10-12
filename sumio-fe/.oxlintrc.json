@@ -9,13 +9,42 @@
   },
   "rules": {
     "no-unused-vars": "error",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "react/react-in-jsx-scope": "off",
     "react/jsx-key": "error",
     "react/jsx-no-target-blank": "error",
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "warn",
+    "react/no-array-index-key": "warn",
+    "react/incompatible-library": "off",
+    "react/set-state-in-effect": "warn",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/prefer-tag-over-role": "off",
     "typescript/no-explicit-any": "warn",
-    "unicorn/prefer-node-protocol": "error"
+    "typescript/consistent-type-imports": "error",
+    "unicorn/prefer-node-protocol": "error",
+    "unicorn/prefer-top-level-await": "off",
+    "no-duplicate-imports": "off",
+    "max-lines": ["error", { "max": 350, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": [
+      "warn",
+      { "max": 100, "skipBlankLines": true, "skipComments": true }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "@heroui/react",
+            "message": "Direct import from @heroui/react is forbidden. Import from '@/components/ui' instead."
+          },
+          {
+            "name": "@heroui/styles",
+            "message": "Direct import from @heroui/styles is forbidden outside global styles."
+          }
+        ]
+      }
+    ]
   },
   "env": {
     "browser": true,

@@ -1,8 +1,8 @@
 import { CalendarDays } from "lucide-react";
 import { useState } from "react";
 
-import house from "@/assets/illustrations/greeting-house.jpg";
-import { Card, Heading, Text } from "@/components/ui";
+import clayHero from "@/assets/illustrations/dashboard-clay-hero.jpg";
+import { Card, Chip, Heading, Text } from "@/components/ui";
 
 interface GreetingBannerProps {
   userName: string;
@@ -24,27 +24,27 @@ export function GreetingBanner({ userName, date: dateProp }: GreetingBannerProps
   });
 
   return (
-    <Card className="animate-entrance relative overflow-hidden p-0">
+    <Card padding="none" className="animate-entrance relative overflow-hidden">
       <img
-        src={house}
+        src={clayHero}
         alt=""
-        className="absolute inset-y-0 right-0 h-full w-3/5 object-cover object-right"
+        className="pointer-events-none absolute inset-y-0 right-0 h-full w-2/5 object-cover object-center opacity-90 sm:w-1/3"
       />
-      <div className="from-surface via-surface/90 absolute inset-0 bg-gradient-to-r to-transparent" />
-      <div className="relative flex min-h-36 items-center justify-between gap-4 p-5 sm:p-6">
-        <div>
+      <div className="from-surface via-surface/85 pointer-events-none absolute inset-0 bg-gradient-to-r to-transparent" />
+      <Card.Content className="relative flex min-h-24 items-center justify-between gap-4 p-4 sm:min-h-28 sm:p-5">
+        <div className="max-w-md">
           <Heading level={1}>
             {greetingFor(date.getHours())}, {userName}! <span aria-hidden>👋</span>
           </Heading>
-          <Text variant="body" className="text-muted mt-1 max-w-sm">
-            Here&apos;s your financial overview for today. Keep going!
-          </Text>
+          <div className="mt-0.5">
+            <Text variant="muted">Here&apos;s your financial overview for today.</Text>
+          </div>
         </div>
-        <div className="border-border bg-surface/90 text-foreground flex shrink-0 items-center gap-2 self-start rounded-lg border px-3 py-1.5 text-xs font-medium tabular-nums backdrop-blur">
-          <CalendarDays className="text-muted h-3.5 w-3.5" />
-          {dateLabel}
-        </div>
-      </div>
+        <Chip intent="default" className="self-center">
+          <CalendarDays className="size-3.5" />
+          <span className="tabular-nums">{dateLabel}</span>
+        </Chip>
+      </Card.Content>
     </Card>
   );
 }

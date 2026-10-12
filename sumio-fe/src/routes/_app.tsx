@@ -2,6 +2,7 @@ import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 import { AppShell } from "@/components/layout";
+import { Spinner } from "@/components/ui";
 import { useAuth } from "@/features/auth";
 
 export const Route = createFileRoute("/_app")({
@@ -21,7 +22,7 @@ function AppRouteComponent() {
   if (isLoading) {
     return (
       <div className="bg-background flex h-screen w-full items-center justify-center">
-        <div className="border-accent h-8 w-8 animate-spin rounded-full border-2 border-t-transparent" />
+        <Spinner size="lg" />
       </div>
     );
   }

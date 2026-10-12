@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { GroupedBarChart, SectionCard, SelectPill, type BarSeries } from "@/components/ui";
+import { ChartLegend, GroupedBarChart, type BarSeries } from "@/components/common";
+import { SectionCard, SelectPill } from "@/components/ui";
 
 import type { WeeklyCashflow } from "../types";
 
@@ -9,8 +10,8 @@ interface IncomeVsExpensesProps {
 }
 
 const series: BarSeries[] = [
-  { key: "income", name: "Income", color: "var(--chart-1)" },
-  { key: "expenses", name: "Expenses", color: "var(--chart-4)" },
+  { key: "income", name: "Income", color: "var(--finance-income)" },
+  { key: "expenses", name: "Expenses", color: "var(--finance-expense)" },
 ];
 
 const ranges = [
@@ -29,14 +30,7 @@ export function IncomeVsExpenses({ data }: IncomeVsExpensesProps) {
       description="Last 4 weeks"
       action={
         <div className="flex items-center gap-3">
-          <ul className="text-muted hidden items-center gap-3 text-xs sm:flex">
-            {series.map((s) => (
-              <li key={s.key} className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: s.color }} />
-                {s.name}
-              </li>
-            ))}
-          </ul>
+          <ChartLegend series={series} />
           <SelectPill ariaLabel="Range" options={ranges} value={range} onChange={setRange} />
         </div>
       }

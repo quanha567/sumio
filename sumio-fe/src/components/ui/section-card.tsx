@@ -1,9 +1,9 @@
-import { cn } from "@heroui/react";
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { Button } from "./button";
 import { Card } from "./card";
+import { cn } from "./cn";
 import { Heading, Text } from "./typography";
 
 interface SectionCardProps {
@@ -26,19 +26,23 @@ export function SectionCard({
   children,
 }: SectionCardProps) {
   return (
-    <Card className={cn("p-4 sm:p-5", className)}>
-      <div className="flex items-start justify-between gap-3">
+    <Card padding="md" className={className}>
+      <Card.Header className="flex flex-row items-center justify-between gap-3 p-0">
         <div className="min-w-0">
-          <Heading level={2}>{title}</Heading>
+          <Card.Title>
+            <Heading level={2}>{title}</Heading>
+          </Card.Title>
           {description && (
-            <Text variant="muted" className="mt-0.5">
-              {description}
-            </Text>
+            <Card.Description>
+              <Text variant="muted" className="mt-0.5">
+                {description}
+              </Text>
+            </Card.Description>
           )}
         </div>
         {action}
-      </div>
-      <div className={cn("mt-4", contentClassName)}>{children}</div>
+      </Card.Header>
+      <Card.Content className={cn("mt-4 p-0", contentClassName)}>{children}</Card.Content>
     </Card>
   );
 }
@@ -51,7 +55,12 @@ interface SectionLinkProps {
 /** "View all >" style header action (HeroUI Button). */
 export function SectionLink({ label, onPress }: SectionLinkProps) {
   return (
-    <Button size="sm" variant="ghost" onPress={onPress} className="text-accent h-7 gap-0.5 px-2">
+    <Button
+      size="sm"
+      intent="ghost"
+      onPress={onPress}
+      className="text-accent hover:text-accent-hover h-7 gap-0.5 px-2 font-medium"
+    >
       {label}
       <ChevronRight className="h-3.5 w-3.5" />
     </Button>

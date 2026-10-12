@@ -1,9 +1,15 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { User } from "../../../domain/entities/user.entity.js";
-import { IUserRepository } from "../../../domain/repositories/user.repository.interface.js";
-import { Email } from "../../../domain/value-objects/email.vo.js";
-import { SyncUserUseCase } from "./sync-user.use-case.js";
+import type { SeedDefaultCategoriesUseCase } from "../../../../category/application/commands/seed-default-categories/seed-default-categories.use-case";
+import { User } from "../../../domain/entities/user.entity";
+import type { IUserRepository } from "../../../domain/repositories/user.repository.interface";
+import { Email } from "../../../domain/value-objects/email.vo";
+import { SyncUserUseCase } from "./sync-user.use-case";
+
+const makeSeeder = () => {
+  const seeder = { execute: vi.fn().mockImplementation(() => Promise.resolve()) };
+  return seeder as unknown as SeedDefaultCategoriesUseCase & typeof seeder;
+};
 
 describe("SyncUserUseCase (JIT Provisioning)", () => {
   it("should create and save a new user when identity does not exist", async () => {
@@ -14,7 +20,8 @@ describe("SyncUserUseCase (JIT Provisioning)", () => {
       save: vi.fn().mockImplementation(async () => {}),
     };
 
-    const useCase = new SyncUserUseCase(mockRepo);
+    const seeder = makeSeeder();
+    const useCase = new SyncUserUseCase(mockRepo, seeder);
     const result = await useCase.execute({
       firebaseUid: "fb-unique-123",
       email: "newuser@example.com",
@@ -24,6 +31,7 @@ describe("SyncUserUseCase (JIT Provisioning)", () => {
     expect(result.email.value).toBe("newuser@example.com");
     expect(result.displayName).toBe("New User");
     expect(mockRepo.save).toHaveBeenCalledOnce();
+    expect(seeder.execute).toHaveBeenCalledWith(result.id.value);
   });
 
   it("should update existing user when found by firebase UID", async () => {
@@ -40,7 +48,8 @@ describe("SyncUserUseCase (JIT Provisioning)", () => {
       save: vi.fn().mockImplementation(async () => {}),
     };
 
-    const useCase = new SyncUserUseCase(mockRepo);
+    const seeder = makeSeeder();
+    const useCase = new SyncUserUseCase(mockRepo, seeder);
     const result = await useCase.execute({
       firebaseUid: "fb-existing-123",
       email: "existing@example.com",
@@ -49,5 +58,6 @@ describe("SyncUserUseCase (JIT Provisioning)", () => {
 
     expect(result.displayName).toBe("New Display Name");
     expect(mockRepo.save).toHaveBeenCalledWith(existing);
+    expect(seeder.execute).not.toHaveBeenCalled();
   });
 });

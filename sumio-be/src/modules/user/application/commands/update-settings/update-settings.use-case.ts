@@ -1,13 +1,13 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import type { UpdateUserSettingsDto, UserSettingsDto } from "@sumio/contract";
 
-import { IUseCase } from "../../../../../shared/application/use-case.interface.js";
+import type { IUseCase } from "../../../../../shared/application/use-case.interface";
 import {
   type IUserRepository,
   USER_REPOSITORY,
-} from "../../../domain/repositories/user.repository.interface.js";
-import { Currency } from "../../../domain/value-objects/currency.vo.js";
-import { UserId } from "../../../domain/value-objects/user-id.vo.js";
+} from "../../../domain/repositories/user.repository.interface";
+import { Currency } from "../../../domain/value-objects/currency.vo";
+import { UserId } from "../../../domain/value-objects/user-id.vo";
 
 export interface UpdateSettingsInput {
   userId: string;

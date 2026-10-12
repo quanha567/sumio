@@ -1,4 +1,4 @@
-import { ValueObject } from "../../../../shared/domain/value-object.base.js";
+import { ValueObject } from "../../../../shared/domain/value-object.base";
 
 const VALID_CURRENCIES = new Set(["USD", "VND", "EUR", "GBP", "JPY", "CAD", "AUD", "SGD"]);
 

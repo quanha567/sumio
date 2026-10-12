@@ -1,7 +1,7 @@
-import { BarChart2, Plus, Target, Wallet, type LucideIcon } from "lucide-react";
+import { BarChart2, Plus, Sparkles, Target, Wallet, type LucideIcon } from "lucide-react";
 
-import plant from "@/assets/illustrations/quick-actions-plant.jpg";
-import { Button, IconBadge, SectionCard } from "@/components/ui";
+import { IconBadge } from "@/components/common";
+import { Button, Card, SectionCard, Text } from "@/components/ui";
 
 interface QuickAction {
   id: string;
@@ -32,28 +32,28 @@ export function QuickActions() {
     <SectionCard title="Quick Actions">
       <div className="grid grid-cols-2 gap-3">
         {actions.map(({ id, title, description, icon }) => (
-          <Button
-            key={id}
-            variant="outline"
-            className="h-auto justify-start gap-3 rounded-xl p-3 text-left font-normal"
-          >
-            <IconBadge icon={icon} className="h-9 w-9 rounded-full" iconClassName="h-4 w-4" />
+          <Button key={id} intent="outline" className="h-auto justify-start gap-3 p-3 text-left">
+            <IconBadge icon={icon} size="sm" shape="circle" />
             <span className="min-w-0">
-              <span className="text-foreground block text-xs font-semibold">{title}</span>
-              <span className="text-muted block text-[11px] leading-tight whitespace-normal">
+              <Text variant="label" className="block truncate">
+                {title}
+              </Text>
+              <Text variant="caption" className="block leading-tight whitespace-normal">
                 {description}
-              </span>
+              </Text>
             </span>
           </Button>
         ))}
       </div>
-      <div className="bg-surface-secondary mt-3 flex items-center gap-3 rounded-xl p-3">
-        <img src={plant} alt="" className="h-12 w-12 rounded-lg object-cover" />
-        <div>
-          <p className="text-foreground text-xs font-semibold">You&apos;re doing great!</p>
-          <p className="text-muted text-[11px]">Consistent habits build a better tomorrow.</p>
+      <Card intent="secondary" padding="sm" className="mt-3">
+        <div className="flex items-center gap-3">
+          <IconBadge icon={Sparkles} tone="sand" />
+          <div className="min-w-0">
+            <Text variant="label">You&apos;re doing great!</Text>
+            <Text variant="caption">Consistent habits build financial peace of mind.</Text>
+          </div>
         </div>
-      </div>
+      </Card>
     </SectionCard>
   );
 }

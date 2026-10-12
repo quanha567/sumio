@@ -12,13 +12,12 @@ export interface NavItem {
   id: string;
   label: string;
   icon: LucideIcon;
-  /** Omit while the page does not exist yet; the item renders disabled. */
-  to?: "/";
+  to?: string;
 }
 
 export const navItems: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, to: "/" },
-  { id: "transactions", label: "Transactions", icon: ArrowLeftRight },
+  { id: "transactions", label: "Transactions", icon: ArrowLeftRight, to: "/transactions" },
   { id: "budgets", label: "Budgets", icon: PiggyBank },
   { id: "goals", label: "Goals", icon: Target },
   { id: "reports", label: "Reports", icon: BarChart2 },

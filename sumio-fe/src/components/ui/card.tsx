@@ -1,74 +1,124 @@
 import {
   Card as HeroUICard,
-  CardContent as HeroUICardContent,
-  CardDescription as HeroUICardDescription,
-  CardFooter as HeroUICardFooter,
-  CardHeader as HeroUICardHeader,
-  CardTitle as HeroUICardTitle,
-  cn,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardRoot as HeroUICardRoot,
+  CardTitle,
+  type CardContentProps,
+  type CardDescriptionProps,
+  type CardFooterProps,
+  type CardHeaderProps,
+  type CardProps as HeroUICardProps,
+  type CardRootProps,
+  type CardTitleProps,
 } from "@heroui/react";
-import type { ComponentProps } from "react";
+import { cardVariants, tv, type VariantProps } from "@heroui/styles";
+import type { ReactNode } from "react";
 
-export type CardProps = ComponentProps<typeof HeroUICard>;
-export type CardHeaderProps = ComponentProps<typeof HeroUICardHeader>;
-export type CardTitleProps = ComponentProps<typeof HeroUICardTitle>;
-export type CardDescriptionProps = ComponentProps<typeof HeroUICardDescription>;
-export type CardContentProps = ComponentProps<typeof HeroUICardContent>;
-export type CardFooterProps = ComponentProps<typeof HeroUICardFooter>;
+import { cn } from "./cn";
+import { Heading, Text } from "./typography";
 
-export function Card({ className, children, ...props }: CardProps) {
+export const customCardVariants = tv({
+  extend: cardVariants,
+  base: "rounded-card bg-surface border border-border shadow-xs transition-all",
+  variants: {
+    intent: {
+      default: "",
+      raised: "bg-surface-raised shadow-sm",
+      secondary: "bg-surface-secondary border-transparent shadow-none",
+      sunken: "bg-surface-sunken border-transparent shadow-none",
+    },
+    padding: {
+      none: "p-0",
+      sm: "p-3.5 sm:p-4",
+      md: "p-4 sm:p-5",
+      lg: "p-5 sm:p-6 md:p-8",
+    },
+  },
+  defaultVariants: {
+    intent: "default",
+    padding: "none",
+  },
+});
+
+export type CustomCardVariants = VariantProps<typeof customCardVariants>;
+
+export interface CardProps
+  extends Omit<HeroUICardProps, "className" | "title">, CustomCardVariants {
+  title?: ReactNode;
+  subtitle?: ReactNode;
+  action?: ReactNode;
+  className?: string;
+  headerClassName?: string;
+  contentClassName?: string;
+}
+
+function CardBase({
+  intent,
+  padding,
+  title,
+  subtitle,
+  action,
+  children,
+  className,
+  headerClassName,
+  contentClassName,
+  ...props
+}: CardProps) {
+  const slots = customCardVariants({ intent, padding });
+  const baseClass = typeof slots === "object" && "base" in slots ? slots.base() : "";
+
+  if (title || subtitle || action) {
+    return (
+      <HeroUICard className={cn(baseClass, className)} {...props}>
+        <div
+          className={cn(
+            "flex items-center justify-between gap-4 p-4 sm:p-5 border-b border-border/60",
+            headerClassName,
+          )}
+        >
+          <div className="min-w-0">
+            {typeof title === "string" ? <Heading level={2}>{title}</Heading> : title}
+            {subtitle && (
+              <div className="mt-0.5">
+                {typeof subtitle === "string" ? <Text variant="muted">{subtitle}</Text> : subtitle}
+              </div>
+            )}
+          </div>
+          {action && <div className="shrink-0">{action}</div>}
+        </div>
+        <div className={cn("p-4 sm:p-5", contentClassName)}>{children}</div>
+      </HeroUICard>
+    );
+  }
+
   return (
-    <HeroUICard
-      className={cn(
-        "rounded-xl border border-border bg-surface text-surface-foreground shadow-xs transition-all duration-200",
-        className,
-      )}
-      {...props}
-    >
+    <HeroUICard className={cn(baseClass, className)} {...props}>
       {children}
     </HeroUICard>
   );
 }
 
-export function CardHeader({ className, children, ...props }: CardHeaderProps) {
-  return (
-    <HeroUICardHeader className={cn("p-4 pb-2.5 sm:p-5 sm:pb-3", className)} {...props}>
-      {children}
-    </HeroUICardHeader>
-  );
-}
+export const Card = Object.assign(CardBase, {
+  Root: HeroUICardRoot,
+  Header: CardHeader,
+  Title: CardTitle,
+  Description: CardDescription,
+  Content: CardContent,
+  Footer: CardFooter,
+});
 
-export function CardTitle({ className, children, ...props }: CardTitleProps) {
-  return (
-    <HeroUICardTitle
-      className={cn("text-sm font-semibold text-foreground sm:text-base", className)}
-      {...props}
-    >
-      {children}
-    </HeroUICardTitle>
-  );
-}
-
-export function CardDescription({ className, children, ...props }: CardDescriptionProps) {
-  return (
-    <HeroUICardDescription className={cn("text-xs text-muted", className)} {...props}>
-      {children}
-    </HeroUICardDescription>
-  );
-}
-
-export function CardContent({ className, children, ...props }: CardContentProps) {
-  return (
-    <HeroUICardContent className={cn("p-4 pt-0 sm:p-5 sm:pt-0", className)} {...props}>
-      {children}
-    </HeroUICardContent>
-  );
-}
-
-export function CardFooter({ className, children, ...props }: CardFooterProps) {
-  return (
-    <HeroUICardFooter className={cn("p-4 pt-0 sm:p-5 sm:pt-0", className)} {...props}>
-      {children}
-    </HeroUICardFooter>
-  );
-}
+export const CardRoot = HeroUICardRoot;
+export { CardHeader, CardTitle, CardDescription, CardContent, CardFooter };
+export type {
+  CardRootProps,
+  CardHeaderProps,
+  CardTitleProps,
+  CardDescriptionProps,
+  CardContentProps,
+  CardFooterProps,
+  CustomCardVariants as CardVariants,
+};
+export { cardVariants } from "@heroui/styles";

@@ -1,4 +1,4 @@
-import { Tabs } from "@heroui/react";
+import { Tabs } from "./tabs";
 
 export interface SegmentedTab<T extends string> {
   id: T;

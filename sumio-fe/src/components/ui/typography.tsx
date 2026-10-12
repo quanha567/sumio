@@ -8,19 +8,21 @@ import { type Tone, toneStyles } from "./tone";
  * ------------------------------------------------------------------------- */
 
 export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
-  level?: 1 | 2 | 3;
+  level?: 1 | 2 | 3 | 4;
   children: ReactNode;
   className?: string;
 }
 
-const headingStyles: Record<1 | 2 | 3, string> = {
+const headingStyles: Record<1 | 2 | 3 | 4, string> = {
   1: "text-xl font-bold text-foreground sm:text-2xl tracking-tight leading-tight",
-  2: "text-sm font-bold text-foreground sm:text-base leading-snug",
+  2: "text-sm font-semibold text-foreground sm:text-base leading-snug",
   3: "text-xs font-semibold text-foreground sm:text-sm leading-snug",
+  4: "text-xs font-medium text-foreground leading-snug",
 };
 
 export function Heading({ level = 2, children, className, ...props }: HeadingProps) {
   const Tag = (`h${level}` as ElementType) || "h2";
+
   return (
     <Tag className={cn(headingStyles[level], className)} {...props}>
       {children}
@@ -32,25 +34,59 @@ export function Heading({ level = 2, children, className, ...props }: HeadingPro
  * Text Primitive
  * ------------------------------------------------------------------------- */
 
-export type TextVariant = "body" | "muted" | "caption";
+export type TextVariant = "body" | "body-sm" | "muted" | "caption" | "label" | "error";
+export type TextWeight = "normal" | "medium" | "semibold" | "bold";
+export type TextSize = "xs" | "sm" | "base" | "lg";
 
 export interface TextProps extends HTMLAttributes<HTMLElement> {
-  as?: "p" | "span" | "div";
+  as?: "p" | "span" | "div" | "label";
   variant?: TextVariant;
+  weight?: TextWeight;
+  size?: TextSize;
   children: ReactNode;
   className?: string;
 }
 
 const textStyles: Record<TextVariant, string> = {
-  body: "text-sm font-normal text-foreground leading-normal",
-  muted: "text-xs font-normal text-muted leading-normal",
-  caption: "text-[11px] font-medium text-muted leading-tight",
+  body: "text-sm text-foreground leading-normal",
+  "body-sm": "text-xs text-foreground leading-normal",
+  muted: "text-xs text-muted leading-normal",
+  caption: "text-[11px] text-muted leading-tight",
+  label: "text-xs text-foreground leading-tight",
+  error: "text-xs text-danger leading-tight",
 };
 
-export function Text({ as = "p", variant = "body", children, className, ...props }: TextProps) {
+const textSizeStyles: Record<TextSize, string> = {
+  xs: "text-xs",
+  sm: "text-sm",
+  base: "text-base",
+  lg: "text-lg",
+};
+
+const weightStyles: Record<TextWeight, string> = {
+  normal: "font-normal",
+  medium: "font-medium",
+  semibold: "font-semibold",
+  bold: "font-bold",
+};
+
+export function Text({
+  as = "p",
+  variant = "body",
+  weight,
+  size,
+  children,
+  className,
+  ...props
+}: TextProps) {
   const Tag = as;
+  const defaultWeight =
+    variant === "label" ? "font-semibold" : variant === "caption" ? "font-medium" : "font-normal";
+  const appliedWeight = weight ? weightStyles[weight] : defaultWeight;
+  const appliedSize = size ? textSizeStyles[size] : "";
+
   return (
-    <Tag className={cn(textStyles[variant], className)} {...props}>
+    <Tag className={cn(textStyles[variant], appliedSize, appliedWeight, className)} {...props}>
       {children}
     </Tag>
   );
@@ -60,12 +96,14 @@ export function Text({ as = "p", variant = "body", children, className, ...props
  * Metric Primitive (Tabular Numbers for Financial Values)
  * ------------------------------------------------------------------------- */
 
-export type MetricSize = "lg" | "md" | "sm";
+export type MetricSize = "lg" | "md" | "sm" | "xs";
+export type MetricTrend = "income" | "expense" | "neutral" | "pending";
 
 export interface MetricProps extends HTMLAttributes<HTMLSpanElement> {
   value: ReactNode;
   size?: MetricSize;
   tone?: Tone;
+  trend?: MetricTrend;
   className?: string;
 }
 
@@ -73,13 +111,27 @@ const metricSizes: Record<MetricSize, string> = {
   lg: "text-2xl font-bold sm:text-3xl tracking-tight",
   md: "text-lg font-bold sm:text-xl tracking-tight",
   sm: "text-xs font-semibold sm:text-sm",
+  xs: "text-[11px] font-semibold",
 };
 
-export function Metric({ value, size = "md", tone, className, ...props }: MetricProps) {
-  const toneClass = tone ? toneStyles[tone].text : "text-foreground";
+const trendClasses: Record<MetricTrend, string> = {
+  income: "text-finance-income",
+  expense: "text-finance-expense",
+  neutral: "text-finance-neutral",
+  pending: "text-finance-pending",
+};
+
+export function Metric({ value, size = "md", tone, trend, className, ...props }: MetricProps) {
+  const toneClass = trend ? trendClasses[trend] : tone ? toneStyles[tone].text : "text-foreground";
+
   return (
     <span
-      className={cn("tabular-nums font-sans", metricSizes[size], toneClass, className)}
+      className={cn(
+        "tabular-nums font-features-['tnum'_1,'lnum'_1] font-sans",
+        metricSizes[size],
+        toneClass,
+        className,
+      )}
       {...props}
     >
       {value}

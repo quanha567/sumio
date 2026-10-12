@@ -9,11 +9,16 @@
   },
   "rules": {
     "no-unused-vars": "error",
+    "no-console": "error",
     "no-underscore-dangle": "off",
-    "max-lines-per-function": "off",
+    "no-throw-literal": "error",
     "typescript/no-extraneous-class": "off",
     "typescript/no-explicit-any": "warn",
-    "unicorn/prefer-node-protocol": "error"
+    "typescript/consistent-type-imports": "error",
+    "unicorn/prefer-node-protocol": "error",
+    "no-duplicate-imports": "off",
+    "max-lines": ["error", { "max": 250, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": ["warn", { "max": 50, "skipBlankLines": true, "skipComments": true }]
   },
   "env": {
     "es2024": true,

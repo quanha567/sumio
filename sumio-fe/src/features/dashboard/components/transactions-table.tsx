@@ -1,14 +1,14 @@
+import type { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 
+import { DataTable, EmptyState, IconBadge } from "@/components/common";
 import {
   Chip,
-  IconBadge,
   Metric,
   SearchField,
   SectionCard,
   SectionLink,
   SegmentedTabs,
-  Table,
   Text,
 } from "@/components/ui";
 import { formatSignedCurrency } from "@/lib/format";
@@ -23,55 +23,88 @@ const tabs: { id: Filter; label: string }[] = [
   { id: "expense", label: "Expense" },
 ];
 
-const columns = ["Date", "Description", "Category", "Amount", "Type"];
+const columns: ColumnDef<any, Transaction>[] = [
+  {
+    accessorKey: "date",
+    header: "Date",
+    cell: ({ getValue }) => (
+      <Text variant="muted" size="xs" className="whitespace-nowrap tabular-nums">
+        {getValue() as string}
+      </Text>
+    ),
+  },
+  {
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => {
+      const t = row.original;
+      const isIncome = t.type === "income";
 
-function TransactionRow({ t }: { t: Transaction }) {
-  const isIncome = t.type === "income";
-  return (
-    <Table.Row id={t.id}>
-      <Table.Cell className="text-muted whitespace-nowrap tabular-nums">{t.date}</Table.Cell>
-      <Table.Cell>
-        <span className="flex items-center gap-2">
+      return (
+        <span className="flex items-center gap-2.5">
           <IconBadge
             icon={t.icon}
-            tone={isIncome ? "success" : "accent"}
-            className="h-7 w-7 rounded-full"
-            iconClassName="h-3.5 w-3.5"
+            tone={isIncome ? "income" : "neutral"}
+            size="sm"
+            shape="circle"
           />
-          <Text variant="body" as="span" className="font-medium">
+          <Text variant="body" as="span" weight="medium">
             {t.description}
           </Text>
         </span>
-      </Table.Cell>
-      <Table.Cell className="text-muted">{t.category}</Table.Cell>
-      <Table.Cell>
-        <Metric
-          value={formatSignedCurrency(t.amount)}
-          size="sm"
-          tone={isIncome ? "success" : "danger"}
-        />
-      </Table.Cell>
-      <Table.Cell>
-        <Chip size="sm" variant="soft" color={isIncome ? "success" : "danger"}>
-          {isIncome ? "Income" : "Expense"}
-        </Chip>
-      </Table.Cell>
-    </Table.Row>
-  );
-}
+      );
+    },
+  },
+  {
+    accessorKey: "category",
+    header: "Category",
+    cell: ({ getValue }) => (
+      <Text variant="muted" size="xs">
+        {getValue() as string}
+      </Text>
+    ),
+  },
+  {
+    accessorKey: "amount",
+    header: () => <span className="block text-right">Amount</span>,
+    cell: ({ row }) => {
+      const t = row.original;
+      const isIncome = t.type === "income";
 
-function MobileTransactionItem({ t }: { t: Transaction }) {
+      return (
+        <div className="text-right">
+          <Metric
+            value={formatSignedCurrency(t.amount)}
+            size="sm"
+            trend={isIncome ? "income" : "expense"}
+          />
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "type",
+    header: () => <span className="block text-center">Type</span>,
+    cell: ({ row }) => {
+      const isIncome = row.original.type === "income";
+
+      return (
+        <div className="text-center">
+          <Chip intent={isIncome ? "income" : "expense"}>{isIncome ? "Income" : "Expense"}</Chip>
+        </div>
+      );
+    },
+  },
+];
+
+function MobileTransactionItem(t: Transaction) {
   const isIncome = t.type === "income";
+
   return (
-    <li className="border-border/60 flex items-center gap-3 border-b py-2.5 last:border-0">
-      <IconBadge
-        icon={t.icon}
-        tone={isIncome ? "success" : "accent"}
-        className="h-8 w-8 rounded-full"
-        iconClassName="h-4 w-4"
-      />
+    <div className="border-border/60 flex items-center gap-3 border-b py-2.5 last:border-0">
+      <IconBadge icon={t.icon} tone={isIncome ? "income" : "neutral"} size="sm" shape="circle" />
       <div className="min-w-0 flex-1">
-        <Text variant="body" className="truncate text-xs font-semibold">
+        <Text variant="label" className="truncate">
           {t.description}
         </Text>
         <Text variant="caption">
@@ -82,19 +115,14 @@ function MobileTransactionItem({ t }: { t: Transaction }) {
         <Metric
           value={formatSignedCurrency(t.amount)}
           size="sm"
-          tone={isIncome ? "success" : "danger"}
-          className="block text-xs font-semibold"
+          trend={isIncome ? "income" : "expense"}
+          className="block"
         />
-        <Chip
-          size="sm"
-          variant="soft"
-          color={isIncome ? "success" : "danger"}
-          className="mt-0.5 px-1.5 py-0 text-[10px]"
-        >
+        <Chip intent={isIncome ? "income" : "expense"} className="mt-0.5">
           {isIncome ? "Income" : "Expense"}
         </Chip>
       </div>
-    </li>
+    </div>
   );
 }
 
@@ -122,54 +150,20 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
           onChange={setFilter}
         />
         <SearchField aria-label="Search transactions" value={query} onChange={setQuery}>
-          <SearchField.Group>
+          <SearchField.Group className="w-32 sm:w-40">
             <SearchField.SearchIcon />
-            <SearchField.Input className="w-28" placeholder="Search" />
+            <SearchField.Input placeholder="Search" />
             <SearchField.ClearButton />
           </SearchField.Group>
         </SearchField>
       </div>
 
-      <Table.Adaptive
-        desktop={
-          <Table variant="secondary">
-            <Table.ScrollContainer>
-              <Table.Content aria-label="Recent transactions" className="min-w-[520px]">
-                <Table.Header>
-                  {columns.map((c, i) => (
-                    <Table.Column key={c} isRowHeader={i === 1}>
-                      {c}
-                    </Table.Column>
-                  ))}
-                </Table.Header>
-                <Table.Body
-                  renderEmptyState={() => (
-                    <Text variant="muted" className="py-6 text-center text-xs">
-                      No transactions found
-                    </Text>
-                  )}
-                >
-                  {rows.map((t) => (
-                    <TransactionRow key={t.id} t={t} />
-                  ))}
-                </Table.Body>
-              </Table.Content>
-            </Table.ScrollContainer>
-          </Table>
-        }
-        mobile={
-          rows.length === 0 ? (
-            <Text variant="muted" className="py-6 text-center text-xs">
-              No transactions found
-            </Text>
-          ) : (
-            <ul className="divide-border/40 divide-y">
-              {rows.map((t) => (
-                <MobileTransactionItem key={t.id} t={t} />
-              ))}
-            </ul>
-          )
-        }
+      <DataTable
+        data={rows}
+        columns={columns}
+        renderMobileRow={(item) => MobileTransactionItem(item)}
+        emptyState={<EmptyState title="No transactions found" variant="clean" className="py-6" />}
+        ariaLabel="Recent transactions"
       />
     </SectionCard>
   );

@@ -1,9 +1,20 @@
 import { PiggyBank, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 
-import { StatCard, type StatCardProps } from "@/components/ui";
-import { formatCurrency } from "@/lib/format";
+import { StatCard, type StatCardProps } from "@/components/common";
+import { Skeleton } from "@/components/ui";
+import { formatCurrency, formatMoney } from "@/lib/format";
 
-const kpis: StatCardProps[] = [
+export interface KpiCardsProps {
+  totalBalance?: number;
+  monthlyIncome?: number;
+  monthlyExpenses?: number;
+  savingsRate?: string;
+  currency?: string;
+  locale?: string;
+  isLoading?: boolean;
+}
+
+const defaultKpis: StatCardProps[] = [
   {
     label: "Total Balance",
     value: formatCurrency(2845.5),
@@ -40,10 +51,76 @@ const kpis: StatCardProps[] = [
   },
 ];
 
-export function KpiCards() {
+export function KpiCards({
+  totalBalance,
+  monthlyIncome,
+  monthlyExpenses,
+  savingsRate,
+  currency = "USD",
+  locale = "en-US",
+  isLoading,
+}: KpiCardsProps = {}) {
+  if (isLoading) {
+    return (
+      <StatCard.Grid>
+        {[1, 2, 3, 4].map((i) => (
+          <Skeleton key={i} className="rounded-card h-28 w-full" />
+        ))}
+      </StatCard.Grid>
+    );
+  }
+
+  const hasLiveData = totalBalance !== undefined || monthlyIncome !== undefined;
+
+  const cards: StatCardProps[] = hasLiveData
+    ? [
+        {
+          label: "Total Balance",
+          value: formatMoney(totalBalance ?? 0, currency, locale),
+          icon: Wallet,
+          tone: (totalBalance ?? 0) >= 0 ? "accent" : "danger",
+          delta: "Live",
+          deltaDirection: "none",
+          deltaTone: "accent",
+          trend: [3, 4, 3.5, 5, 6, 6.5, 8],
+          hint: true,
+        },
+        {
+          label: "Total Income",
+          value: formatMoney(monthlyIncome ?? 0, currency, locale),
+          icon: TrendingUp,
+          tone: "income",
+          delta: "Live",
+          deltaDirection: "none",
+          deltaTone: "income",
+          trend: [4, 4.5, 4.2, 5.5, 6, 7, 7.5],
+        },
+        {
+          label: "Total Expenses",
+          value: formatMoney(monthlyExpenses ?? 0, currency, locale),
+          icon: TrendingDown,
+          tone: "expense",
+          deltaTone: "expense",
+          deltaDirection: "none",
+          delta: "Live",
+          trend: [6, 5.5, 6.5, 6, 7, 7.2, 8],
+        },
+        {
+          label: "Savings Rate",
+          value: savingsRate ?? "0%",
+          icon: PiggyBank,
+          tone: "sand",
+          delta: "Live",
+          deltaDirection: "none",
+          deltaTone: "sand",
+          trend: [3, 3.5, 4, 5, 5.2, 6.5, 8],
+        },
+      ]
+    : defaultKpis;
+
   return (
     <StatCard.Grid>
-      {kpis.map((kpi, idx) => (
+      {cards.map((kpi, idx) => (
         <div
           key={kpi.label}
           className="animate-entrance"

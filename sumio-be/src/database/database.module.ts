@@ -1,12 +1,21 @@
-import { Global, Module, OnModuleDestroy } from "@nestjs/common";
+import type { OnModuleDestroy } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import pg from "pg";
 import { DataSource } from "typeorm";
 
-import { UserIdentityOrmEntity } from "../modules/user/infrastructure/persistence/entities/user-identity.orm-entity.js";
-import { UserSettingsOrmEntity } from "../modules/user/infrastructure/persistence/entities/user-settings.orm-entity.js";
-import { UserOrmEntity } from "../modules/user/infrastructure/persistence/entities/user.orm-entity.js";
+import { CategoryOrmEntity } from "../modules/category/infrastructure/persistence/entities/category.orm-entity";
+import { TransactionOrmEntity } from "../modules/transaction/infrastructure/persistence/entities/transaction.orm-entity";
+import { UserIdentityOrmEntity } from "../modules/user/infrastructure/persistence/entities/user-identity.orm-entity";
+import { UserSettingsOrmEntity } from "../modules/user/infrastructure/persistence/entities/user-settings.orm-entity";
+import { UserOrmEntity } from "../modules/user/infrastructure/persistence/entities/user.orm-entity";
 
-export const ORM_ENTITIES = [UserOrmEntity, UserIdentityOrmEntity, UserSettingsOrmEntity];
+export const ORM_ENTITIES = [
+  UserOrmEntity,
+  UserIdentityOrmEntity,
+  UserSettingsOrmEntity,
+  CategoryOrmEntity,
+  TransactionOrmEntity,
+];
 
 export const createDataSource = (): DataSource => {
   const rawDatabaseUrl = process.env.DATABASE_URL;

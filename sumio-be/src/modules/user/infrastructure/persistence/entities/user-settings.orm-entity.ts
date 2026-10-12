@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 
-import type { UserOrmEntity } from "./user.orm-entity.js";
+import type { UserOrmEntity } from "./user.orm-entity";
 
 @Entity("user_settings")
 export class UserSettingsOrmEntity {

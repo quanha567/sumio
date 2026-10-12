@@ -1,7 +1,7 @@
 import pg from "pg";
 import { DataSource } from "typeorm";
 
-import { ORM_ENTITIES } from "./database.module.js";
+import { ORM_ENTITIES } from "./database.module";
 
 const rawDatabaseUrl = process.env.DATABASE_URL;
 const databaseUrl = rawDatabaseUrl

@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { DonutChart, Metric, SectionCard, SelectPill, Text } from "@/components/ui";
+import { DonutChart } from "@/components/common";
+import { Metric, SectionCard, SelectPill, Text } from "@/components/ui";
 import { formatCurrency } from "@/lib/format";
 
 import type { SpendingCategory } from "../types";
@@ -45,26 +46,26 @@ export function SpendingOverview({ categories }: SpendingOverviewProps) {
           segments={rows.map((r) => ({ label: r.name, value: r.amount, color: r.color }))}
         >
           <Metric value={formatCurrency(total)} size="md" />
-          <Text variant="caption" className="text-[10px]">
-            Total spent
-          </Text>
+          <Text variant="caption">Total spent</Text>
         </DonutChart>
 
         <ul className="w-full flex-1 space-y-2">
           {rows.map((r) => (
-            <li key={r.name} className="flex items-center justify-between gap-2 text-xs">
+            <li key={r.name} className="flex items-center justify-between gap-2">
               <span className="flex items-center gap-2">
                 <span
-                  className="h-2.5 w-2.5 shrink-0 rounded-full"
+                  className="size-2.5 shrink-0 rounded-full"
                   style={{ backgroundColor: r.color }}
                 />
-                <span className="text-foreground">{r.name}</span>
+                <Text variant="body-sm">{r.name}</Text>
               </span>
               <span className="flex items-center gap-3">
-                <span className="text-muted w-8 text-right tabular-nums">{r.percent}%</span>
-                <span className="text-foreground w-16 text-right font-semibold tabular-nums">
+                <Text variant="muted" size="xs" className="w-8 text-right tabular-nums">
+                  {r.percent}%
+                </Text>
+                <Text variant="body-sm" weight="semibold" className="w-16 text-right tabular-nums">
                   {formatCurrency(r.amount)}
-                </span>
+                </Text>
               </span>
             </li>
           ))}
