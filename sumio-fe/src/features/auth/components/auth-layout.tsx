@@ -42,15 +42,12 @@ export function AuthLayout({ children }: AuthLayoutProps) {
               <Text size="lg" weight="medium">
                 Small steps today,
               </Text>
-              <Heading
-                level={1}
-                className="text-accent mt-1 font-serif text-4xl sm:text-5xl lg:text-6xl"
-              >
+              <Heading level={1} variant="display" tone="accent" className="mt-1">
                 <span className="font-semibold italic">bigger dreams</span>{" "}
                 <br className="hidden sm:inline" />
                 tomorrow
                 <span
-                  className="ml-3 inline-block text-3xl drop-shadow-xs filter sm:text-4xl"
+                  className="ml-3 inline-block drop-shadow-xs filter"
                   role="img"
                   aria-label="sun"
                 >

@@ -2,7 +2,7 @@ import type { TransactionDto } from "@sumio/contract";
 import { AlertCircle, Edit2, RefreshCw, Trash2 } from "lucide-react";
 import { useMemo } from "react";
 
-import { Alert, Button, Checkbox, cn, Metric, Skeleton, Spinner, Text } from "@/components/atoms";
+import { Alert, Button, Checkbox, Metric, Skeleton, Spinner, Text } from "@/components/atoms";
 import { DataTable, EmptyState } from "@/components/molecules";
 import { formatMoney } from "@/lib/format";
 
@@ -177,12 +177,7 @@ function TransactionTableMobileRow({
   const isIncome = t.type === "income";
 
   return (
-    <li
-      className={cn(
-        "flex items-center gap-3 py-3.5 transition-colors",
-        isSelected && "bg-accent-subtle/50",
-      )}
-    >
+    <DataTable.MobileRow isSelected={isSelected}>
       <Checkbox
         isSelected={isSelected}
         onChange={onToggleSelect}
@@ -211,14 +206,15 @@ function TransactionTableMobileRow({
           <Button
             isIconOnly
             intent="ghost"
+            color="danger"
             size="sm"
             onPress={() => onDelete(t)}
             aria-label="Delete"
           >
-            <Trash2 className="text-danger size-3.5" />
+            <Trash2 className="size-3.5" />
           </Button>
         </div>
       </div>
-    </li>
+    </DataTable.MobileRow>
   );
 }

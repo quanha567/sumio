@@ -49,7 +49,7 @@ const TYPE_OPTIONS: SelectOption[] = [
   {
     id: "all",
     label: "All types",
-    icon: <ArrowUpDown className="text-muted size-3.5" />,
+    icon: <ArrowUpDown className="size-3.5" />,
   },
   {
     id: "income",
@@ -94,7 +94,7 @@ function resolveTypeIcon(typeFilter: "all" | "income" | "expense") {
   if (typeFilter === "expense") {
     return <ArrowUpRight className="text-finance-expense size-3.5" />;
   }
-  return <ArrowUpDown className="text-muted size-3.5" />;
+  return <ArrowUpDown className="size-3.5" />;
 }
 
 function ToolbarFilters({
@@ -154,7 +154,7 @@ function ToolbarFilters({
         value={categoryFilter}
         onChange={(val) => setCategoryFilter(val)}
         options={categoryOptions}
-        icon={<Tag className="text-muted size-3.5" />}
+        icon={<Tag className="size-3.5" />}
       />
 
       <SelectPill
@@ -163,16 +163,11 @@ function ToolbarFilters({
         value={dateFilter}
         onChange={(val) => setDateFilter(val as "all" | "this-month" | "last-month")}
         options={DATE_OPTIONS}
-        icon={<Calendar className="text-muted size-3.5" />}
+        icon={<Calendar className="size-3.5" />}
       />
 
       {hasActiveFilters && onResetFilters && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onPress={onResetFilters}
-          className="text-muted hover:text-foreground h-8 px-2 text-xs"
-        >
+        <Button variant="ghost" size="sm" onPress={onResetFilters} className="h-8 px-2">
           <X className="mr-1 size-3" />
           Reset
         </Button>
@@ -203,7 +198,10 @@ export function TransactionToolbar({
     searchQuery.trim() !== "";
 
   return (
-    <Toolbar className="bg-surface-secondary/40 flex-col items-stretch gap-3 rounded-xl p-2.5 sm:flex-row sm:items-center sm:justify-between">
+    <Toolbar
+      variant="surface"
+      className="flex-col items-stretch gap-3 p-2.5 sm:flex-row sm:items-center sm:justify-between"
+    >
       <ToolbarFilters
         typeFilter={typeFilter}
         setTypeFilter={setTypeFilter}
@@ -218,7 +216,7 @@ export function TransactionToolbar({
         onResetFilters={onResetFilters}
       />
 
-      <div className="flex items-center justify-end gap-2 border-t pt-2 sm:border-t-0 sm:pt-0">
+      <div className="flex items-center justify-end gap-2 pt-2 sm:pt-0">
         <Button
           variant="outline"
           size="sm"
@@ -237,7 +235,7 @@ export function TransactionToolbar({
           )}
         </Button>
 
-        <Button intent="primary" size="sm" onPress={onAddTransaction} className="h-8 shadow-xs">
+        <Button intent="primary" size="sm" onPress={onAddTransaction} className="h-8">
           <Plus className="mr-1.5 size-3.5" />
           <span>New</span>
         </Button>

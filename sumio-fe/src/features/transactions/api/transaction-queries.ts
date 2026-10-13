@@ -10,6 +10,7 @@ import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/reac
 
 import { toast } from "@/components/atoms";
 import { useAuth } from "@/features/auth";
+import { QueryStaleTime } from "@/lib/query-constants";
 
 import {
   createTransactionApi,
@@ -38,6 +39,7 @@ export function useTransactionsQuery(query: Partial<ListTransactionsQuery> = {})
   return useQuery<TransactionListDto, Error>({
     queryKey: transactionKeys.list(query),
     queryFn: token ? () => fetchTransactions(token, query) : skipToken,
+    staleTime: QueryStaleTime.Short,
   });
 }
 
@@ -47,7 +49,7 @@ export function useCategoriesQuery() {
   return useQuery<CategoryListDto, Error>({
     queryKey: categoryKeys.all,
     queryFn: token ? () => fetchCategories(token) : skipToken,
-    staleTime: 1000 * 60 * 10,
+    staleTime: QueryStaleTime.Long,
   });
 }
 

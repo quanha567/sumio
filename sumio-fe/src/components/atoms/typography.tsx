@@ -7,8 +7,12 @@ import { type Tone, toneStyles } from "./tone";
  * Heading Primitive
  * ------------------------------------------------------------------------- */
 
+export type HeadingVariant = "default" | "display";
+
 export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   level?: 1 | 2 | 3 | 4;
+  variant?: HeadingVariant;
+  tone?: Tone;
   children: ReactNode;
   className?: string;
 }
@@ -20,11 +24,27 @@ const headingStyles: Record<1 | 2 | 3 | 4, string> = {
   4: "text-xs font-medium text-foreground leading-snug",
 };
 
-export function Heading({ level = 2, children, className, ...props }: HeadingProps) {
+const displayHeadingStyles: Record<1 | 2 | 3 | 4, string> = {
+  1: "text-4xl font-serif sm:text-5xl lg:text-6xl tracking-tight leading-tight",
+  2: "text-2xl font-serif sm:text-3xl lg:text-4xl tracking-tight leading-tight",
+  3: "text-xl font-serif sm:text-2xl tracking-tight leading-snug",
+  4: "text-lg font-serif sm:text-xl leading-snug",
+};
+
+export function Heading({
+  level = 2,
+  variant = "default",
+  tone,
+  children,
+  className,
+  ...props
+}: HeadingProps) {
   const Tag = (`h${level}` as ElementType) || "h2";
+  const baseStyle = variant === "display" ? displayHeadingStyles[level] : headingStyles[level];
+  const toneClass = tone ? toneStyles[tone].text : "";
 
   return (
-    <Tag className={cn(headingStyles[level], className)} {...props}>
+    <Tag className={cn(baseStyle, toneClass, className)} {...props}>
       {children}
     </Tag>
   );

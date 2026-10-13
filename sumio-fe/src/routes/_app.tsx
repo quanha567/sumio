@@ -13,7 +13,7 @@ function AppRouteComponent() {
 
   if (isLoading) {
     return (
-      <div className="bg-background flex h-screen w-full items-center justify-center">
+      <div className="flex h-screen w-full items-center justify-center">
         <Spinner size="lg" />
       </div>
     );

@@ -40,11 +40,20 @@ function DropdownMenuBase({ className, ...props }: ComponentProps<typeof HeroUID
   return <HeroUIDropdownMenu className={cn("p-1 outline-none", className)} {...props} />;
 }
 
-function DropdownItemBase({ className, ...props }: ComponentProps<typeof HeroUIDropdownItem>) {
+export interface DropdownItemProps extends ComponentProps<typeof HeroUIDropdownItem> {
+  intent?: "default" | "destructive" | "danger";
+}
+
+function DropdownItemBase({ className, intent = "default", ...props }: DropdownItemProps) {
+  const isDestructive = intent === "destructive" || intent === "danger";
+
   return (
     <HeroUIDropdownItem
       className={cn(
-        "rounded-sm px-2.5 py-1.5 text-sm text-foreground hover:bg-surface-secondary data-[focused=true]:bg-surface-secondary cursor-pointer outline-none transition-colors",
+        "rounded-sm px-2.5 py-1.5 text-sm cursor-pointer outline-none transition-colors",
+        isDestructive
+          ? "text-danger hover:bg-danger-subtle data-[focused=true]:bg-danger-subtle"
+          : "text-foreground hover:bg-surface-secondary data-[focused=true]:bg-surface-secondary",
         className,
       )}
       {...props}

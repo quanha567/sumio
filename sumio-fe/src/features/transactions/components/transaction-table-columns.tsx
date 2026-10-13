@@ -176,7 +176,7 @@ function createActionsColumn(
                   <Edit2 className="mr-2 size-3.5" />
                   Edit
                 </DropdownItem>
-                <DropdownItem id="delete" textValue="Delete" className="text-danger">
+                <DropdownItem id="delete" textValue="Delete" intent="destructive">
                   <Trash2 className="mr-2 size-3.5" />
                   Delete
                 </DropdownItem>

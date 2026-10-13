@@ -174,7 +174,7 @@ function DataTableMobile<TData extends RowData>({
   );
 }
 
-export function DataTable<TData extends RowData>({
+function DataTableBase<TData extends RowData>({
   data,
   columns,
   isLoading = false,
@@ -234,3 +234,27 @@ export function DataTable<TData extends RowData>({
     </div>
   );
 }
+
+export interface DataTableMobileRowProps {
+  isSelected?: boolean;
+  children: ReactNode;
+  className?: string;
+}
+
+export function DataTableMobileRow({ isSelected, children, className }: DataTableMobileRowProps) {
+  return (
+    <div
+      data-selected={isSelected}
+      className={cn(
+        "flex items-center gap-3 py-3.5 transition-colors data-[selected=true]:bg-accent-subtle/50",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+export const DataTable = Object.assign(DataTableBase, {
+  MobileRow: DataTableMobileRow,
+});
