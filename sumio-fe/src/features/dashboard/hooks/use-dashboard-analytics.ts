@@ -1,10 +1,10 @@
+import { toMajorUnits } from "@sumio/common";
 import { Receipt } from "lucide-react";
 import { useMemo } from "react";
 
 import { useAuth } from "@/features/auth";
 import { useTransactionsQuery } from "@/features/transactions";
 import { getCategoryMeta } from "@/features/transactions/components/transaction-category-icon";
-import { minorUnitsToMajor } from "@/lib/format";
 
 import type { SpendingCategory, Transaction } from "../types";
 
@@ -47,7 +47,7 @@ export function useDashboardAnalytics(): DashboardAnalytics {
 
     const mapped: Transaction[] = rawItems.slice(0, 10).map((t) => {
       const meta = getCategoryMeta(t.category.name, t.type);
-      const major = minorUnitsToMajor(t.amount, t.currency || baseCurrency);
+      const major = toMajorUnits(t.amount, t.currency || baseCurrency);
 
       return {
         id: t.id,
@@ -76,7 +76,7 @@ export function useDashboardAnalytics(): DashboardAnalytics {
     const cats: SpendingCategory[] = Array.from(catMap.entries())
       .map(([name, amount]) => ({
         name,
-        amount: minorUnitsToMajor(amount, baseCurrency),
+        amount: toMajorUnits(amount, baseCurrency),
       }))
       .toSorted((a, b) => b.amount - a.amount);
 

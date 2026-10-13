@@ -1,9 +1,8 @@
-import type { Nullable } from "@sumio/common";
+import { formatSignedCurrencyAmount, type Nullable } from "@sumio/common";
 import type { TransactionDto } from "@sumio/contract";
 
 import { Card, Metric, Text } from "@/components/atoms";
 import { ConfirmModal } from "@/components/molecules";
-import { formatSignedMoney } from "@/lib/format";
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
@@ -48,7 +47,11 @@ export function DeleteConfirmModal({
             {transaction.description || "Untitled Transaction"}
           </Text>
           <Metric
-            value={formatSignedMoney(transaction.amount, transaction.type, transaction.currency)}
+            value={formatSignedCurrencyAmount(
+              transaction.amount,
+              transaction.type,
+              transaction.currency,
+            )}
             size="sm"
             tone={transaction.type === "income" ? "income" : "expense"}
           />

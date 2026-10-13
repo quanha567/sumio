@@ -61,3 +61,13 @@ export function formatCurrencyAmount(
     maximumFractionDigits: exponent,
   }).format(major);
 }
+
+export function formatSignedCurrencyAmount(
+  minorAmount: bigint | number,
+  type: "income" | "expense",
+  currencyCode: string,
+  locale = "en-US",
+): string {
+  const formatted = formatCurrencyAmount(minorAmount, currencyCode, locale);
+  return type === "income" ? `+${formatted}` : `-${formatted}`;
+}

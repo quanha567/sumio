@@ -1,8 +1,8 @@
+import { formatCurrencyAmount } from "@sumio/common";
 import { PiggyBank, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 
 import { Skeleton } from "@/components/atoms";
 import { StatCard, type StatCardProps } from "@/components/molecules";
-import { formatMoney } from "@/lib/format";
 
 export interface KpiCardsProps {
   totalBalance?: number;
@@ -36,7 +36,7 @@ export function KpiCards({
   const cards: StatCardProps[] = [
     {
       label: "Total Balance",
-      value: formatMoney(totalBalance, currency, locale),
+      value: formatCurrencyAmount(totalBalance, currency, locale),
       icon: Wallet,
       tone: totalBalance >= 0 ? "accent" : "danger",
       delta: "Live",
@@ -46,7 +46,7 @@ export function KpiCards({
     },
     {
       label: "Total Income",
-      value: formatMoney(monthlyIncome, currency, locale),
+      value: formatCurrencyAmount(monthlyIncome, currency, locale),
       icon: TrendingUp,
       tone: "income",
       delta: "Live",
@@ -55,7 +55,7 @@ export function KpiCards({
     },
     {
       label: "Total Expenses",
-      value: formatMoney(monthlyExpenses, currency, locale),
+      value: formatCurrencyAmount(monthlyExpenses, currency, locale),
       icon: TrendingDown,
       tone: "expense",
       deltaTone: "expense",

@@ -1,10 +1,10 @@
+import { formatCurrencyAmount } from "@sumio/common";
 import type { TransactionDto } from "@sumio/contract";
 import { AlertCircle, Edit2, RefreshCw, Trash2 } from "lucide-react";
 import { useMemo } from "react";
 
 import { Alert, Button, Checkbox, Metric, Skeleton, Spinner, Text } from "@/components/atoms";
 import { DataTable, EmptyState } from "@/components/molecules";
-import { formatMoney } from "@/lib/format";
 
 import type { TransactionSelectionResult } from "../hooks/use-transaction-selection";
 import { CategoryIcon } from "./transaction-category-icon";
@@ -191,7 +191,7 @@ function TransactionTableMobileRow({
       </div>
       <div className="text-right">
         <Metric
-          value={`${isIncome ? "+ " : "- "}${formatMoney(t.amount, t.currency || baseCurrency, userLocale)}`}
+          value={`${isIncome ? "+ " : "- "}${formatCurrencyAmount(t.amount, t.currency || baseCurrency, userLocale)}`}
           tone={isIncome ? "income" : "expense"}
           size="sm"
           className="block"

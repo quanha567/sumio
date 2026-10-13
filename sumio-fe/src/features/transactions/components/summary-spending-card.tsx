@@ -1,8 +1,8 @@
+import { formatCurrencyAmount } from "@sumio/common";
 import { ChevronRight } from "lucide-react";
 
 import { Button, Card, ColorDot, Heading, Metric, Text } from "@/components/atoms";
 import { DonutChart, type DonutSegment, EmptyState } from "@/components/molecules";
-import { formatMoney } from "@/lib/format";
 
 interface SummarySpendingCardProps {
   totalExpense: number;
@@ -38,7 +38,7 @@ export function SummarySpendingCard({
           <div className="flex flex-col items-center">
             <DonutChart segments={spendingSegments} size={150}>
               <div className="flex flex-col items-center">
-                <Metric value={formatMoney(totalExpense, currency, locale)} size="sm" />
+                <Metric value={formatCurrencyAmount(totalExpense, currency, locale)} size="sm" />
                 <Text variant="caption">Total Expenses</Text>
               </div>
             </DonutChart>
@@ -61,7 +61,7 @@ export function SummarySpendingCard({
                         {percent}%
                       </Text>
                       <Text variant="body-sm" weight="semibold" className="tabular-nums">
-                        {formatMoney(seg.value, currency, locale)}
+                        {formatCurrencyAmount(seg.value, currency, locale)}
                       </Text>
                     </div>
                   </div>

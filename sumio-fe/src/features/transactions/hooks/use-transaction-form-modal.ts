@@ -1,10 +1,8 @@
-import type { Nullable } from "@sumio/common";
+import { toMajorUnits, toMinorUnits, type Nullable } from "@sumio/common";
 import type { CategoryDto, TransactionDto } from "@sumio/contract";
 import { useEffect, useMemo, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
-
-import { majorUnitsToMinor, minorUnitsToMajor } from "@/lib/format";
 
 export interface TransactionFormData {
   type: "income" | "expense";
@@ -61,7 +59,7 @@ export function useTransactionFormModal({
     if (effectiveTx) {
       return {
         type: effectiveTx.type,
-        amount: minorUnitsToMajor(effectiveTx.amount, effectiveTx.currency),
+        amount: toMajorUnits(effectiveTx.amount, effectiveTx.currency),
         date: effectiveTx.date,
         description: effectiveTx.description,
         categoryId: effectiveTx.category.id,
@@ -109,7 +107,7 @@ export function useTransactionFormModal({
       setIsSubmitting(true);
       setServerError(null);
       const currency = effectiveTx ? effectiveTx.currency : baseCurrency;
-      const minorAmount = majorUnitsToMinor(Number(data.amount), currency);
+      const minorAmount = Number(toMinorUnits(Number(data.amount), currency));
 
       if (minorAmount <= 0) {
         setServerError("Amount must be greater than 0");

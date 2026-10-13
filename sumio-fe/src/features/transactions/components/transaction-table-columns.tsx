@@ -1,3 +1,4 @@
+import { formatCurrencyAmount } from "@sumio/common";
 import type { TransactionDto } from "@sumio/contract";
 import type { ColumnDef, TableFeatures } from "@tanstack/react-table";
 import { Edit2, MoreVertical, Trash2 } from "lucide-react";
@@ -15,7 +16,6 @@ import {
   Metric,
   Text,
 } from "@/components/atoms";
-import { formatMoney } from "@/lib/format";
 
 import { CategoryIcon } from "./transaction-category-icon";
 
@@ -137,7 +137,7 @@ function createAmountColumn(
       const t = row.original;
       const isIncome = t.type === "income";
       const sign = isIncome ? "+ " : "- ";
-      const formatted = formatMoney(t.amount, t.currency || baseCurrency, userLocale);
+      const formatted = formatCurrencyAmount(t.amount, t.currency || baseCurrency, userLocale);
 
       return (
         <div className="text-right">

@@ -1,8 +1,8 @@
+import { formatCurrencyAmount } from "@sumio/common";
 import { ArrowDownLeft, ArrowUpRight, MoreHorizontal } from "lucide-react";
 
 import { Button, Card, Metric, Text } from "@/components/atoms";
 import { IconBadge, Sparkline, TrendBadge } from "@/components/molecules";
-import { formatMoney } from "@/lib/format";
 
 interface SummaryBalanceCardProps {
   netBalance: number;
@@ -37,7 +37,7 @@ export function SummaryBalanceCard({
           <Text variant="caption">Total balance</Text>
           <div className="mt-1 flex items-baseline justify-between">
             <Metric
-              value={formatMoney(Math.abs(netBalance), currency, locale)}
+              value={formatCurrencyAmount(Math.abs(netBalance), currency, locale)}
               size="lg"
               tone={netBalance >= 0 ? "income" : "expense"}
             />
@@ -64,7 +64,7 @@ export function SummaryBalanceCard({
               </Text>
             </div>
             <Metric
-              value={formatMoney(totalIncome, currency, locale)}
+              value={formatCurrencyAmount(totalIncome, currency, locale)}
               size="sm"
               className="mt-2 block"
             />
@@ -81,7 +81,7 @@ export function SummaryBalanceCard({
               </Text>
             </div>
             <Metric
-              value={formatMoney(totalExpense, currency, locale)}
+              value={formatCurrencyAmount(totalExpense, currency, locale)}
               size="sm"
               className="mt-2 block"
             />
