@@ -18,17 +18,3 @@ export interface SpendingCategory {
   name: string;
   amount: number;
 }
-
-export interface WeeklyCashflow {
-  label: string;
-  income: number;
-  expenses: number;
-}
-
-export interface UpcomingBill {
-  id: string;
-  name: string;
-  dueLabel: string;
-  amount: number;
-  icon: LucideIcon;
-}

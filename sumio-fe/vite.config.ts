@@ -17,7 +17,12 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "./src"),
+      "@sumio/contract": path.resolve(import.meta.dirname, "../packages/contract/src"),
+      "@sumio/common": path.resolve(import.meta.dirname, "../packages/common/src"),
     },
+  },
+  build: {
+    chunkSizeWarningLimit: 2500,
   },
   fmt: {
     ignorePatterns: ["dist/**", "src/routeTree.gen.ts"],

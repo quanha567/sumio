@@ -1,4 +1,4 @@
-import { Entity } from "../../../../shared/domain/entity.base.js";
+import { Entity } from "../../../../shared/domain/entity.base";
 
 export interface UserIdentityProps {
   userId: string;

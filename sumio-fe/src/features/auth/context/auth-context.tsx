@@ -1,16 +1,25 @@
 import type { UserProfileDto } from "@sumio/contract";
 import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  sendPasswordResetEmail,
   updateProfile,
   type User as FirebaseUser,
 } from "firebase/auth";
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
+import {
+  createContext,
+  use,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
+import { apiClient } from "@/lib/api-client";
 import { auth, googleProvider } from "@/lib/firebase";
 
 export interface AuthContextType {
@@ -28,7 +37,7 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+function useAuthSession() {
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [profile, setProfile] = useState<UserProfileDto | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -36,15 +45,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchProfile = useCallback(async (jwt: string) => {
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-      const res = await fetch(`${baseUrl}/api/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
+      const res = await apiClient.auth.getMe({
+        headers: { authorization: `Bearer ${jwt}` },
       });
-      if (res.ok) {
-        const data = (await res.json()) as UserProfileDto;
-        setProfile(data);
+      if (res.status === 200) {
+        setProfile(res.body);
       }
     } catch {
       // Backend might be offline or still starting in dev, gracefully ignore
@@ -79,63 +84,105 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => unsubscribe();
   }, [fetchProfile]);
 
-  const signInWithEmail = async (email: string, pass: string) => {
-    const cred = await signInWithEmailAndPassword(auth, email, pass);
-    const jwt = await cred.user.getIdToken();
-    setToken(jwt);
-    await fetchProfile(jwt);
+  return {
+    firebaseUser,
+    setFirebaseUser,
+    profile,
+    setProfile,
+    token,
+    setToken,
+    isLoading,
+    fetchProfile,
+    refreshProfile,
   };
+}
 
-  const signUpWithEmail = async (email: string, pass: string, displayName?: string) => {
-    const cred = await createUserWithEmailAndPassword(auth, email, pass);
-    if (displayName) {
-      await updateProfile(cred.user, { displayName });
-    }
-    const jwt = await cred.user.getIdToken(true);
-    setToken(jwt);
-    await fetchProfile(jwt);
-  };
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const {
+    firebaseUser,
+    setFirebaseUser,
+    profile,
+    setProfile,
+    token,
+    setToken,
+    isLoading,
+    fetchProfile,
+    refreshProfile,
+  } = useAuthSession();
 
-  const signInWithGoogle = async () => {
+  const signInWithEmail = useCallback(
+    async (email: string, pass: string) => {
+      const cred = await signInWithEmailAndPassword(auth, email, pass);
+      const jwt = await cred.user.getIdToken();
+      setToken(jwt);
+      await fetchProfile(jwt);
+    },
+    [fetchProfile, setToken],
+  );
+
+  const signUpWithEmail = useCallback(
+    async (email: string, pass: string, displayName?: string) => {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      if (displayName) {
+        await updateProfile(cred.user, { displayName });
+      }
+      const jwt = await cred.user.getIdToken(true);
+      setToken(jwt);
+      await fetchProfile(jwt);
+    },
+    [fetchProfile, setToken],
+  );
+
+  const signInWithGoogle = useCallback(async () => {
     const cred = await signInWithPopup(auth, googleProvider);
     const jwt = await cred.user.getIdToken();
     setToken(jwt);
     await fetchProfile(jwt);
-  };
+  }, [fetchProfile, setToken]);
 
-  const resetPassword = async (email: string) => {
+  const resetPassword = useCallback(async (email: string) => {
     await sendPasswordResetEmail(auth, email);
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await signOut(auth);
     setFirebaseUser(null);
     setToken(null);
     setProfile(null);
-  };
+  }, [setFirebaseUser, setProfile, setToken]);
 
-  return (
-    <AuthContext.Provider
-      value={{
-        firebaseUser,
-        profile,
-        token,
-        isLoading,
-        signInWithEmail,
-        signUpWithEmail,
-        signInWithGoogle,
-        resetPassword,
-        logout,
-        refreshProfile,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const contextValue = useMemo<AuthContextType>(
+    () => ({
+      firebaseUser,
+      profile,
+      token,
+      isLoading,
+      signInWithEmail,
+      signUpWithEmail,
+      signInWithGoogle,
+      resetPassword,
+      logout,
+      refreshProfile,
+    }),
+    [
+      firebaseUser,
+      profile,
+      token,
+      isLoading,
+      signInWithEmail,
+      signUpWithEmail,
+      signInWithGoogle,
+      resetPassword,
+      logout,
+      refreshProfile,
+    ],
   );
+
+  return <AuthContext value={contextValue}>{children}</AuthContext>;
 }
 
 export function useAuth(): AuthContextType {
-  const context = useContext(AuthContext);
+  const context = use(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }

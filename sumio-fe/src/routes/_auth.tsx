@@ -1,5 +1,4 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import { AuthLayout, useAuth } from "@/features/auth";
 
@@ -9,13 +8,10 @@ export const Route = createFileRoute("/_auth")({
 
 function AuthRouteComponent() {
   const { firebaseUser, isLoading } = useAuth();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isLoading && firebaseUser) {
-      void navigate({ to: "/" });
-    }
-  }, [isLoading, firebaseUser, navigate]);
+  if (!isLoading && firebaseUser) {
+    redirect({ to: "/" });
+  }
 
   return (
     <AuthLayout>

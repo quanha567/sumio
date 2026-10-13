@@ -1,11 +1,8 @@
 import { initContract } from "@ts-rest/core";
 import { z } from "zod";
+
 import { ErrorResponseSchema } from "../common/response.schema.js";
-import {
-  UpdateUserSettingsSchema,
-  UserProfileSchema,
-  UserSettingsSchema,
-} from "./auth.schema.js";
+import { UpdateUserSettingsSchema, UserProfileSchema, UserSettingsSchema } from "./auth.schema.js";
 
 const c = initContract();
 

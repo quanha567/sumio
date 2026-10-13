@@ -1,4 +1,4 @@
-import { ValueObject } from "../../../../shared/domain/value-object.base.js";
+import { ValueObject } from "../../../../shared/domain/value-object.base";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 

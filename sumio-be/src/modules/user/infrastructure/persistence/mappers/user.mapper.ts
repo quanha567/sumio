@@ -1,12 +1,12 @@
-import { UserIdentity } from "../../../domain/entities/user-identity.entity.js";
-import { UserSettings } from "../../../domain/entities/user-settings.entity.js";
-import { User, type UserStatus } from "../../../domain/entities/user.entity.js";
-import { Currency } from "../../../domain/value-objects/currency.vo.js";
-import { Email } from "../../../domain/value-objects/email.vo.js";
-import { UserId } from "../../../domain/value-objects/user-id.vo.js";
-import { UserIdentityOrmEntity } from "../entities/user-identity.orm-entity.js";
-import { UserSettingsOrmEntity } from "../entities/user-settings.orm-entity.js";
-import { UserOrmEntity } from "../entities/user.orm-entity.js";
+import { UserIdentity } from "../../../domain/entities/user-identity.entity";
+import { UserSettings } from "../../../domain/entities/user-settings.entity";
+import { User, type UserStatus } from "../../../domain/entities/user.entity";
+import { Currency } from "../../../domain/value-objects/currency.vo";
+import { Email } from "../../../domain/value-objects/email.vo";
+import { UserId } from "../../../domain/value-objects/user-id.vo";
+import { UserIdentityOrmEntity } from "../entities/user-identity.orm-entity";
+import { UserSettingsOrmEntity } from "../entities/user-settings.orm-entity";
+import { UserOrmEntity } from "../entities/user.orm-entity";
 
 export class UserMapper {
   public static toDomain(orm: UserOrmEntity): User {

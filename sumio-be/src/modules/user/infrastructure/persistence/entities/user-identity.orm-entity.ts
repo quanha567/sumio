@@ -8,7 +8,7 @@ import {
   PrimaryColumn,
 } from "typeorm";
 
-import type { UserOrmEntity } from "./user.orm-entity.js";
+import type { UserOrmEntity } from "./user.orm-entity";
 
 @Entity("user_identities")
 export class UserIdentityOrmEntity {

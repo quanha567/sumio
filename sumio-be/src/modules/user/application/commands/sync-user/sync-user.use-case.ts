@@ -1,19 +1,22 @@
 import { Inject, Injectable } from "@nestjs/common";
 
-import { IUseCase } from "../../../../../shared/application/use-case.interface.js";
-import { User } from "../../../domain/entities/user.entity.js";
+import type { IUseCase } from "../../../../../shared/application/use-case.interface";
+import { SeedDefaultCategoriesUseCase } from "../../../../category/application/commands/seed-default-categories/seed-default-categories.use-case";
+import { User } from "../../../domain/entities/user.entity";
 import {
   type IUserRepository,
   USER_REPOSITORY,
-} from "../../../domain/repositories/user.repository.interface.js";
-import { Email } from "../../../domain/value-objects/email.vo.js";
-import { SyncUserCommand } from "./sync-user.command.js";
+} from "../../../domain/repositories/user.repository.interface";
+import { Email } from "../../../domain/value-objects/email.vo";
+import type { SyncUserCommand } from "./sync-user.command";
 
 @Injectable()
 export class SyncUserUseCase implements IUseCase<SyncUserCommand, User> {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
+    @Inject(SeedDefaultCategoriesUseCase)
+    private readonly seedDefaultCategories: SeedDefaultCategoriesUseCase,
   ) {}
 
   public async execute(command: SyncUserCommand): Promise<User> {
@@ -52,6 +55,7 @@ export class SyncUserUseCase implements IUseCase<SyncUserCommand, User> {
     });
 
     await this.userRepository.save(newUser);
+    await this.seedDefaultCategories.execute(newUser.id.value);
     return newUser;
   }
 }

@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { Currency } from "../value-objects/currency.vo.js";
-import { Email } from "../value-objects/email.vo.js";
-import { UserId } from "../value-objects/user-id.vo.js";
-import { User } from "./user.entity.js";
+import { Currency } from "../value-objects/currency.vo";
+import { Email } from "../value-objects/email.vo";
+import { UserId } from "../value-objects/user-id.vo";
+import { User } from "./user.entity";
 
 describe("User Aggregate Root", () => {
   it("should create a new user with default settings and firebase identity", () => {

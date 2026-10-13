@@ -1,13 +1,13 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { DataSource } from "typeorm";
 
-import { User } from "../../../domain/entities/user.entity.js";
-import { IUserRepository } from "../../../domain/repositories/user.repository.interface.js";
-import { Email } from "../../../domain/value-objects/email.vo.js";
-import { UserId } from "../../../domain/value-objects/user-id.vo.js";
-import { UserIdentityOrmEntity } from "../entities/user-identity.orm-entity.js";
-import { UserOrmEntity } from "../entities/user.orm-entity.js";
-import { UserMapper } from "../mappers/user.mapper.js";
+import type { User } from "../../../domain/entities/user.entity";
+import type { IUserRepository } from "../../../domain/repositories/user.repository.interface";
+import type { Email } from "../../../domain/value-objects/email.vo";
+import type { UserId } from "../../../domain/value-objects/user-id.vo";
+import { UserIdentityOrmEntity } from "../entities/user-identity.orm-entity";
+import { UserOrmEntity } from "../entities/user.orm-entity";
+import { UserMapper } from "../mappers/user.mapper";
 
 @Injectable()
 export class TypeOrmUserRepository implements IUserRepository {

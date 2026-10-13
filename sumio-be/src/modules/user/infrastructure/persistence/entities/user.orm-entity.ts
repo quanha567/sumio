@@ -9,8 +9,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import { UserIdentityOrmEntity } from "./user-identity.orm-entity.js";
-import { UserSettingsOrmEntity } from "./user-settings.orm-entity.js";
+import { UserIdentityOrmEntity } from "./user-identity.orm-entity";
+import { UserSettingsOrmEntity } from "./user-settings.orm-entity";
 
 @Entity("users")
 export class UserOrmEntity {
