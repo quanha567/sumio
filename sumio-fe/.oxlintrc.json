@@ -10,17 +10,20 @@
   "rules": {
     "no-unused-vars": "error",
     "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-nested-ternary": "error",
+    "prefer-const": "error",
+    "max-params": ["error", { "max": 3 }],
     "react/react-in-jsx-scope": "off",
     "react/jsx-key": "error",
     "react/jsx-no-target-blank": "error",
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "warn",
-    "react/no-array-index-key": "warn",
+    "react/no-array-index-key": "error",
     "react/incompatible-library": "off",
     "react/set-state-in-effect": "warn",
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/prefer-tag-over-role": "off",
-    "typescript/no-explicit-any": "warn",
+    "typescript/no-explicit-any": "error",
     "typescript/consistent-type-imports": "error",
     "unicorn/prefer-node-protocol": "error",
     "unicorn/prefer-top-level-await": "off",
@@ -36,11 +39,19 @@
         "paths": [
           {
             "name": "@heroui/react",
-            "message": "Direct import from @heroui/react is forbidden. Import from '@/components/ui' instead."
+            "message": "Direct import from @heroui/react is forbidden. Import from '@/components/atoms' instead."
           },
           {
             "name": "@heroui/styles",
-            "message": "Direct import from @heroui/styles is forbidden outside global styles."
+            "message": "Direct import from @heroui/styles is forbidden outside components/atoms/."
+          },
+          {
+            "name": "recharts",
+            "message": "Direct import from recharts is forbidden. Import chart components from '@/components/molecules' instead."
+          },
+          {
+            "name": "motion/react",
+            "message": "Direct import from motion/react is forbidden in features. Use wrappers from '@/components/motion' instead."
           }
         ]
       }
@@ -51,5 +62,61 @@
     "es2024": true,
     "node": true
   },
+  "overrides": [
+    {
+      "files": ["src/components/atoms/**", "src/components/ui/**"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    },
+    {
+      "files": ["src/components/molecules/**", "src/components/common/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "@heroui/react",
+                "message": "Direct import from @heroui/react is forbidden. Import from '@/components/atoms' instead."
+              },
+              {
+                "name": "@heroui/styles",
+                "message": "Direct import from @heroui/styles is forbidden outside components/atoms/."
+              },
+              {
+                "name": "motion/react",
+                "message": "Direct import from motion/react is forbidden in features. Use wrappers from '@/components/motion' instead."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/components/motion/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "@heroui/react",
+                "message": "Direct import from @heroui/react is forbidden. Import from '@/components/atoms' instead."
+              },
+              {
+                "name": "@heroui/styles",
+                "message": "Direct import from @heroui/styles is forbidden outside components/atoms/."
+              },
+              {
+                "name": "recharts",
+                "message": "Direct import from recharts is forbidden. Import chart components from '@/components/molecules' instead."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
   "ignorePatterns": ["dist/**", "node_modules/**", "src/routeTree.gen.ts"]
 }
