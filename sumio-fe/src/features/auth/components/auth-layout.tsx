@@ -43,8 +43,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
                 Small steps today,
               </Text>
               <Heading level={1} variant="display" tone="accent" className="mt-1">
-                <span className="font-semibold italic">bigger dreams</span>{" "}
-                <br className="hidden sm:inline" />
+                <span className="italic">bigger dreams</span> <br className="hidden sm:inline" />
                 tomorrow
                 <span
                   className="ml-3 inline-block drop-shadow-xs filter"
