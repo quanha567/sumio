@@ -6,24 +6,22 @@ import { Alert, Button, Checkbox, Metric, Skeleton, Spinner, Text } from "@/comp
 import { DataTable, EmptyState } from "@/components/molecules";
 import { formatMoney } from "@/lib/format";
 
+import type { TransactionSelectionResult } from "../hooks/use-transaction-selection";
 import { CategoryIcon } from "./transaction-category-icon";
+import { buildTransactionColumns } from "./transaction-table-columns";
 
-interface TransactionTableViewProps {
+export interface TransactionTableViewProps {
   transactions: TransactionDto[];
   isLoading: boolean;
-  isError?: boolean;
+  isError: boolean;
   errorMessage?: string;
   onRetry?: () => void;
-  selectedIds: Set<string>;
+  selection: TransactionSelectionResult;
   baseCurrency: string;
   userLocale: string;
-  onToggleSelectAll: (isSelected: boolean) => void;
-  onToggleSelectRow: (id: string, isSelected: boolean) => void;
   onEdit: (tx: TransactionDto) => void;
   onDelete: (tx: TransactionDto) => void;
 }
-
-import { buildTransactionColumns } from "./transaction-table-columns";
 
 export function TransactionTableView({
   transactions,
@@ -31,23 +29,22 @@ export function TransactionTableView({
   isError,
   errorMessage,
   onRetry,
-  selectedIds,
+  selection,
   baseCurrency,
   userLocale,
-  onToggleSelectAll,
-  onToggleSelectRow,
   onEdit,
   onDelete,
 }: TransactionTableViewProps) {
+  const { selectedIds, toggleSelectAll, toggleSelectRow } = selection;
   const isAllSelected = transactions.length > 0 && transactions.every((t) => selectedIds.has(t.id));
 
   const columns = useMemo(
     () =>
       buildTransactionColumns({
         isAllSelected,
-        onToggleSelectAll,
+        onToggleSelectAll: toggleSelectAll,
         selectedIds,
-        onToggleSelectRow,
+        onToggleSelectRow: toggleSelectRow,
         userLocale,
         baseCurrency,
         onEdit,
@@ -55,9 +52,9 @@ export function TransactionTableView({
       }),
     [
       isAllSelected,
-      onToggleSelectAll,
+      toggleSelectAll,
       selectedIds,
-      onToggleSelectRow,
+      toggleSelectRow,
       userLocale,
       baseCurrency,
       onEdit,
@@ -112,7 +109,7 @@ export function TransactionTableView({
           isSelected={selectedIds.has(item.id)}
           baseCurrency={baseCurrency}
           userLocale={userLocale}
-          onToggleSelect={(sel) => onToggleSelectRow(item.id, sel)}
+          onToggleSelect={(sel) => toggleSelectRow(item.id, sel)}
           onEdit={onEdit}
           onDelete={onDelete}
         />

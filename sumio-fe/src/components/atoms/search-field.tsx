@@ -12,11 +12,21 @@ import {
   type SearchFieldSearchIconProps,
 } from "@heroui/react";
 import { searchFieldVariants, type VariantProps } from "@heroui/styles";
-import type { ComponentProps } from "react";
+import type { ComponentProps, Ref } from "react";
+import { useImperativeHandle, useRef } from "react";
 
 import { cn } from "./cn";
 
-function SearchFieldGroupWrapper({ className, ...props }: SearchFieldGroupProps) {
+export interface SearchFieldHandle {
+  focus: () => void;
+  clear: () => void;
+}
+
+interface SearchFieldGroupWrapperProps extends SearchFieldGroupProps {
+  className?: string;
+}
+
+function SearchFieldGroupWrapper({ className, ...props }: SearchFieldGroupWrapperProps) {
   return (
     <HeroUISearchFieldGroup
       className={cn(
@@ -28,9 +38,14 @@ function SearchFieldGroupWrapper({ className, ...props }: SearchFieldGroupProps)
   );
 }
 
-function SearchFieldInputWrapper({ className, ...props }: SearchFieldInputProps) {
+interface SearchFieldInputWrapperProps extends SearchFieldInputProps {
+  inputRef?: Ref<HTMLInputElement>;
+}
+
+function SearchFieldInputWrapper({ className, inputRef, ...props }: SearchFieldInputWrapperProps) {
   return (
     <HeroUISearchFieldInput
+      ref={inputRef}
       className={cn(
         "border-0 bg-transparent text-foreground placeholder:text-muted shadow-none ring-0 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 px-2 text-base sm:text-sm flex-1 min-w-0",
         className,
@@ -40,11 +55,25 @@ function SearchFieldInputWrapper({ className, ...props }: SearchFieldInputProps)
   );
 }
 
-export interface SearchFieldProps extends ComponentProps<typeof HeroUISearchField> {
+export interface SearchFieldProps extends Omit<ComponentProps<typeof HeroUISearchField>, "ref"> {
   placeholder?: string;
+  ref?: Ref<SearchFieldHandle>;
 }
 
-function BaseSearchField({ children, placeholder, className, ...props }: SearchFieldProps) {
+function BaseSearchField({ children, placeholder, className, ref, ...props }: SearchFieldProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      focus: () => inputRef.current?.focus(),
+      clear: () => {
+        if (inputRef.current) inputRef.current.value = "";
+      },
+    }),
+    [],
+  );
+
   if (children) {
     return (
       <HeroUISearchField className={className} {...props}>
@@ -57,7 +86,7 @@ function BaseSearchField({ children, placeholder, className, ...props }: SearchF
     <HeroUISearchField className={className} {...props}>
       <SearchFieldGroupWrapper>
         <HeroUISearchFieldSearchIcon />
-        <SearchFieldInputWrapper placeholder={placeholder} />
+        <SearchFieldInputWrapper inputRef={inputRef} placeholder={placeholder} />
         <HeroUISearchFieldClearButton />
       </SearchFieldGroupWrapper>
     </HeroUISearchField>

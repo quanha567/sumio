@@ -15,34 +15,19 @@ import { useEffect, useMemo, useRef } from "react";
 import { Button, SearchField, SelectPill, Spinner, Toolbar } from "@/components/atoms";
 import type { SelectOption } from "@/components/atoms/select-pill";
 
-interface TransactionToolbarProps {
-  typeFilter: "all" | "income" | "expense";
-  setTypeFilter: (val: "all" | "income" | "expense") => void;
-  categoryFilter: string;
-  setCategoryFilter: (val: string) => void;
-  dateFilter: "all" | "this-month" | "last-month";
-  setDateFilter: (val: "all" | "this-month" | "last-month") => void;
-  searchQuery: string;
-  setSearchQuery: (val: string) => void;
+import type { TransactionFiltersResult } from "../hooks/use-transaction-filters";
+
+export interface TransactionToolbarProps {
+  filters: TransactionFiltersResult;
   categories: CategoryDto[];
   isLoading: boolean;
   onRefresh: () => void;
   onAddTransaction: () => void;
-  onResetFilters?: () => void;
 }
 
 interface ToolbarFiltersProps {
-  typeFilter: "all" | "income" | "expense";
-  setTypeFilter: (val: "all" | "income" | "expense") => void;
-  categoryFilter: string;
-  setCategoryFilter: (val: string) => void;
-  dateFilter: "all" | "this-month" | "last-month";
-  setDateFilter: (val: "all" | "this-month" | "last-month") => void;
-  searchQuery: string;
-  setSearchQuery: (val: string) => void;
+  filters: TransactionFiltersResult;
   categories: CategoryDto[];
-  hasActiveFilters: boolean;
-  onResetFilters?: () => void;
 }
 
 const TYPE_OPTIONS: SelectOption[] = [
@@ -97,21 +82,26 @@ function resolveTypeIcon(typeFilter: "all" | "income" | "expense") {
   return <ArrowUpDown className="size-3.5" />;
 }
 
-function ToolbarFilters({
-  typeFilter,
-  setTypeFilter,
-  categoryFilter,
-  setCategoryFilter,
-  dateFilter,
-  setDateFilter,
-  searchQuery,
-  setSearchQuery,
-  categories,
-  hasActiveFilters,
-  onResetFilters,
-}: ToolbarFiltersProps) {
+function ToolbarFilters({ filters, categories }: ToolbarFiltersProps) {
   const searchInputRef = useRef<HTMLInputElement>(null);
   useSlashKeyFocus(searchInputRef);
+
+  const {
+    search,
+    searchInput,
+    setSearchInput,
+    setTypeFilter,
+    setCategoryFilter,
+    setDateFilter,
+    resetFilters,
+  } = filters;
+  const { type: typeFilter, categoryId: categoryFilter, date: dateFilter } = search;
+
+  const hasActiveFilters =
+    typeFilter !== "all" ||
+    categoryFilter !== "all" ||
+    dateFilter !== "all" ||
+    searchInput.trim() !== "";
 
   const activeTypeIcon = useMemo(() => resolveTypeIcon(typeFilter), [typeFilter]);
 
@@ -129,13 +119,13 @@ function ToolbarFilters({
     <div className="flex flex-wrap items-center gap-2">
       <SearchField
         aria-label="Search description"
-        value={searchQuery}
-        onChange={(val) => setSearchQuery(val)}
+        value={searchInput}
+        onChange={(val) => setSearchInput(val)}
       >
         <SearchField.Group className="w-full sm:w-48">
           <SearchField.SearchIcon />
           <SearchField.Input ref={searchInputRef} placeholder="Search transactions..." />
-          {searchQuery !== "" && <SearchField.ClearButton />}
+          {searchInput !== "" && <SearchField.ClearButton />}
         </SearchField.Group>
       </SearchField>
 
@@ -166,8 +156,8 @@ function ToolbarFilters({
         icon={<Calendar className="size-3.5" />}
       />
 
-      {hasActiveFilters && onResetFilters && (
-        <Button variant="ghost" size="sm" onPress={onResetFilters} className="h-8 px-2">
+      {hasActiveFilters && (
+        <Button variant="ghost" size="sm" onPress={resetFilters} className="h-8 px-2">
           <X className="mr-1 size-3" />
           Reset
         </Button>
@@ -177,44 +167,18 @@ function ToolbarFilters({
 }
 
 export function TransactionToolbar({
-  typeFilter,
-  setTypeFilter,
-  categoryFilter,
-  setCategoryFilter,
-  dateFilter,
-  setDateFilter,
-  searchQuery,
-  setSearchQuery,
+  filters,
   categories,
   isLoading,
   onRefresh,
   onAddTransaction,
-  onResetFilters,
 }: TransactionToolbarProps) {
-  const hasActiveFilters =
-    typeFilter !== "all" ||
-    categoryFilter !== "all" ||
-    dateFilter !== "all" ||
-    searchQuery.trim() !== "";
-
   return (
     <Toolbar
       variant="surface"
       className="flex-col items-stretch gap-3 p-2.5 sm:flex-row sm:items-center sm:justify-between"
     >
-      <ToolbarFilters
-        typeFilter={typeFilter}
-        setTypeFilter={setTypeFilter}
-        categoryFilter={categoryFilter}
-        setCategoryFilter={setCategoryFilter}
-        dateFilter={dateFilter}
-        setDateFilter={setDateFilter}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        categories={categories}
-        hasActiveFilters={hasActiveFilters}
-        onResetFilters={onResetFilters}
-      />
+      <ToolbarFilters filters={filters} categories={categories} />
 
       <div className="flex items-center justify-end gap-2 pt-2 sm:pt-0">
         <Button

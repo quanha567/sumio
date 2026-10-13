@@ -1,6 +1,6 @@
 import type { ListTransactionsQuery } from "@sumio/contract";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { useCallback, useMemo } from "react";
+import { startTransition, useCallback, useMemo } from "react";
 
 import type { TransactionSearch } from "@/routes/_app/transactions";
 
@@ -85,13 +85,15 @@ export function useTransactionFilters(): TransactionFiltersResult {
     (val: string) => {
       const trimmed = val.trim();
       if (trimmed !== (search.q || "")) {
-        void navigate({
-          search: (prev) => ({
-            ...prev,
-            q: trimmed,
-            page: 1,
-          }),
-          replace: true,
+        startTransition(() => {
+          void navigate({
+            search: (prev) => ({
+              ...prev,
+              q: trimmed,
+              page: 1,
+            }),
+            replace: true,
+          });
         });
       }
     },
@@ -106,9 +108,11 @@ export function useTransactionFilters(): TransactionFiltersResult {
 
   const setPage = useCallback(
     (newPage: number) => {
-      void navigate({
-        search: (prev) => ({ ...prev, page: newPage }),
-        replace: true,
+      startTransition(() => {
+        void navigate({
+          search: (prev) => ({ ...prev, page: newPage }),
+          replace: true,
+        });
       });
     },
     [navigate],
@@ -116,9 +120,11 @@ export function useTransactionFilters(): TransactionFiltersResult {
 
   const setTypeFilter = useCallback(
     (type: "all" | "income" | "expense") => {
-      void navigate({
-        search: (prev) => ({ ...prev, type, page: 1 }),
-        replace: true,
+      startTransition(() => {
+        void navigate({
+          search: (prev) => ({ ...prev, type, page: 1 }),
+          replace: true,
+        });
       });
     },
     [navigate],
@@ -126,9 +132,11 @@ export function useTransactionFilters(): TransactionFiltersResult {
 
   const setCategoryFilter = useCallback(
     (categoryId: string) => {
-      void navigate({
-        search: (prev) => ({ ...prev, categoryId, page: 1 }),
-        replace: true,
+      startTransition(() => {
+        void navigate({
+          search: (prev) => ({ ...prev, categoryId, page: 1 }),
+          replace: true,
+        });
       });
     },
     [navigate],
@@ -136,9 +144,11 @@ export function useTransactionFilters(): TransactionFiltersResult {
 
   const setDateFilter = useCallback(
     (date: "all" | "this-month" | "last-month") => {
-      void navigate({
-        search: (prev) => ({ ...prev, date, page: 1 }),
-        replace: true,
+      startTransition(() => {
+        void navigate({
+          search: (prev) => ({ ...prev, date, page: 1 }),
+          replace: true,
+        });
       });
     },
     [navigate],
@@ -146,16 +156,18 @@ export function useTransactionFilters(): TransactionFiltersResult {
 
   const resetFilters = useCallback(() => {
     setSearchInput("");
-    void navigate({
-      search: (prev) => ({
-        ...prev,
-        type: "all",
-        categoryId: "all",
-        date: "all",
-        q: "",
-        page: 1,
-      }),
-      replace: true,
+    startTransition(() => {
+      void navigate({
+        search: (prev) => ({
+          ...prev,
+          type: "all",
+          categoryId: "all",
+          date: "all",
+          q: "",
+          page: 1,
+        }),
+        replace: true,
+      });
     });
   }, [navigate, setSearchInput]);
 

@@ -34,19 +34,11 @@ function TransactionMainCard({
     <Card padding="md">
       <div className="space-y-4">
         <TransactionToolbar
-          typeFilter={list.search.type}
-          setTypeFilter={list.setTypeFilter}
-          categoryFilter={list.search.categoryId}
-          setCategoryFilter={list.setCategoryFilter}
-          dateFilter={list.search.date}
-          setDateFilter={list.setDateFilter}
-          searchQuery={list.searchInput}
-          setSearchQuery={list.setSearchInput}
+          filters={list}
           categories={list.categories}
           isLoading={list.isLoading}
           onRefresh={() => list.refetch()}
           onAddTransaction={() => modals.openCreate("expense")}
-          onResetFilters={list.resetFilters}
         />
 
         <BatchActionBar
@@ -62,11 +54,9 @@ function TransactionMainCard({
           isError={list.isError}
           errorMessage={list.error?.message}
           onRetry={() => list.refetch()}
-          selectedIds={list.selectedIds}
+          selection={list}
           baseCurrency={baseCurrency}
           userLocale={userLocale}
-          onToggleSelectAll={list.toggleSelectAll}
-          onToggleSelectRow={list.toggleSelectRow}
           onEdit={modals.openEdit}
           onDelete={modals.openDelete}
         />
