@@ -1,4 +1,4 @@
-import { formatSignedMajorCurrency } from "@sumio/common";
+import { formatSignedMajorCurrencyAmount } from "@sumio/common";
 import { useNavigate } from "@tanstack/react-router";
 import type { ColumnDef, TableFeatures } from "@tanstack/react-table";
 import { useState } from "react";
@@ -79,7 +79,7 @@ const columns: ColumnDef<TableFeatures, Transaction>[] = [
       return (
         <div className="text-right">
           <Metric
-            value={formatSignedMajorCurrency(t.amount)}
+            value={formatSignedMajorCurrencyAmount(t.amount)}
             size="sm"
             trend={isIncome ? "income" : "expense"}
           />
@@ -122,7 +122,7 @@ function MobileTransactionItem(t: Transaction) {
       </div>
       <div className="text-right">
         <Metric
-          value={formatSignedMajorCurrency(t.amount)}
+          value={formatSignedMajorCurrencyAmount(t.amount)}
           size="sm"
           trend={isIncome ? "income" : "expense"}
           className="block"

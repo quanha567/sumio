@@ -1,4 +1,4 @@
-import { formatMajorCurrency } from "@sumio/common";
+import { formatMajorCurrencyAmount } from "@sumio/common";
 import type { ReactNode } from "react";
 import { Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
@@ -38,7 +38,7 @@ function CustomDonutTooltip({ active, payload }: CustomDonutTooltipProps) {
         <ColorDot color={item.payload?.color} size="sm" />
         <Text variant="muted">{item.name}:</Text>
         <Text variant="body-sm" weight="semibold" className="tabular-nums">
-          {item.value === undefined ? null : formatMajorCurrency(item.value)}
+          {item.value === undefined ? null : formatMajorCurrencyAmount(item.value)}
         </Text>
       </div>
     </div>

@@ -28,6 +28,27 @@ export function toUtcIsoString(date: DateInput): string {
 }
 
 /**
+ * Formats a date using a custom pattern (default: YYYY-MM-DD).
+ */
+export function formatDate(date: DateInput, pattern = "YYYY-MM-DD"): string {
+  return dayjs(date).format(pattern);
+}
+
+/**
+ * Formats a date and time using a custom pattern (default: YYYY-MM-DD HH:mm:ss).
+ */
+export function formatDateTime(date: DateInput, pattern = "YYYY-MM-DD HH:mm:ss"): string {
+  return dayjs(date).format(pattern);
+}
+
+/**
+ * Formats a time using a custom pattern (default: HH:mm).
+ */
+export function formatTime(date: DateInput, pattern = "HH:mm"): string {
+  return dayjs(date).format(pattern);
+}
+
+/**
  * Returns a native Date representing the start of the UTC day (00:00:00.000Z).
  */
 export function startOfDayUtc(date: DateInput): Date {

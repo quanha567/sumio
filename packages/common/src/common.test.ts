@@ -5,14 +5,14 @@ import {
   endOfDayUtc,
   esToolkit,
   formatCompactNumber,
-  formatCurrency,
+  formatCurrencyAmount,
   formatDate,
   formatDateTime,
-  formatMajorCurrency,
+  formatMajorCurrencyAmount,
   formatNumber,
   formatPercent,
-  formatSignedCurrency,
-  formatSignedMajorCurrency,
+  formatSignedCurrencyAmount,
+  formatSignedMajorCurrencyAmount,
   formatTime,
   generateId,
   getCurrencyExponent,
@@ -42,9 +42,14 @@ describe("@sumio/common", () => {
       const iso = toUtcIsoString("2026-03-01T12:00:00Z");
       expect(iso).toBe("2026-03-01T12:00:00.000Z");
     });
+
+    it("should format dates and times correctly", () => {
+      expect(formatDateTime("2026-03-01T14:30:00", "YYYY-MM-DD HH:mm")).toBe("2026-03-01 14:30");
+      expect(formatTime("2026-03-01T14:30:00", "HH:mm")).toBe("14:30");
+    });
   });
 
-  describe("currency utilities & formatting", () => {
+  describe("currency utilities", () => {
     it("should correctly convert between minor and major units", () => {
       expect(getCurrencyExponent("VND")).toBe(0);
       expect(toMinorUnits(50000, "VND")).toBe(50000n);
@@ -56,41 +61,36 @@ describe("@sumio/common", () => {
     });
 
     it("should format minor unit currencies (unsigned and signed)", () => {
-      const usd = formatCurrency(1250, "USD", "en-US");
+      const usd = formatCurrencyAmount(1250, "USD", "en-US");
       expect(usd).toContain("12.50");
 
-      const vnd = formatCurrency(50000, "VND", "vi-VN");
+      const vnd = formatCurrencyAmount(50000, "VND", "vi-VN");
       expect(vnd).toContain("50.000");
 
-      const income = formatSignedCurrency(1250, "income", "USD", "en-US");
+      const income = formatSignedCurrencyAmount(1250, "income", "USD", "en-US");
       expect(income.startsWith("+")).toBe(true);
 
-      const expense = formatSignedCurrency(50000, "expense", "VND", "vi-VN");
+      const expense = formatSignedCurrencyAmount(50000, "expense", "VND", "vi-VN");
       expect(expense.startsWith("-")).toBe(true);
     });
 
     it("should format major unit currencies (unsigned and signed)", () => {
-      const usd = formatMajorCurrency(12.5, "USD", "en-US");
+      const usd = formatMajorCurrencyAmount(12.5, "USD", "en-US");
       expect(usd).toContain("12.50");
 
-      const signedPos = formatSignedMajorCurrency(12.5, "USD", "en-US");
+      const signedPos = formatSignedMajorCurrencyAmount(12.5, "USD", "en-US");
       expect(signedPos.startsWith("+")).toBe(true);
 
-      const signedNeg = formatSignedMajorCurrency(-50, "USD", "en-US");
+      const signedNeg = formatSignedMajorCurrencyAmount(-50, "USD", "en-US");
       expect(signedNeg.startsWith("-")).toBe(true);
     });
   });
 
-  describe("number & date formatters", () => {
+  describe("number formatters", () => {
     it("should format numbers and percents correctly", () => {
       expect(formatNumber(1234567.89, { maximumFractionDigits: 2 }, "en-US")).toBe("1,234,567.89");
       expect(formatPercent(0.155, 1, "en-US")).toBe("15.5%");
       expect(formatCompactNumber(1500, "en-US")).toBe("1.5K");
-    });
-
-    it("should format dates and times correctly", () => {
-      expect(formatDateTime("2026-03-01T14:30:00", "YYYY-MM-DD HH:mm")).toBe("2026-03-01 14:30");
-      expect(formatTime("2026-03-01T14:30:00", "HH:mm")).toBe("14:30");
     });
   });
 

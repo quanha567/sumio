@@ -1,7 +1,7 @@
 export * from "./currency";
 export * from "./date";
-export * from "./format";
 export * from "./id";
+export * from "./number";
 export * from "./types";
 
 // Re-export dayjs, es-toolkit, and lodash-es for unified imports

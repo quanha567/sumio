@@ -48,7 +48,7 @@ export function toMajorUnits(minorAmount: bigint | number, currencyCode: string)
 
 export function formatCurrencyAmount(
   minorAmount: bigint | number,
-  currencyCode: string,
+  currencyCode = "USD",
   locale = "en-US",
 ): string {
   const major = toMajorUnits(minorAmount, currencyCode);
@@ -65,9 +65,35 @@ export function formatCurrencyAmount(
 export function formatSignedCurrencyAmount(
   minorAmount: bigint | number,
   type: "income" | "expense",
-  currencyCode: string,
+  currencyCode = "USD",
   locale = "en-US",
 ): string {
   const formatted = formatCurrencyAmount(minorAmount, currencyCode, locale);
   return type === "income" ? `+${formatted}` : `-${formatted}`;
+}
+
+export function formatMajorCurrencyAmount(
+  majorAmount: number,
+  currencyCode = "USD",
+  locale = "en-US",
+): string {
+  const exponent = getCurrencyExponent(currencyCode);
+
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currencyCode.toUpperCase(),
+    minimumFractionDigits: exponent,
+    maximumFractionDigits: exponent,
+  }).format(majorAmount);
+}
+
+export function formatSignedMajorCurrencyAmount(
+  majorAmount: number,
+  currencyCode = "USD",
+  locale = "en-US",
+): string {
+  const formatted = formatMajorCurrencyAmount(Math.abs(majorAmount), currencyCode, locale);
+  if (majorAmount > 0) return `+${formatted}`;
+  if (majorAmount < 0) return `-${formatted}`;
+  return formatted;
 }
