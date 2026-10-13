@@ -15,7 +15,6 @@ import {
   AnimatedSidebarRail,
   useAnimatedSidebar,
 } from "@/components/motion/animated-sidebar";
-import { useAuth } from "@/features/auth";
 import { formatCurrency } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +24,7 @@ import { navItems } from "./nav-items";
 interface NavSidebarProps {
   savingsSaved?: number;
   savingsTarget?: number;
+  onLogout?: () => void | Promise<void>;
 }
 
 function checkNavActive(to: string | undefined, pathname: string): boolean {
@@ -33,11 +33,10 @@ function checkNavActive(to: string | undefined, pathname: string): boolean {
   return pathname.startsWith(to);
 }
 
-export function NavSidebar({ savingsSaved, savingsTarget }: NavSidebarProps) {
+export function NavSidebar({ savingsSaved, savingsTarget, onLogout }: NavSidebarProps) {
   const hasSavingsGoal =
     savingsSaved !== undefined && savingsTarget !== undefined && savingsTarget > 0;
   const percent = hasSavingsGoal ? Math.round((savingsSaved / savingsTarget) * 100) : 0;
-  const { logout } = useAuth();
   const { state } = useAnimatedSidebar();
   const routerState = useRouterState();
   const pathname = routerState.location.pathname;
@@ -46,7 +45,7 @@ export function NavSidebar({ savingsSaved, savingsTarget }: NavSidebarProps) {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await onLogout?.();
     } catch {
       // ignore
     }

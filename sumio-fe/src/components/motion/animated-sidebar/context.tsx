@@ -31,7 +31,7 @@ export const AnimatedSidebarPanelContext = createContext<AnimatedSidebarPanelCon
   null,
 );
 
-export function useAnimatedSidebar() {
+export function useAnimatedSidebar(): AnimatedSidebarContextValue {
   const context = use(AnimatedSidebarContext);
   if (!context) {
     throw new Error("useAnimatedSidebar must be used inside AnimatedSidebarProvider.");
@@ -39,7 +39,7 @@ export function useAnimatedSidebar() {
   return context;
 }
 
-export function useAnimatedSidebarPanel() {
+export function useAnimatedSidebarPanel(): AnimatedSidebarPanelContextValue {
   const context = use(AnimatedSidebarPanelContext);
   if (!context) {
     throw new Error("Animated Sidebar parts must be used inside AnimatedSidebar.");
@@ -47,7 +47,7 @@ export function useAnimatedSidebarPanel() {
   return context;
 }
 
-export function useIsMobile() {
+export function useIsMobile(): boolean {
   return useSyncExternalStore(subscribeToMobileQuery, getMobileSnapshot, getServerMobileSnapshot);
 }
 

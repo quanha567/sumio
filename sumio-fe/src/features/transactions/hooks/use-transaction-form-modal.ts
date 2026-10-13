@@ -1,5 +1,6 @@
 import type { CategoryDto, TransactionDto } from "@sumio/contract";
 import { useEffect, useMemo, useState } from "react";
+import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 
 import { majorUnitsToMinor, minorUnitsToMajor } from "@/lib/format";
@@ -29,6 +30,16 @@ export interface UseTransactionFormModalProps {
   }) => Promise<void>;
 }
 
+export interface TransactionFormModalResult {
+  form: UseFormReturn<TransactionFormData>;
+  selectedType: "income" | "expense";
+  handleTypeChange: (newType: "income" | "expense") => void;
+  filteredCategories: CategoryDto[];
+  isSubmitting: boolean;
+  serverError: string | null;
+  onFormSubmit: (data: TransactionFormData) => Promise<void>;
+}
+
 function getTodayString(): string {
   return new Date().toISOString().slice(0, 10);
 }
@@ -41,7 +52,7 @@ export function useTransactionFormModal({
   isOpen,
   onSuccess,
   handleSubmitAction,
-}: UseTransactionFormModalProps) {
+}: UseTransactionFormModalProps): TransactionFormModalResult {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 

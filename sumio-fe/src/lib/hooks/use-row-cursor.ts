@@ -40,7 +40,13 @@ function indexOfCursor(rows: readonly { id: string }[], query: string, cursor: R
  * effect's dependencies — the exhaustive-deps rule makes it — and a `moveTo`
  * rebuilt on every keystroke would re-run that effect on every keystroke.
  */
-export function useRowCursor(rows: readonly { id: string }[], query: string) {
+export interface RowCursorResult {
+  activeIndex: number;
+  moveTo: (id: string | null) => void;
+  moveActive: (direction: 1 | -1) => void;
+}
+
+export function useRowCursor(rows: readonly { id: string }[], query: string): RowCursorResult {
   const [cursor, setCursor] = useState<RowCursor | null>(null);
   // Written after commit, not during render: a render React discards or has not
   // finished still runs the component body, and an event handler that read this

@@ -4,7 +4,7 @@ export function useDebouncedSearch(
   initialValue: string,
   onDebounce: (value: string) => void,
   delay = 300,
-) {
+): readonly [string, (value: string) => void] {
   const [value, setValue] = useState(initialValue);
   const [prevInitial, setPrevInitial] = useState(initialValue);
 

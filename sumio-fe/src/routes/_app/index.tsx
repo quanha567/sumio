@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { RouteErrorBoundary } from "@/components/molecules";
 import { useAuth } from "@/features/auth";
 import { DashboardPage } from "@/features/dashboard";
 
 export const Route = createFileRoute("/_app/")({
   component: DashboardRouteComponent,
+  errorComponent: RouteErrorBoundary,
 });
 
 function DashboardRouteComponent() {

@@ -1,16 +1,18 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
 
+import { RouteErrorBoundary } from "@/components/molecules";
 import { AuthLayout, useAuth } from "@/features/auth";
 
 export const Route = createFileRoute("/_auth")({
   component: AuthRouteComponent,
+  errorComponent: RouteErrorBoundary,
 });
 
 function AuthRouteComponent() {
   const { firebaseUser, isLoading } = useAuth();
 
   if (!isLoading && firebaseUser) {
-    redirect({ to: "/" });
+    return <Navigate to="/" replace />;
   }
 
   return (

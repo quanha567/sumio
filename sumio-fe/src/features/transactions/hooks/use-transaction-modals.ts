@@ -7,7 +7,24 @@ import {
   useUpdateTransactionMutation,
 } from "../api/transaction-queries";
 
-export function useTransactionModals() {
+export interface TransactionModalsResult {
+  isFormOpen: boolean;
+  formDefaultType: "income" | "expense";
+  editingTx: TransactionDto | null;
+  isDeleteOpen: boolean;
+  deletingTx: TransactionDto | null;
+  openCreate: (defaultType?: "income" | "expense") => void;
+  openEdit: (tx: TransactionDto) => void;
+  closeForm: () => void;
+  openDelete: (tx: TransactionDto) => void;
+  closeDelete: () => void;
+  handleSave: (dto: CreateTransactionDto | UpdateTransactionDto) => Promise<void>;
+  handleConfirmDelete: () => Promise<void>;
+  isSaving: boolean;
+  isDeleting: boolean;
+}
+
+export function useTransactionModals(): TransactionModalsResult {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [formDefaultType, setFormDefaultType] = useState<"income" | "expense">("expense");
   const [editingTx, setEditingTx] = useState<TransactionDto | null>(null);

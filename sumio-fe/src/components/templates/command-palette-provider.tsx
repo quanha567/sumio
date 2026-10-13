@@ -13,14 +13,14 @@ import { createContext, type ReactNode, useCallback, use, useMemo, useState } fr
 import type { CommandItem } from "@/components/motion/command-palette";
 import { CommandPalette } from "@/components/motion/command-palette";
 
-interface CommandPaletteContextValue {
+export interface CommandPaletteContextValue {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
 const CommandPaletteContext = createContext<CommandPaletteContextValue | null>(null);
 
-export function useCommandPalette() {
+export function useCommandPalette(): CommandPaletteContextValue {
   const ctx = use(CommandPaletteContext);
 
   if (!ctx) {

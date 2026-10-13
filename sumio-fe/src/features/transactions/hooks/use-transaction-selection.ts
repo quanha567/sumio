@@ -1,6 +1,15 @@
 import { useCallback, useState } from "react";
 
-export function useTransactionSelection(currentItems: Array<{ id: string }> = []) {
+export interface TransactionSelectionResult {
+  selectedIds: Set<string>;
+  toggleSelectAll: (isSelected: boolean) => void;
+  toggleSelectRow: (id: string, isSelected: boolean) => void;
+  clearSelection: () => void;
+}
+
+export function useTransactionSelection(
+  currentItems: Array<{ id: string }> = [],
+): TransactionSelectionResult {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const toggleSelectAll = useCallback(

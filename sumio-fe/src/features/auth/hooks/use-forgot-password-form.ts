@@ -1,11 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useState } from "react";
+import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 
 import { useAuth } from "../context/auth-context";
 import { forgotPasswordSchema, type ForgotPasswordFormData } from "../schemas/auth.schema";
 
-export function useForgotPasswordForm() {
+export interface ForgotPasswordFormResult {
+  form: UseFormReturn<ForgotPasswordFormData>;
+  authError: string | null;
+  isSubmitting: boolean;
+  isSuccess: boolean;
+  sentEmail: string;
+  onSubmit: (data: ForgotPasswordFormData) => Promise<void>;
+}
+
+export function useForgotPasswordForm(): ForgotPasswordFormResult {
   const { resetPassword } = useAuth();
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);

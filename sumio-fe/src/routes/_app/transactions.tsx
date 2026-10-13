@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
+import { RouteErrorBoundary } from "@/components/molecules";
 import { TransactionsPage } from "@/features/transactions";
 
 export const transactionSearchSchema = z.object({
@@ -17,4 +18,5 @@ export const Route = createFileRoute("/_app/transactions")({
   validateSearch: (search: Record<string, unknown>): TransactionSearch =>
     transactionSearchSchema.parse(search),
   component: TransactionsPage,
+  errorComponent: RouteErrorBoundary,
 });

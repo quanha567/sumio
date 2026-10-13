@@ -1,12 +1,26 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
+import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 
 import { useAuth } from "../context/auth-context";
 import { registerSchema, type RegisterFormData } from "../schemas/auth.schema";
 
-export function useRegisterForm() {
+export interface RegisterFormResult {
+  form: UseFormReturn<RegisterFormData>;
+  showPassword: boolean;
+  togglePassword: () => void;
+  showConfirmPassword: boolean;
+  toggleConfirmPassword: () => void;
+  authError: string | null;
+  isSubmitting: boolean;
+  isGoogleSubmitting: boolean;
+  onSubmit: (data: RegisterFormData) => Promise<void>;
+  handleGoogleSignIn: () => Promise<void>;
+}
+
+export function useRegisterForm(): RegisterFormResult {
   const navigate = useNavigate();
   const { signUpWithEmail, signInWithGoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);

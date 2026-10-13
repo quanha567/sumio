@@ -6,6 +6,7 @@ export * from "./empty-state";
 export * from "./grouped-bar-chart";
 export * from "./icon-badge";
 export * from "./page-header";
+export * from "./route-error-boundary";
 export * from "./sparkline";
 export * from "./stat-card";
 export * from "./trend-badge";

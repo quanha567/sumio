@@ -6,6 +6,7 @@ import type {
   TransactionListDto,
   UpdateTransactionDto,
 } from "@sumio/contract";
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "@/components/atoms";
@@ -33,7 +34,9 @@ export const categoryKeys = {
   lists: () => [...categoryKeys.all, "list"] as const,
 };
 
-export function useTransactionsQuery(query: Partial<ListTransactionsQuery> = {}) {
+export function useTransactionsQuery(
+  query: Partial<ListTransactionsQuery> = {},
+): UseQueryResult<TransactionListDto, Error> {
   const { token } = useAuth();
 
   return useQuery<TransactionListDto, Error>({
@@ -43,7 +46,7 @@ export function useTransactionsQuery(query: Partial<ListTransactionsQuery> = {})
   });
 }
 
-export function useCategoriesQuery() {
+export function useCategoriesQuery(): UseQueryResult<CategoryListDto, Error> {
   const { token } = useAuth();
 
   return useQuery<CategoryListDto, Error>({
@@ -53,7 +56,11 @@ export function useCategoriesQuery() {
   });
 }
 
-export function useCreateTransactionMutation() {
+export function useCreateTransactionMutation(): UseMutationResult<
+  TransactionDto,
+  Error,
+  CreateTransactionDto
+> {
   const queryClient = useQueryClient();
   const { token } = useAuth();
 
@@ -72,7 +79,11 @@ export function useCreateTransactionMutation() {
   });
 }
 
-export function useUpdateTransactionMutation() {
+export function useUpdateTransactionMutation(): UseMutationResult<
+  TransactionDto,
+  Error,
+  { id: string; dto: UpdateTransactionDto }
+> {
   const queryClient = useQueryClient();
   const { token } = useAuth();
 
@@ -91,7 +102,7 @@ export function useUpdateTransactionMutation() {
   });
 }
 
-export function useDeleteTransactionMutation() {
+export function useDeleteTransactionMutation(): UseMutationResult<void, Error, string> {
   const queryClient = useQueryClient();
   const { token } = useAuth();
 
@@ -116,7 +127,11 @@ export interface BatchDeleteResult {
   failed: number;
 }
 
-export function useBatchDeleteTransactionsMutation() {
+export function useBatchDeleteTransactionsMutation(): UseMutationResult<
+  BatchDeleteResult,
+  Error,
+  string[]
+> {
   const queryClient = useQueryClient();
   const { token } = useAuth();
 

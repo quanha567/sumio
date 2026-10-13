@@ -13,7 +13,7 @@ import { useState } from "react";
  * side effect, and React rejects a callback that sets another component's state
  * during this one's render. Put those in an effect keyed to `open`.
  */
-export function useOnOpen(open: boolean, start: () => void) {
+export function useOnOpen(open: boolean, start: () => void): void {
   const [wasOpen, setWasOpen] = useState(open);
   if (open !== wasOpen) {
     setWasOpen(open);

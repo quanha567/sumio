@@ -12,7 +12,6 @@ import {
   Text,
 } from "@/components/atoms";
 import { AnimatedSidebarTrigger, useAnimatedSidebar } from "@/components/motion/animated-sidebar";
-import { useAuth } from "@/features/auth";
 
 import { useCommandPalette } from "./command-palette-provider";
 
@@ -24,6 +23,7 @@ export interface TopbarUser {
 
 interface TopbarProps {
   user: TopbarUser;
+  onLogout?: () => void | Promise<void>;
 }
 
 function initials(name: string) {
@@ -71,14 +71,13 @@ function TopbarSearchField() {
   );
 }
 
-export function Topbar({ user }: TopbarProps) {
-  const { logout } = useAuth();
+export function Topbar({ user, onLogout }: TopbarProps) {
   const navigate = useNavigate();
   const { state } = useAnimatedSidebar();
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await onLogout?.();
       void navigate({ to: "/login" });
     } catch {
       // ignore

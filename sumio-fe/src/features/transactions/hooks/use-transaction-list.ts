@@ -1,3 +1,4 @@
+import type { CategoryDto, TransactionDto } from "@sumio/contract";
 import { useCallback } from "react";
 
 import {
@@ -5,12 +6,33 @@ import {
   useCategoriesQuery,
   useTransactionsQuery,
 } from "../api/transaction-queries";
+import type { TransactionFiltersResult } from "./use-transaction-filters";
 import { PAGE_SIZE, useTransactionFilters } from "./use-transaction-filters";
+import type { TransactionSelectionResult } from "./use-transaction-selection";
 import { useTransactionSelection } from "./use-transaction-selection";
 
 export { PAGE_SIZE };
 
-export function useTransactionList() {
+export interface TransactionListController
+  extends TransactionFiltersResult, TransactionSelectionResult {
+  transactions: TransactionDto[];
+  total: number;
+  page: number;
+  pageSize: number;
+  isPending: boolean;
+  isLoading: boolean;
+  isFetching: boolean;
+  isError: boolean;
+  error: Error | null;
+  refetch: () => void;
+  categories: CategoryDto[];
+  isCategoriesPending: boolean;
+  isCategoriesLoading: boolean;
+  handleBatchDelete: () => Promise<void>;
+  isBatchDeleting: boolean;
+}
+
+export function useTransactionList(): TransactionListController {
   const filters = useTransactionFilters();
   const transactionsQuery = useTransactionsQuery(filters.queryParams);
   const categoriesQuery = useCategoriesQuery();

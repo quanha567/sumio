@@ -12,18 +12,19 @@ import { Topbar, type TopbarUser } from "./topbar";
 
 interface AppShellProps {
   user: TopbarUser;
+  onLogout?: () => void | Promise<void>;
   children: ReactNode;
 }
 
 /** Authenticated page chrome: animated sidebar + sticky topbar + command palette. */
-export function AppShell({ user, children }: AppShellProps) {
+export function AppShell({ user, onLogout, children }: AppShellProps) {
   return (
     <CommandPaletteProvider>
       <AnimatedSidebarProvider>
-        <NavSidebar />
+        <NavSidebar onLogout={onLogout} />
 
         <AnimatedSidebarInset className="bg-background">
-          <Topbar user={user} />
+          <Topbar user={user} onLogout={onLogout} />
 
           <main className="min-w-0 flex-1 px-4 pt-5 pb-24 sm:px-6 lg:px-8 lg:pb-8">{children}</main>
         </AnimatedSidebarInset>

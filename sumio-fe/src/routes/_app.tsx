@@ -1,15 +1,17 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
 
 import { Spinner } from "@/components/atoms";
+import { RouteErrorBoundary } from "@/components/molecules";
 import { AppShell } from "@/components/templates";
 import { useAuth } from "@/features/auth";
 
 export const Route = createFileRoute("/_app")({
   component: AppRouteComponent,
+  errorComponent: RouteErrorBoundary,
 });
 
 function AppRouteComponent() {
-  const { firebaseUser, profile, isLoading } = useAuth();
+  const { firebaseUser, profile, isLoading, logout } = useAuth();
 
   if (isLoading) {
     return (
@@ -20,9 +22,7 @@ function AppRouteComponent() {
   }
 
   if (!firebaseUser) {
-    redirect({
-      to: "/login",
-    });
+    return <Navigate to="/login" replace />;
   }
 
   const displayName =
@@ -37,7 +37,7 @@ function AppRouteComponent() {
   };
 
   return (
-    <AppShell user={currentUser}>
+    <AppShell user={currentUser} onLogout={logout}>
       <Outlet />
     </AppShell>
   );

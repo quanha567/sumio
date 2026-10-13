@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
  * of an interaction on this hook and leave hover-only polish on
  * `useHoverCapable`, so a component that opens on hover also opens on tap.
  */
-export function useTouchCapable() {
+export function useTouchCapable(): boolean {
   const [canTouch, setCanTouch] = useState(false);
 
   useEffect(() => {

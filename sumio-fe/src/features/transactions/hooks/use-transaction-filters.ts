@@ -63,7 +63,19 @@ function buildQueryParams(
   };
 }
 
-export function useTransactionFilters() {
+export interface TransactionFiltersResult {
+  search: TransactionSearch;
+  searchInput: string;
+  setSearchInput: (value: string) => void;
+  queryParams: Partial<ListTransactionsQuery>;
+  setPage: (newPage: number) => void;
+  setTypeFilter: (type: "all" | "income" | "expense") => void;
+  setCategoryFilter: (categoryId: string) => void;
+  setDateFilter: (date: "all" | "this-month" | "last-month") => void;
+  resetFilters: () => void;
+}
+
+export function useTransactionFilters(): TransactionFiltersResult {
   const rawSearch = useSearch({ strict: false }) as Record<string, unknown>;
   const navigate = useNavigate({ from: "/transactions" });
 
