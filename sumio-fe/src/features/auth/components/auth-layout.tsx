@@ -65,7 +65,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
 
           {/* Right Column: Floating Auth Form Card */}
           <div className="flex justify-center lg:col-span-6 lg:justify-end xl:col-span-5">
-            <div className="animate-entrance w-full max-w-[460px]">
+            <div className="animate-entrance w-full max-w-115">
               <Card intent="raised" padding="lg">
                 <BrandLogo className="mb-6" />
 

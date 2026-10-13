@@ -3,11 +3,11 @@ import { Global, Module } from "@nestjs/common";
 import pg from "pg";
 import { DataSource } from "typeorm";
 
-import { CategoryOrmEntity } from "../modules/category/infrastructure/persistence/entities/category.orm-entity";
-import { TransactionOrmEntity } from "../modules/transaction/infrastructure/persistence/entities/transaction.orm-entity";
-import { UserIdentityOrmEntity } from "../modules/user/infrastructure/persistence/entities/user-identity.orm-entity";
-import { UserSettingsOrmEntity } from "../modules/user/infrastructure/persistence/entities/user-settings.orm-entity";
-import { UserOrmEntity } from "../modules/user/infrastructure/persistence/entities/user.orm-entity";
+import { CategoryOrmEntity } from "@/modules/category/infrastructure/persistence/entities/category.orm-entity";
+import { TransactionOrmEntity } from "@/modules/transaction/infrastructure/persistence/entities/transaction.orm-entity";
+import { UserIdentityOrmEntity } from "@/modules/user/infrastructure/persistence/entities/user-identity.orm-entity";
+import { UserSettingsOrmEntity } from "@/modules/user/infrastructure/persistence/entities/user-settings.orm-entity";
+import { UserOrmEntity } from "@/modules/user/infrastructure/persistence/entities/user.orm-entity";
 
 export const ORM_ENTITIES = [
   UserOrmEntity,
