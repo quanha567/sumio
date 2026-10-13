@@ -271,8 +271,8 @@ Financial tables become unusable when crammed onto mobile screens:
 3. **Always Use Currency Formatters**:
    ```tsx
    // ✅ CORRECT:
-   import { formatCurrency, formatSignedCurrency } from "@/lib/format";
-   <Metric value={formatSignedCurrency(transaction.amount)} />
+   import { formatCurrency, formatSignedCurrency } from "@sumio/common";
+   <Metric value={formatSignedCurrency(transaction.amount, transaction.type, transaction.currency)} />
 
    // ❌ FORBIDDEN:
    <span>{`$${amount}.00`}</span>

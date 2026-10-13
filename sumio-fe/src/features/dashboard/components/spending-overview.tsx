@@ -1,8 +1,8 @@
+import { formatMajorCurrency } from "@sumio/common";
 import { useState } from "react";
 
 import { ColorDot, Metric, SectionCard, SelectPill, Text } from "@/components/atoms";
 import { DonutChart, EmptyState } from "@/components/molecules";
-import { formatCurrency } from "@/lib/format";
 
 import type { SpendingCategory } from "../types";
 
@@ -54,7 +54,7 @@ export function SpendingOverview({ categories }: SpendingOverviewProps) {
           <DonutChart
             segments={rows.map((r) => ({ label: r.name, value: r.amount, color: r.color }))}
           >
-            <Metric value={formatCurrency(total)} size="md" />
+            <Metric value={formatMajorCurrency(total)} size="md" />
             <Text variant="caption">Total spent</Text>
           </DonutChart>
 
@@ -75,7 +75,7 @@ export function SpendingOverview({ categories }: SpendingOverviewProps) {
                     weight="semibold"
                     className="w-16 text-right tabular-nums"
                   >
-                    {formatCurrency(r.amount)}
+                    {formatMajorCurrency(r.amount)}
                   </Text>
                 </span>
               </li>

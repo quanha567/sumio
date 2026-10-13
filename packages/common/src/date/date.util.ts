@@ -28,13 +28,6 @@ export function toUtcIsoString(date: DateInput): string {
 }
 
 /**
- * Formats a date using a custom pattern (default: YYYY-MM-DD).
- */
-export function formatDate(date: DateInput, format = "YYYY-MM-DD"): string {
-  return dayjs(date).format(format);
-}
-
-/**
  * Returns a native Date representing the start of the UTC day (00:00:00.000Z).
  */
 export function startOfDayUtc(date: DateInput): Date {

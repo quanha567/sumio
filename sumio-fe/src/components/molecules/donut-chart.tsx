@@ -1,8 +1,8 @@
+import { formatMajorCurrency } from "@sumio/common";
 import type { ReactNode } from "react";
 import { Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import { cn, ColorDot, Text } from "@/components/atoms";
-import { formatCurrency } from "@/lib/format";
 
 export interface DonutSegment {
   label: string;
@@ -38,7 +38,7 @@ function CustomDonutTooltip({ active, payload }: CustomDonutTooltipProps) {
         <ColorDot color={item.payload?.color} size="sm" />
         <Text variant="muted">{item.name}:</Text>
         <Text variant="body-sm" weight="semibold" className="tabular-nums">
-          {item.value === undefined ? null : formatCurrency(item.value)}
+          {item.value === undefined ? null : formatMajorCurrency(item.value)}
         </Text>
       </div>
     </div>

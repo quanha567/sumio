@@ -1,3 +1,4 @@
+import { formatMajorCurrency } from "@sumio/common";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 
@@ -15,7 +16,6 @@ import {
   AnimatedSidebarRail,
   useAnimatedSidebar,
 } from "@/components/motion/animated-sidebar";
-import { formatCurrency } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 import { BrandLogo } from "./brand-logo";
@@ -111,7 +111,7 @@ export function NavSidebar({ savingsSaved, savingsTarget, onLogout }: NavSidebar
             <div className="min-w-0">
               <Text variant="label">Monthly saving goal</Text>
               <Text variant="caption">
-                {formatCurrency(savingsSaved ?? 0)} / {formatCurrency(savingsTarget ?? 0)}
+                {formatMajorCurrency(savingsSaved ?? 0)} / {formatMajorCurrency(savingsTarget ?? 0)}
               </Text>
             </div>
           </Card>
