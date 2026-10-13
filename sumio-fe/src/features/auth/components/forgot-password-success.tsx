@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 
-import { IconBadge } from "@/components/common";
-import { Button, Heading, Text } from "@/components/ui";
+import { Button, Heading, Text } from "@/components/atoms";
+import { IconBadge } from "@/components/molecules";
 
 interface ForgotPasswordSuccessProps {
   email: string;

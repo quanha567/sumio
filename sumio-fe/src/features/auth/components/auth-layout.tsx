@@ -3,9 +3,9 @@ import { ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 
 import beachIllustration from "@/assets/illustrations/auth-beach.jpg";
-import { IconBadge } from "@/components/common";
-import { BrandLogo } from "@/components/layout";
-import { Card, Heading, Text } from "@/components/ui";
+import { Card, Heading, Text } from "@/components/atoms";
+import { IconBadge } from "@/components/molecules";
+import { BrandLogo } from "@/components/templates";
 
 interface AuthLayoutProps {
   children: ReactNode;

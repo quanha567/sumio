@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
 
-import { Button, Modal, Spinner, Text } from "@/components/ui";
+import { Button, Modal, Spinner, Text } from "@/components/atoms";
 
 export interface ConfirmModalProps {
   isOpen: boolean;

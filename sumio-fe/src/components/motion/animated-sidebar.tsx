@@ -139,6 +139,38 @@ function useIsMobile() {
   return useSyncExternalStore(subscribeToMobileQuery, getMobileSnapshot, getServerMobileSnapshot);
 }
 
+function getMobileSidebarOpacity(reduce: boolean, openMobile: boolean): number {
+  if (reduce) return openMobile ? 1 : 0;
+  return 1;
+}
+
+function getMobileSidebarX(
+  reduce: boolean,
+  openMobile: boolean,
+  side: SidebarSide,
+): string | number {
+  if (reduce) return 0;
+  if (openMobile) return "0%";
+  return side === "left" ? "-100%" : "100%";
+}
+
+function getSidebarWidth(offcanvas: boolean, collapsed: boolean): string {
+  if (offcanvas) return "0px";
+  if (collapsed) return "var(--sidebar-width-icon)";
+  return "var(--sidebar-width)";
+}
+
+function getOffcanvasX(offcanvas: boolean, side: SidebarSide): string {
+  if (!offcanvas) return "0%";
+  return side === "left" ? "-100%" : "100%";
+}
+
+function getLabelTransition(reduce: boolean, collapsed: boolean) {
+  if (reduce) return REDUCED_TRANSITION;
+  if (collapsed) return LABEL_EXIT_TRANSITION;
+  return LABEL_ENTER_TRANSITION;
+}
+
 interface AnimatedSidebarContextValue {
   isMobile: boolean;
   layoutId: string;
@@ -420,8 +452,8 @@ function MobileSidebar({
         data-side={side}
         initial={false}
         animate={{
-          opacity: context.reduce ? (context.openMobile ? 1 : 0) : 1,
-          x: context.reduce ? 0 : context.openMobile ? "0%" : side === "left" ? "-100%" : "100%",
+          opacity: getMobileSidebarOpacity(context.reduce, context.openMobile),
+          x: getMobileSidebarX(context.reduce, context.openMobile, side),
         }}
         transition={context.reduce ? REDUCED_TRANSITION : PANEL_TRANSITION}
         onAnimationComplete={() => {
@@ -472,16 +504,8 @@ function MobileSidebar({
 }
 
 export interface AnimatedSidebarProps extends Omit<HTMLMotionProps<"aside">, "children"> {
-  children?: ReactNode;
-  side?: SidebarSide;
-  variant?: SidebarVariant;
-  collapsible?: SidebarCollapsible;
-  ariaLabel?: string;
-  panelClassName?: string;
-}
-
-export interface AnimatedSidebarProps extends HTMLMotionProps<"aside"> {
   ref?: Ref<HTMLElement>;
+  children?: ReactNode;
   side?: SidebarSide;
   variant?: SidebarVariant;
   collapsible?: SidebarCollapsible;
@@ -504,11 +528,7 @@ export function AnimatedSidebar({
   const context = useAnimatedSidebar();
   const collapsed = collapsible !== "none" && !context.open;
   const offcanvas = collapsed && collapsible === "offcanvas";
-  const width = offcanvas
-    ? "0px"
-    : collapsed
-      ? "var(--sidebar-width-icon)"
-      : "var(--sidebar-width)";
+  const width = getSidebarWidth(offcanvas, collapsed);
 
   const panelValue = useMemo(
     () => ({ collapsed, collapsible, side }),
@@ -548,7 +568,7 @@ export function AnimatedSidebar({
         initial={false}
         animate={{
           opacity: offcanvas ? 0 : 1,
-          x: offcanvas ? (side === "left" ? "-100%" : "100%") : "0%",
+          x: getOffcanvasX(offcanvas, side),
         }}
         transition={context.reduce ? REDUCED_TRANSITION : PANEL_TRANSITION}
         className={cn(
@@ -1077,13 +1097,7 @@ export function AnimatedSidebarMenuButton({
           opacity: panel.collapsed ? 0 : 1,
           x: panel.collapsed ? -4 : 0,
         }}
-        transition={
-          context.reduce
-            ? REDUCED_TRANSITION
-            : panel.collapsed
-              ? LABEL_EXIT_TRANSITION
-              : LABEL_ENTER_TRANSITION
-        }
+        transition={getLabelTransition(context.reduce, panel.collapsed)}
         aria-hidden={panel.collapsed}
         className={cn(
           "relative z-10 min-w-0 flex-1 truncate",

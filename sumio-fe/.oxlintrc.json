@@ -64,13 +64,13 @@
   },
   "overrides": [
     {
-      "files": ["src/components/atoms/**", "src/components/ui/**"],
+      "files": ["src/components/atoms/**"],
       "rules": {
         "no-restricted-imports": "off"
       }
     },
     {
-      "files": ["src/components/molecules/**", "src/components/common/**"],
+      "files": ["src/components/molecules/**"],
       "rules": {
         "no-restricted-imports": [
           "error",

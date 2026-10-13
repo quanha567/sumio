@@ -1,6 +1,7 @@
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 
+import { Button, Card, ProgressRing, Text } from "@/components/atoms";
 import {
   AnimatedSidebar,
   AnimatedSidebarContent,
@@ -14,7 +15,6 @@ import {
   AnimatedSidebarRail,
   useAnimatedSidebar,
 } from "@/components/motion/animated-sidebar";
-import { Button, Card, ProgressRing, Text } from "@/components/ui";
 import { useAuth } from "@/features/auth";
 import { formatCurrency } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -25,6 +25,12 @@ import { navItems } from "./nav-items";
 interface NavSidebarProps {
   savingsSaved?: number;
   savingsTarget?: number;
+}
+
+function checkNavActive(to: string | undefined, pathname: string): boolean {
+  if (!to) return false;
+  if (to === "/") return pathname === "/";
+  return pathname.startsWith(to);
 }
 
 export function NavSidebar({ savingsSaved, savingsTarget }: NavSidebarProps) {
@@ -64,11 +70,7 @@ export function NavSidebar({ savingsSaved, savingsTarget }: NavSidebarProps) {
 
           <AnimatedSidebarMenu>
             {navItems.map(({ id, label, icon: Icon, to }) => {
-              const isActive = to
-                ? to === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(to)
-                : false;
+              const isActive = checkNavActive(to, pathname);
 
               if (to) {
                 return (

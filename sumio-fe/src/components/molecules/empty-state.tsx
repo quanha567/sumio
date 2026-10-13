@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 
-import { cn, Heading, Text } from "@/components/ui";
+import { cn, Heading, Text } from "@/components/atoms";
 
 export interface EmptyStateProps extends Omit<ComponentProps<"div">, "title"> {
   icon?: LucideIcon;

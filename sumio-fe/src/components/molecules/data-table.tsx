@@ -4,7 +4,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import type { ReactNode } from "react";
 import { useRef } from "react";
 
-import { Card, cn, Pagination, Spinner, Table, Text } from "@/components/ui";
+import { Card, cn, Pagination, Spinner, Table, Text } from "@/components/atoms";
 
 import { EmptyState } from "./empty-state";
 
@@ -18,7 +18,7 @@ export interface DataTablePagination {
 
 export interface DataTableProps<TData extends RowData> {
   data: TData[];
-  columns: ColumnDef<any, TData>[];
+  columns: ColumnDef<TData, unknown>[];
   isLoading?: boolean;
   emptyState?: ReactNode;
   renderMobileRow?: (item: TData, index: number) => ReactNode;
@@ -44,7 +44,7 @@ export function DataTable<TData extends RowData>({
   // TanStack Table v9 setup
   const table = useTable({
     data,
-    columns: columns as any,
+    columns,
     features: coreFeatures,
   });
 
@@ -65,7 +65,7 @@ export function DataTable<TData extends RowData>({
   }
 
   if (!isLoading && data.length === 0 && emptyState) {
-    return <>{emptyState}</>;
+    return emptyState;
   }
 
   const defaultEmpty = (
@@ -85,8 +85,8 @@ export function DataTable<TData extends RowData>({
               <Table.ScrollContainer>
                 <Table.Content aria-label={ariaLabel} className="w-full">
                   <Table.Header>
-                    {table.getHeaderGroups().map((headerGroup: any) =>
-                      headerGroup.headers.map((header: any) => (
+                    {table.getHeaderGroups().map((headerGroup) =>
+                      headerGroup.headers.map((header) => (
                         <Table.Column key={header.id} id={header.id}>
                           {header.isPlaceholder ? null : <FlexRender header={header} />}
                         </Table.Column>
@@ -95,9 +95,9 @@ export function DataTable<TData extends RowData>({
                   </Table.Header>
 
                   <Table.Body renderEmptyState={() => emptyState ?? defaultEmpty}>
-                    {table.getRowModel().rows.map((row: any) => (
+                    {table.getRowModel().rows.map((row) => (
                       <Table.Row key={row.id} id={row.id}>
-                        {row.getAllCells().map((cell: any) => (
+                        {row.getAllCells().map((cell) => (
                           <Table.Cell key={cell.id}>
                             <FlexRender cell={cell} />
                           </Table.Cell>
@@ -158,7 +158,7 @@ export function DataTable<TData extends RowData>({
                       <Card padding="sm">
                         <div className="flex flex-col gap-2">
                           {row
-                            ? row.getAllCells().map((cell: any) => (
+                            ? row.getAllCells().map((cell) => (
                                 <div key={cell.id} className="flex items-center justify-between">
                                   <Text variant="muted" size="xs">
                                     {typeof cell.column.columnDef.header === "string"

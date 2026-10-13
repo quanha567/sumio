@@ -19,8 +19,9 @@ import { EASE_OUT } from "@/lib/ease";
 import { useOnOpen } from "@/lib/hooks/use-on-open";
 import { useRowCursor } from "@/lib/hooks/use-row-cursor";
 import { useTouchCapable } from "@/lib/hooks/use-touch-capable";
-import { PresenceGate } from "@/lib/presence-gate";
 import { cn } from "@/lib/utils";
+
+import { PresenceGate } from "./presence-gate";
 
 export type CommandItem = {
   id: string;
@@ -53,6 +54,27 @@ const PANEL_SPRING = {
 } as const;
 
 const emptySubscribe = () => () => {};
+
+function renderCommandIcon(
+  Icon: React.ComponentType<{ className?: string }> | undefined,
+  hasIcons: boolean,
+  isActive: boolean,
+) {
+  if (Icon) {
+    return (
+      <Icon
+        className={cn(
+          "relative z-10 size-4 shrink-0 transition-colors",
+          isActive ? "text-accent" : "text-muted",
+        )}
+      />
+    );
+  }
+  if (hasIcons) {
+    return <span className="relative z-10 size-4 shrink-0" />;
+  }
+  return null;
+}
 
 export function CommandPalette({
   items,
@@ -321,16 +343,7 @@ export function CommandPalette({
                                   }
                                 />
                               ) : null}
-                              {Icon ? (
-                                <Icon
-                                  className={cn(
-                                    "relative z-10 size-4 shrink-0 transition-colors",
-                                    isActive ? "text-accent" : "text-muted",
-                                  )}
-                                />
-                              ) : hasIcons ? (
-                                <span className="relative z-10 size-4 shrink-0" />
-                              ) : null}
+                              {renderCommandIcon(Icon, hasIcons, isActive)}
                               <span className="relative z-10 flex-1 truncate">{it.label}</span>
                               {it.badge ? (
                                 <span className="relative z-10 shrink-0">{it.badge}</span>

@@ -2,7 +2,6 @@ import { useNavigate } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 
-import { DataTable, EmptyState, IconBadge } from "@/components/common";
 import {
   Chip,
   Metric,
@@ -11,7 +10,8 @@ import {
   SectionLink,
   SegmentedTabs,
   Text,
-} from "@/components/ui";
+} from "@/components/atoms";
+import { DataTable, EmptyState, IconBadge } from "@/components/molecules";
 import { formatSignedCurrency } from "@/lib/format";
 
 import type { Transaction, TransactionType } from "../types";
@@ -24,7 +24,7 @@ const tabs: { id: Filter; label: string }[] = [
   { id: "expense", label: "Expense" },
 ];
 
-const columns: ColumnDef<any, Transaction>[] = [
+const columns: ColumnDef<Transaction, unknown>[] = [
   {
     accessorKey: "date",
     header: "Date",

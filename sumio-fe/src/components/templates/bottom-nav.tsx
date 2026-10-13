@@ -1,8 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { motion } from "motion/react";
 
-import { SharedLayoutBg } from "@/components/motion/shared-layout-bg";
-import { ColorDot, Text } from "@/components/ui";
+import { ColorDot, Text } from "@/components/atoms";
+import { motion, SharedLayoutBg } from "@/components/motion";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +9,12 @@ import { navItems } from "./nav-items";
 
 // Use first 5 items for mobile bottom bar
 const items = navItems.slice(0, 5);
+
+function checkBottomNavActive(to: string | undefined, pathname: string): boolean {
+  if (!to) return false;
+  if (to === "/") return pathname === "/";
+  return pathname.startsWith(to);
+}
 
 export function BottomNav() {
   const routerState = useRouterState();
@@ -29,11 +34,7 @@ export function BottomNav() {
         >
           {items.map((item) => {
             const Icon = item.icon;
-            const isActive = item.to
-              ? item.to === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.to)
-              : false;
+            const isActive = checkBottomNavActive(item.to, pathname);
 
             const content = (
               <div

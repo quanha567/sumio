@@ -1,7 +1,7 @@
 import { Trash2, X } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { Button, Separator, Text, Toolbar } from "@/components/ui";
+import { Button, Separator, Text, Toolbar } from "@/components/atoms";
 
 export interface BatchActionBarProps {
   selectedCount: number;

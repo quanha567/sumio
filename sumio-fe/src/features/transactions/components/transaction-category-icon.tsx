@@ -19,8 +19,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import { IconBadge } from "@/components/common";
-import { type Tone, toneStyles } from "@/components/ui";
+import { type Tone, toneStyles } from "@/components/atoms";
+import { IconBadge } from "@/components/molecules";
 
 export interface CategoryMeta {
   icon: LucideIcon;

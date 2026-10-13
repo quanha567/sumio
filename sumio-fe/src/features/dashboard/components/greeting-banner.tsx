@@ -2,7 +2,7 @@ import { CalendarDays } from "lucide-react";
 import { useState } from "react";
 
 import clayHero from "@/assets/illustrations/dashboard-clay-hero.jpg";
-import { Card, Chip, Heading, Text } from "@/components/ui";
+import { Card, Chip, Heading, Text } from "@/components/atoms";
 
 interface GreetingBannerProps {
   userName: string;

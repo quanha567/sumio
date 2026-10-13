@@ -33,6 +33,12 @@ function tokenScore(token: string, field: string) {
   return 0;
 }
 
+function computeInitialScore(label: string, normalized: string): number {
+  if (label === normalized) return 10000;
+  if (label.startsWith(normalized)) return 2000;
+  return 0;
+}
+
 /** Match every query word across fields and put direct name matches first. */
 export function searchCommands<T extends SearchableCommand>(items: T[], query: string): T[] {
   const normalized = normalize(query);
@@ -41,8 +47,12 @@ export function searchCommands<T extends SearchableCommand>(items: T[], query: s
   return items
     .map((item) => {
       const label = normalize(item.label);
-      const fields = [label, normalize(item.group ?? ""), ...(item.keywords ?? []).map(normalize)];
-      let score = label === normalized ? 10000 : label.startsWith(normalized) ? 2000 : 0;
+      const fields = [
+        label,
+        normalize(item.group ?? ""),
+        ...(item.keywords ?? []).map((k) => normalize(k)),
+      ];
+      let score = computeInitialScore(label, normalized);
       for (const token of tokens) {
         const best = Math.max(
           ...fields.map((field, index) => {

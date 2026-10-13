@@ -1,8 +1,8 @@
 import { Plus } from "lucide-react";
 
-import { BatchActionBar, PageHeader } from "@/components/common";
-import { PageContainer, SplitLayout } from "@/components/layout";
-import { Button, Card, Pagination, Separator } from "@/components/ui";
+import { Button, Card, Pagination, Separator } from "@/components/atoms";
+import { BatchActionBar, PageHeader } from "@/components/molecules";
+import { PageContainer, SplitLayout } from "@/components/templates";
 import { useAuth } from "@/features/auth";
 
 import {

@@ -8,7 +8,7 @@ import type {
 } from "@sumio/contract";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { toast } from "@/components/ui";
+import { toast } from "@/components/atoms";
 import { useAuth } from "@/features/auth";
 
 import {

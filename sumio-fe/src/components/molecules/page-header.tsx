@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { cn, Heading, Text } from "@/components/ui";
+import { cn, Heading, Text } from "@/components/atoms";
 
 export interface PageHeaderProps {
   title: ReactNode;

@@ -9,7 +9,7 @@ import {
   SelectField,
   Text,
   TextField,
-} from "@/components/ui";
+} from "@/components/atoms";
 
 import { useTransactionFormModal } from "../hooks/use-transaction-form-modal";
 
@@ -39,6 +39,12 @@ interface TransactionFormModalProps {
     description: string;
     categoryId: string;
   }) => Promise<void>;
+}
+
+function getSubmitButtonLabel(isBusy: boolean, isEditing: boolean): string {
+  if (isBusy) return "Saving...";
+  if (isEditing) return "Update";
+  return "Create Transaction";
 }
 
 export function TransactionFormModal({
@@ -163,8 +169,9 @@ export function TransactionFormModal({
           >
             Cancel
           </Button>
+
           <Button type="submit" intent="primary" isDisabled={isSubmitting || isSaving}>
-            {isSubmitting || isSaving ? "Saving..." : isEditing ? "Update" : "Create Transaction"}
+            {getSubmitButtonLabel(isSubmitting || isSaving, isEditing)}
           </Button>
         </Modal.Footer>
       </Form>

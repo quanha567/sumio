@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Mail } from "lucide-react";
 
-import { Alert, Button, Form, Heading, linkStyles, Text, TextField } from "@/components/ui";
+import { Alert, Button, Form, Heading, linkStyles, Text, TextField } from "@/components/atoms";
 
 import { useForgotPasswordForm } from "../hooks/use-forgot-password-form";
 import { ForgotPasswordSuccess } from "./forgot-password-success";

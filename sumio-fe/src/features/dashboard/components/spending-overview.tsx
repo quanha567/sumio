@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { DonutChart, EmptyState } from "@/components/common";
-import { ColorDot, Metric, SectionCard, SelectPill, Text } from "@/components/ui";
+import { ColorDot, Metric, SectionCard, SelectPill, Text } from "@/components/atoms";
+import { DonutChart, EmptyState } from "@/components/molecules";
 import { formatCurrency } from "@/lib/format";
 
 import type { SpendingCategory } from "../types";

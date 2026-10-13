@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-import { cn, ColorDot, Text } from "@/components/ui";
+import { cn, ColorDot, Text } from "@/components/atoms";
 import { formatCurrency } from "@/lib/format";
 
 export interface DonutSegment {

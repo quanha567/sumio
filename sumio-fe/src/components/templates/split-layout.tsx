@@ -21,6 +21,18 @@ interface SplitLayoutProps {
  * Encapsulated responsive two-column master-detail layout.
  * Enforces internal breakpoint handling so features don't author ad-hoc grid utilities.
  */
+const MAIN_COL_CLASSES: Record<SplitRatio, string> = {
+  wide: "lg:col-span-7 xl:col-span-8",
+  equal: "lg:col-span-6",
+  default: "lg:col-span-8 xl:col-span-9",
+};
+
+const ASIDE_COL_CLASSES: Record<SplitRatio, string> = {
+  wide: "lg:col-span-5 xl:col-span-4",
+  equal: "lg:col-span-6",
+  default: "lg:col-span-4 xl:col-span-3",
+};
+
 export function SplitLayout({
   main,
   aside,
@@ -29,19 +41,8 @@ export function SplitLayout({
   mainClassName,
   asideClassName,
 }: SplitLayoutProps) {
-  const mainColClass =
-    ratio === "wide"
-      ? "lg:col-span-7 xl:col-span-8"
-      : ratio === "equal"
-        ? "lg:col-span-6"
-        : "lg:col-span-8 xl:col-span-9";
-
-  const asideColClass =
-    ratio === "wide"
-      ? "lg:col-span-5 xl:col-span-4"
-      : ratio === "equal"
-        ? "lg:col-span-6"
-        : "lg:col-span-4 xl:col-span-3";
+  const mainColClass = MAIN_COL_CLASSES[ratio];
+  const asideColClass = ASIDE_COL_CLASSES[ratio];
 
   return (
     <div className={cn("grid grid-cols-1 gap-6 lg:grid-cols-12", className)}>

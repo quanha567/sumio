@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react";
 
-import { DonutChart, type DonutSegment, EmptyState } from "@/components/common";
-import { Button, Card, ColorDot, Heading, Metric, Text } from "@/components/ui";
+import { Button, Card, ColorDot, Heading, Metric, Text } from "@/components/atoms";
+import { DonutChart, type DonutSegment, EmptyState } from "@/components/molecules";
 import { formatMoney } from "@/lib/format";
 
 interface SummarySpendingCardProps {

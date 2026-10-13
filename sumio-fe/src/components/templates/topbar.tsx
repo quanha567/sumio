@@ -1,7 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Bell, LogOut } from "lucide-react";
 
-import { AnimatedSidebarTrigger, useAnimatedSidebar } from "@/components/motion/animated-sidebar";
 import {
   Avatar,
   AvatarFallback,
@@ -11,7 +10,8 @@ import {
   Kbd,
   SearchField,
   Text,
-} from "@/components/ui";
+} from "@/components/atoms";
+import { AnimatedSidebarTrigger, useAnimatedSidebar } from "@/components/motion/animated-sidebar";
 import { useAuth } from "@/features/auth";
 
 import { useCommandPalette } from "./command-palette-provider";

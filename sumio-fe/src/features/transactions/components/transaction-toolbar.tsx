@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
 
-import { Button, SearchField, SelectPill, Spinner, Toolbar } from "@/components/ui";
-import type { SelectOption } from "@/components/ui/select-pill";
+import { Button, SearchField, SelectPill, Spinner, Toolbar } from "@/components/atoms";
+import type { SelectOption } from "@/components/atoms/select-pill";
 
 interface TransactionToolbarProps {
   typeFilter: "all" | "income" | "expense";

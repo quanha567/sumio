@@ -1,4 +1,4 @@
-import { PageContainer, SplitLayout } from "@/components/layout";
+import { PageContainer, SplitLayout } from "@/components/templates";
 
 import { GreetingBanner } from "./components/greeting-banner";
 import { KpiCards } from "./components/kpi-cards";

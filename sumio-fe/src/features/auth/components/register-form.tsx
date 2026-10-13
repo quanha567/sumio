@@ -11,7 +11,7 @@ import {
   Separator,
   Text,
   TextField,
-} from "@/components/ui";
+} from "@/components/atoms";
 
 import { useRegisterForm } from "../hooks/use-register-form";
 import { GoogleAuthButton } from "./google-auth-button";

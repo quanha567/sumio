@@ -12,7 +12,7 @@ import {
   Separator,
   Text,
   TextField,
-} from "@/components/ui";
+} from "@/components/atoms";
 
 import { useLoginForm } from "../hooks/use-login-form";
 import { GoogleAuthButton } from "./google-auth-button";

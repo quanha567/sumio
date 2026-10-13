@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
 
-import { cn, type Tone, toneStyles, Text } from "@/components/ui";
+import { cn, type Tone, toneStyles, Text } from "@/components/atoms";
 
 export interface TrendBadgeProps {
   delta: string;
@@ -21,7 +21,6 @@ export function TrendBadge({
   caption,
   className,
 }: TrendBadgeProps) {
-  const DeltaIcon = direction === "up" ? ArrowUp : direction === "down" ? ArrowDown : null;
   const style = toneStyles[tone];
 
   return (
@@ -32,9 +31,9 @@ export function TrendBadge({
           style.text,
         )}
       >
-        {DeltaIcon ? (
-          <DeltaIcon className="size-3" />
-        ) : (
+        {direction === "up" && <ArrowUp className="size-3" />}
+        {direction === "down" && <ArrowDown className="size-3" />}
+        {direction === "none" && (
           <span className="relative flex size-1.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-current opacity-75" />
             <span className="relative inline-flex size-1.5 rounded-full bg-current" />

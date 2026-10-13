@@ -1,5 +1,5 @@
 import logo from "@/assets/brand/logo.png";
-import { cn, Heading, Text } from "@/components/ui";
+import { cn, Heading, Text } from "@/components/atoms";
 
 interface BrandLogoProps {
   className?: string;

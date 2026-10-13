@@ -1,7 +1,7 @@
 import { ArrowDownLeft, ArrowUpRight, MoreHorizontal } from "lucide-react";
 
-import { IconBadge, Sparkline, TrendBadge } from "@/components/common";
-import { Button, Card, Metric, Text } from "@/components/ui";
+import { Button, Card, Metric, Text } from "@/components/atoms";
+import { IconBadge, Sparkline, TrendBadge } from "@/components/molecules";
 import { formatMoney } from "@/lib/format";
 
 interface SummaryBalanceCardProps {

@@ -1,6 +1,6 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-import { cn, ColorDot, Text } from "@/components/ui";
+import { cn, ColorDot, Text } from "@/components/atoms";
 
 export interface BarSeries {
   key: string;
@@ -29,8 +29,17 @@ interface CustomChartTooltipProps {
   formatValue?: (value: number) => string;
 }
 
+function formatTooltipValue(
+  value: number | undefined,
+  formatter?: (val: number) => string,
+): string | number | null {
+  if (value === undefined) return null;
+  if (formatter) return formatter(Number(value));
+  return value;
+}
+
 function CustomChartTooltip({ active, payload, label, formatValue }: CustomChartTooltipProps) {
-  if (!active || !payload || !payload.length) return null;
+  if (!active || !payload || payload.length === 0) return null;
 
   return (
     <div className="border-border bg-surface/95 rounded-xl border px-3 py-2 shadow-md backdrop-blur-sm transition-all">
@@ -49,11 +58,7 @@ function CustomChartTooltip({ active, payload, label, formatValue }: CustomChart
             </span>
 
             <Text variant="body-sm" weight="semibold" className="tabular-nums">
-              {entry.value !== undefined
-                ? formatValue
-                  ? formatValue(Number(entry.value))
-                  : entry.value
-                : null}
+              {formatTooltipValue(entry.value, formatValue)}
             </Text>
           </div>
         ))}

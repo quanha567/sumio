@@ -4,8 +4,14 @@ export function formatCurrency(amount: number): string {
   return usd.format(amount);
 }
 
+function getSign(amount: number): string {
+  if (amount > 0) return "+";
+  if (amount < 0) return "-";
+  return "";
+}
+
 export function formatSignedCurrency(amount: number): string {
-  const sign = amount > 0 ? "+" : amount < 0 ? "-" : "";
+  const sign = getSign(amount);
   return `${sign}${usd.format(Math.abs(amount))}`;
 }
 
@@ -46,12 +52,18 @@ export function formatMoney(
   }).format(major);
 }
 
+export interface FormatMoneyOptions {
+  currency?: string;
+  locale?: string;
+}
+
 export function formatSignedMoney(
   minorUnits: number,
   type: "income" | "expense",
-  currency: string = "USD",
-  locale: string = "en-US",
+  options?: string | FormatMoneyOptions,
 ): string {
+  const currency = typeof options === "string" ? options : (options?.currency ?? "USD");
+  const locale = typeof options === "object" ? (options?.locale ?? "en-US") : "en-US";
   const formatted = formatMoney(minorUnits, currency, locale);
   return type === "income" ? `+${formatted}` : `-${formatted}`;
 }

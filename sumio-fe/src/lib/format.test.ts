@@ -27,10 +27,10 @@ describe("formatMoney & minor units (ADR 0006)", () => {
   });
 
   it("formats signed money with appropriate sign (+/-)", () => {
-    const income = formatSignedMoney(1250, "income", "USD", "en-US");
+    const income = formatSignedMoney(1250, "income", { currency: "USD", locale: "en-US" });
     expect(income.startsWith("+")).toBe(true);
 
-    const expense = formatSignedMoney(50000, "expense", "VND", "vi-VN");
+    const expense = formatSignedMoney(50000, "expense", { currency: "VND", locale: "vi-VN" });
     expect(expense.startsWith("-")).toBe(true);
   });
 });

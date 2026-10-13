@@ -1,6 +1,6 @@
 import { Area, AreaChart, ResponsiveContainer, YAxis } from "recharts";
 
-import { cn } from "@/components/ui";
+import { cn } from "@/components/atoms";
 
 export interface SparklineProps {
   data: number[];

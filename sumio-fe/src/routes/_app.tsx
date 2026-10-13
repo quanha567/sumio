@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-import { AppShell } from "@/components/layout";
-import { Spinner } from "@/components/ui";
+import { Spinner } from "@/components/atoms";
+import { AppShell } from "@/components/templates";
 import { useAuth } from "@/features/auth";
 
 export const Route = createFileRoute("/_app")({

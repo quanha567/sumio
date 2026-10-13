@@ -1,7 +1,7 @@
 import { PiggyBank, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 
-import { StatCard, type StatCardProps } from "@/components/common";
-import { Skeleton } from "@/components/ui";
+import { Skeleton } from "@/components/atoms";
+import { StatCard, type StatCardProps } from "@/components/molecules";
 import { formatMoney } from "@/lib/format";
 
 export interface KpiCardsProps {

@@ -1,7 +1,7 @@
 import type { TransactionDto } from "@sumio/contract";
 
-import { ConfirmModal } from "@/components/common";
-import { Card, Metric, Text } from "@/components/ui";
+import { Card, Metric, Text } from "@/components/atoms";
+import { ConfirmModal } from "@/components/molecules";
 import { formatSignedMoney } from "@/lib/format";
 
 interface DeleteConfirmModalProps {

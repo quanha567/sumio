@@ -2,8 +2,8 @@ import type { TransactionDto } from "@sumio/contract";
 import { ArrowRight, PlusCircle } from "lucide-react";
 import { useMemo } from "react";
 
-import { type DonutSegment, IconBadge } from "@/components/common";
-import { Button, Card, Heading, Text } from "@/components/ui";
+import { Button, Card, Heading, Text } from "@/components/atoms";
+import { type DonutSegment, IconBadge } from "@/components/molecules";
 
 import { SummaryBalanceCard } from "./summary-balance-card";
 import { SummarySpendingCard } from "./summary-spending-card";
