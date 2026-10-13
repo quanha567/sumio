@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
+export type SplitRatio = "default" | "wide" | "equal";
+
 interface SplitLayoutProps {
   main: ReactNode;
   aside: ReactNode;
@@ -11,7 +13,7 @@ interface SplitLayoutProps {
    * - "wide": 7/5 on lg, 8/4 on xl (balanced master-detail, e.g. dashboard)
    * - "equal": 6/6 on lg (50/50 split)
    */
-  ratio?: "default" | "wide" | "equal";
+  ratio?: SplitRatio;
   className?: string;
   mainClassName?: string;
   asideClassName?: string;

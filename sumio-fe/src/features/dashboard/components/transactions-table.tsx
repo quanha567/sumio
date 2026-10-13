@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef, TableFeatures } from "@tanstack/react-table";
 import { useState } from "react";
 
 import {
@@ -24,7 +24,7 @@ const tabs: { id: Filter; label: string }[] = [
   { id: "expense", label: "Expense" },
 ];
 
-const columns: ColumnDef<Transaction, unknown>[] = [
+const columns: ColumnDef<TableFeatures, Transaction>[] = [
   {
     accessorKey: "date",
     header: "Date",

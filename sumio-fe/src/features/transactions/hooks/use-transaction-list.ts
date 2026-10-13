@@ -33,14 +33,16 @@ export function useTransactionList() {
     total: transactionsQuery.data?.total ?? 0,
     page: filters.search.page,
     pageSize: PAGE_SIZE,
-    isLoading: transactionsQuery.isLoading,
+    isPending: transactionsQuery.isPending,
+    isLoading: transactionsQuery.isPending,
     isFetching: transactionsQuery.isFetching,
     isError: transactionsQuery.isError,
     error: transactionsQuery.error,
     refetch: transactionsQuery.refetch,
 
     categories: categoriesQuery.data?.items ?? [],
-    isCategoriesLoading: categoriesQuery.isLoading,
+    isCategoriesPending: categoriesQuery.isPending,
+    isCategoriesLoading: categoriesQuery.isPending,
 
     // Selection & batch actions
     ...selection,

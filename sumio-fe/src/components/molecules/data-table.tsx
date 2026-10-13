@@ -1,4 +1,4 @@
-import type { ColumnDef, RowData } from "@tanstack/react-table";
+import type { ColumnDef, RowData, TableFeatures } from "@tanstack/react-table";
 import { coreFeatures, FlexRender, useTable } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import type { ReactNode } from "react";
@@ -18,7 +18,7 @@ export interface DataTablePagination {
 
 export interface DataTableProps<TData extends RowData> {
   data: TData[];
-  columns: ColumnDef<TData, unknown>[];
+  columns: ColumnDef<TableFeatures, TData>[];
   isLoading?: boolean;
   emptyState?: ReactNode;
   renderMobileRow?: (item: TData, index: number) => ReactNode;

@@ -1,5 +1,5 @@
 import type { TransactionDto } from "@sumio/contract";
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef, TableFeatures } from "@tanstack/react-table";
 import { Edit2, MoreVertical, Trash2 } from "lucide-react";
 
 import {
@@ -49,7 +49,7 @@ function formatTransactionDate(rawDate: string, locale: string): string {
 
 export function buildTransactionColumns(
   opts: TransactionColumnOptions,
-): ColumnDef<TransactionDto, unknown>[] {
+): ColumnDef<TableFeatures, TransactionDto>[] {
   const {
     isAllSelected,
     onToggleSelectAll,

@@ -17,6 +17,7 @@ export interface DashboardAnalytics {
   spendingCategories: SpendingCategory[];
   baseCurrency: string;
   userLocale: string;
+  isPending?: boolean;
   isLoading: boolean;
 }
 
@@ -25,7 +26,7 @@ export function useDashboardAnalytics(): DashboardAnalytics {
   const baseCurrency = profile?.settings?.baseCurrency || "USD";
   const userLocale = profile?.settings?.locale || "en-US";
 
-  const { data, isLoading } = useTransactionsQuery({ pageSize: 50 });
+  const { data, isPending } = useTransactionsQuery({ pageSize: 50 });
   const rawItems = data?.items;
 
   const analytics = useMemo(() => {
@@ -93,6 +94,7 @@ export function useDashboardAnalytics(): DashboardAnalytics {
     ...analytics,
     baseCurrency,
     userLocale,
-    isLoading,
+    isPending,
+    isLoading: isPending,
   };
 }

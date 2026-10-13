@@ -6,7 +6,7 @@ import type {
   TransactionListDto,
   UpdateTransactionDto,
 } from "@sumio/contract";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "@/components/atoms";
 import { useAuth } from "@/features/auth";
@@ -37,11 +37,7 @@ export function useTransactionsQuery(query: Partial<ListTransactionsQuery> = {})
 
   return useQuery<TransactionListDto, Error>({
     queryKey: transactionKeys.list(query),
-    queryFn: () => {
-      if (!token) throw new Error("Chưa đăng nhập");
-      return fetchTransactions(token, query);
-    },
-    enabled: !!token,
+    queryFn: token ? () => fetchTransactions(token, query) : skipToken,
   });
 }
 
@@ -50,11 +46,7 @@ export function useCategoriesQuery() {
 
   return useQuery<CategoryListDto, Error>({
     queryKey: categoryKeys.all,
-    queryFn: () => {
-      if (!token) throw new Error("Chưa đăng nhập");
-      return fetchCategories(token);
-    },
-    enabled: !!token,
+    queryFn: token ? () => fetchCategories(token) : skipToken,
     staleTime: 1000 * 60 * 10,
   });
 }
