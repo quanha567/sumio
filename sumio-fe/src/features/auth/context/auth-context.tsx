@@ -1,3 +1,4 @@
+import type { Nullable } from "@sumio/common";
 import type { UserProfileDto } from "@sumio/contract";
 import {
   createUserWithEmailAndPassword,
@@ -23,9 +24,9 @@ import { apiClient } from "@/lib/api-client";
 import { auth, googleProvider } from "@/lib/firebase";
 
 export interface AuthContextType {
-  firebaseUser: FirebaseUser | null;
-  profile: UserProfileDto | null;
-  token: string | null;
+  firebaseUser: Nullable<FirebaseUser>;
+  profile: Nullable<UserProfileDto>;
+  token: Nullable<string>;
   isLoading: boolean;
   signInWithEmail: (email: string, pass: string) => Promise<void>;
   signUpWithEmail: (email: string, pass: string, displayName?: string) => Promise<void>;

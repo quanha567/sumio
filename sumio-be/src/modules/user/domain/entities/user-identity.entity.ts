@@ -1,3 +1,5 @@
+import type { Nullable } from "@sumio/common";
+
 import { Entity } from "../../../../shared/domain/entity.base";
 
 export interface UserIdentityProps {
@@ -5,13 +7,13 @@ export interface UserIdentityProps {
   provider: string;
   providerUid: string;
   claims: Record<string, unknown>;
-  lastSignInAt: Date | null;
+  lastSignInAt: Nullable<Date>;
   createdAt: Date;
 }
 
 export class UserIdentity extends Entity<string> {
   private _claims: Record<string, unknown>;
-  private _lastSignInAt: Date | null;
+  private _lastSignInAt: Nullable<Date>;
 
   private constructor(
     id: string,
@@ -38,7 +40,7 @@ export class UserIdentity extends Entity<string> {
     return this._claims;
   }
 
-  public get lastSignInAt(): Date | null {
+  public get lastSignInAt(): Nullable<Date> {
     return this._lastSignInAt;
   }
 

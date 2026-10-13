@@ -1,3 +1,4 @@
+import type { Nullable } from "@sumio/common";
 import type { CategoryDto, TransactionDto } from "@sumio/contract";
 
 import {
@@ -19,8 +20,8 @@ interface TransactionFormModalProps {
   onOpenChange?: (open: boolean) => void;
   categories: CategoryDto[];
   baseCurrency: string;
-  transactionToEdit?: TransactionDto | null;
-  editingTransaction?: TransactionDto | null;
+  transactionToEdit?: Nullable<TransactionDto>;
+  editingTransaction?: Nullable<TransactionDto>;
   defaultType?: "income" | "expense";
   isSaving?: boolean;
   onSubmit?: (data: {

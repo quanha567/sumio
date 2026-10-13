@@ -1,3 +1,5 @@
+import type { Nullable } from "@sumio/common";
+
 import { Entity } from "../../../../shared/domain/entity.base";
 import type { Email } from "../value-objects/email.vo";
 import { UserId } from "../value-objects/user-id.vo";
@@ -8,8 +10,8 @@ export type UserStatus = "ACTIVE" | "SUSPENDED";
 
 export interface UserProps {
   email: Email;
-  displayName: string | null;
-  photoUrl: string | null;
+  displayName: Nullable<string>;
+  photoUrl: Nullable<string>;
   status: UserStatus;
   identities: UserIdentity[];
   settings: UserSettings;
@@ -19,8 +21,8 @@ export interface UserProps {
 
 export class User extends Entity<UserId> {
   private _email: Email;
-  private _displayName: string | null;
-  private _photoUrl: string | null;
+  private _displayName: Nullable<string>;
+  private _photoUrl: Nullable<string>;
   private _status: UserStatus;
   private _identities: UserIdentity[];
   private _settings: UserSettings;
@@ -44,11 +46,11 @@ export class User extends Entity<UserId> {
     return this._email;
   }
 
-  public get displayName(): string | null {
+  public get displayName(): Nullable<string> {
     return this._displayName;
   }
 
-  public get photoUrl(): string | null {
+  public get photoUrl(): Nullable<string> {
     return this._photoUrl;
   }
 

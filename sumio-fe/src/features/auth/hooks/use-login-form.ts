@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Nullable } from "@sumio/common";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
@@ -11,7 +12,7 @@ export interface LoginFormResult {
   form: UseFormReturn<LoginFormData>;
   showPassword: boolean;
   togglePassword: () => void;
-  authError: string | null;
+  authError: Nullable<string>;
   isSubmitting: boolean;
   isGoogleSubmitting: boolean;
   onSubmit: (data: LoginFormData) => Promise<void>;
@@ -22,7 +23,7 @@ export function useLoginForm(): LoginFormResult {
   const navigate = useNavigate();
   const { signInWithEmail, signInWithGoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<Nullable<string>>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleSubmitting, setIsGoogleSubmitting] = useState(false);
 

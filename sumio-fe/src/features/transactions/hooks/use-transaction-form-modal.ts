@@ -1,3 +1,4 @@
+import type { Nullable } from "@sumio/common";
 import type { CategoryDto, TransactionDto } from "@sumio/contract";
 import { useEffect, useMemo, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
@@ -16,7 +17,7 @@ export interface TransactionFormData {
 export interface UseTransactionFormModalProps {
   categories: CategoryDto[];
   baseCurrency: string;
-  effectiveTx?: TransactionDto | null;
+  effectiveTx?: Nullable<TransactionDto>;
   defaultType?: "income" | "expense";
   isOpen: boolean;
   onSuccess?: () => void;
@@ -36,7 +37,7 @@ export interface TransactionFormModalResult {
   handleTypeChange: (newType: "income" | "expense") => void;
   filteredCategories: CategoryDto[];
   isSubmitting: boolean;
-  serverError: string | null;
+  serverError: Nullable<string>;
   onFormSubmit: (data: TransactionFormData) => Promise<void>;
 }
 

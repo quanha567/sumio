@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Nullable } from "@sumio/common";
 import { useCallback, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
@@ -8,7 +9,7 @@ import { forgotPasswordSchema, type ForgotPasswordFormData } from "../schemas/au
 
 export interface ForgotPasswordFormResult {
   form: UseFormReturn<ForgotPasswordFormData>;
-  authError: string | null;
+  authError: Nullable<string>;
   isSubmitting: boolean;
   isSuccess: boolean;
   sentEmail: string;
@@ -17,7 +18,7 @@ export interface ForgotPasswordFormResult {
 
 export function useForgotPasswordForm(): ForgotPasswordFormResult {
   const { resetPassword } = useAuth();
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<Nullable<string>>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [sentEmail, setSentEmail] = useState("");

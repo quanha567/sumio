@@ -1,3 +1,4 @@
+import type { Nullable } from "@sumio/common";
 import type { TransactionDto } from "@sumio/contract";
 
 import { Card, Metric, Text } from "@/components/atoms";
@@ -8,7 +9,7 @@ interface DeleteConfirmModalProps {
   isOpen: boolean;
   onClose?: () => void;
   onOpenChange?: (open: boolean) => void;
-  transaction: TransactionDto | null;
+  transaction: Nullable<TransactionDto>;
   onConfirm: () => Promise<void>;
   isDeleting?: boolean;
   baseCurrency?: string;

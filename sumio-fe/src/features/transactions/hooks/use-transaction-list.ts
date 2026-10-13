@@ -1,3 +1,4 @@
+import type { Nullable } from "@sumio/common";
 import type { CategoryDto, TransactionDto } from "@sumio/contract";
 import { useCallback } from "react";
 
@@ -23,7 +24,7 @@ export interface TransactionListController
   isLoading: boolean;
   isFetching: boolean;
   isError: boolean;
-  error: Error | null;
+  error: Nullable<Error>;
   refetch: () => void;
   categories: CategoryDto[];
   isCategoriesPending: boolean;

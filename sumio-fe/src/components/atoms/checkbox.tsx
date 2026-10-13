@@ -7,6 +7,7 @@ import {
   CheckboxRoot,
 } from "@heroui/react";
 import { checkboxGroupVariants, checkboxVariants, tv, type VariantProps } from "@heroui/styles";
+import type { OnToggle } from "@sumio/common";
 import type { ComponentProps } from "react";
 
 import { cn } from "./cn";
@@ -27,8 +28,8 @@ export interface CheckboxProps extends Omit<
   "onChange" | "className"
 > {
   className?: string;
-  onValueChange?: (isSelected: boolean) => void;
-  onChange?: (isSelected: boolean) => void;
+  onValueChange?: OnToggle;
+  onChange?: OnToggle;
   disabled?: boolean;
   color?: UnifiedColor;
 }

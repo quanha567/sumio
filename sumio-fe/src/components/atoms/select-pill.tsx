@@ -1,20 +1,17 @@
+import type { OnChange, SelectOption as CommonSelectOption } from "@sumio/common";
 import type { ReactNode } from "react";
 
 import { cn } from "./cn";
 import { ListBox } from "./list-box";
 import { Select } from "./select";
 
-export interface SelectOption {
-  id: string;
-  label: string;
-  icon?: ReactNode;
-}
+export type SelectOption<T = string | number> = CommonSelectOption<T, ReactNode>;
 
 export interface SelectPillProps {
   ariaLabel: string;
   options: SelectOption[];
   value: string;
-  onChange: (value: string) => void;
+  onChange: OnChange<string>;
   className?: string;
   icon?: ReactNode;
   isActive?: boolean;

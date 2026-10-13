@@ -1,3 +1,4 @@
+import type { Nullable } from "@sumio/common";
 import type { CreateTransactionDto, TransactionDto, UpdateTransactionDto } from "@sumio/contract";
 import { useCallback, useState } from "react";
 
@@ -10,9 +11,9 @@ import {
 export interface TransactionModalsResult {
   isFormOpen: boolean;
   formDefaultType: "income" | "expense";
-  editingTx: TransactionDto | null;
+  editingTx: Nullable<TransactionDto>;
   isDeleteOpen: boolean;
-  deletingTx: TransactionDto | null;
+  deletingTx: Nullable<TransactionDto>;
   openCreate: (defaultType?: "income" | "expense") => void;
   openEdit: (tx: TransactionDto) => void;
   closeForm: () => void;
