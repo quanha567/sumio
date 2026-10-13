@@ -8,6 +8,14 @@ import { Email } from "@/modules/user/domain/value-objects/email.vo";
 import type { ITokenVerifier } from "../ports/token-verifier.port";
 import { FirebaseAuthGuard } from "./firebase-auth.guard";
 
+function createGuardContext(req: Record<string, unknown>): ExecutionContext {
+  return {
+    switchToHttp: () => ({
+      getRequest: () => req,
+    }),
+  } as unknown as ExecutionContext;
+}
+
 describe("FirebaseAuthGuard", () => {
   it("should throw UnauthorizedException if Authorization header is missing", async () => {
     const mockTokenVerifier = { verifyIdToken: vi.fn() };
@@ -16,12 +24,7 @@ describe("FirebaseAuthGuard", () => {
       mockTokenVerifier as unknown as ITokenVerifier,
       mockSyncUserUseCase as unknown as SyncUserUseCase,
     );
-
-    const context = {
-      switchToHttp: () => ({
-        getRequest: () => ({ headers: {} }),
-      }),
-    } as unknown as ExecutionContext;
+    const context = createGuardContext({ headers: {} });
 
     await expect(guard.canActivate(context)).rejects.toThrow(UnauthorizedException);
   });
@@ -52,26 +55,15 @@ describe("FirebaseAuthGuard", () => {
     );
 
     const req: Record<string, unknown> = {
-      headers: {
-        authorization: "Bearer valid-token-123",
-      },
+      headers: { authorization: "Bearer valid-token-123" },
     };
 
-    const context = {
-      switchToHttp: () => ({
-        getRequest: () => req,
-      }),
-    } as unknown as ExecutionContext;
-
-    const result = await guard.canActivate(context);
+    const result = await guard.canActivate(createGuardContext(req));
 
     expect(result).toBe(true);
     expect(mockTokenVerifier.verifyIdToken).toHaveBeenCalledWith("valid-token-123");
     expect(mockSyncUserUseCase.execute).toHaveBeenCalledWith(
-      expect.objectContaining({
-        firebaseUid: "fb-123",
-        email: "test@example.com",
-      }),
+      expect.objectContaining({ firebaseUid: "fb-123", email: "test@example.com" }),
     );
     expect(req.user).toEqual({
       id: mockUser.id.value,

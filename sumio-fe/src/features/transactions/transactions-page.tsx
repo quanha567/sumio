@@ -12,15 +12,85 @@ import {
   TransactionTableView,
   TransactionToolbar,
 } from "./components";
-import { useTransactionList, useTransactionModals } from "./hooks";
+import type { useTransactionList, useTransactionModals } from "./hooks";
+import { useTransactionList as useList, useTransactionModals as useModals } from "./hooks";
+
+interface TransactionMainCardProps {
+  list: ReturnType<typeof useTransactionList>;
+  modals: ReturnType<typeof useTransactionModals>;
+  baseCurrency: string;
+  userLocale: string;
+  totalPages: number;
+}
+
+function TransactionMainCard({
+  list,
+  modals,
+  baseCurrency,
+  userLocale,
+  totalPages,
+}: TransactionMainCardProps) {
+  return (
+    <Card padding="md">
+      <div className="space-y-4">
+        <TransactionToolbar
+          typeFilter={list.search.type}
+          setTypeFilter={list.setTypeFilter}
+          categoryFilter={list.search.categoryId}
+          setCategoryFilter={list.setCategoryFilter}
+          dateFilter={list.search.date}
+          setDateFilter={list.setDateFilter}
+          searchQuery={list.searchInput}
+          setSearchQuery={list.setSearchInput}
+          categories={list.categories}
+          isLoading={list.isLoading}
+          onRefresh={() => list.refetch()}
+          onAddTransaction={() => modals.openCreate("expense")}
+          onResetFilters={list.resetFilters}
+        />
+
+        <BatchActionBar
+          selectedCount={list.selectedIds.size}
+          onClearSelection={list.clearSelection}
+          onDelete={list.handleBatchDelete}
+          isDeleting={list.isBatchDeleting}
+        />
+
+        <TransactionTableView
+          transactions={list.transactions}
+          isLoading={list.isLoading}
+          isError={list.isError}
+          errorMessage={list.error?.message}
+          onRetry={() => list.refetch()}
+          selectedIds={list.selectedIds}
+          baseCurrency={baseCurrency}
+          userLocale={userLocale}
+          onToggleSelectAll={list.toggleSelectAll}
+          onToggleSelectRow={list.toggleSelectRow}
+          onEdit={modals.openEdit}
+          onDelete={modals.openDelete}
+        />
+
+        {totalPages > 1 && (
+          <div className="pt-2">
+            <Separator className="mb-4" />
+            <div className="flex justify-center">
+              <Pagination page={list.page} total={totalPages} onChange={(p) => list.setPage(p)} />
+            </div>
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+}
 
 export function TransactionsPage() {
   const { profile } = useAuth();
   const baseCurrency = profile?.settings?.baseCurrency || "USD";
   const userLocale = profile?.settings?.locale || "en-US";
 
-  const list = useTransactionList();
-  const modals = useTransactionModals();
+  const list = useList();
+  const modals = useModals();
 
   const totalPages = Math.ceil(list.total / list.pageSize);
 
@@ -39,60 +109,13 @@ export function TransactionsPage() {
 
       <SplitLayout
         main={
-          <Card padding="md">
-            <div className="space-y-4">
-              <TransactionToolbar
-                typeFilter={list.search.type}
-                setTypeFilter={list.setTypeFilter}
-                categoryFilter={list.search.categoryId}
-                setCategoryFilter={list.setCategoryFilter}
-                dateFilter={list.search.date}
-                setDateFilter={list.setDateFilter}
-                searchQuery={list.searchInput}
-                setSearchQuery={list.setSearchInput}
-                categories={list.categories}
-                isLoading={list.isLoading}
-                onRefresh={() => list.refetch()}
-                onAddTransaction={() => modals.openCreate("expense")}
-                onResetFilters={list.resetFilters}
-              />
-
-              <BatchActionBar
-                selectedCount={list.selectedIds.size}
-                onClearSelection={list.clearSelection}
-                onDelete={list.handleBatchDelete}
-                isDeleting={list.isBatchDeleting}
-              />
-
-              <TransactionTableView
-                transactions={list.transactions}
-                isLoading={list.isLoading}
-                isError={list.isError}
-                errorMessage={list.error?.message}
-                onRetry={() => list.refetch()}
-                selectedIds={list.selectedIds}
-                baseCurrency={baseCurrency}
-                userLocale={userLocale}
-                onToggleSelectAll={list.toggleSelectAll}
-                onToggleSelectRow={list.toggleSelectRow}
-                onEdit={modals.openEdit}
-                onDelete={modals.openDelete}
-              />
-
-              {totalPages > 1 && (
-                <div className="pt-2">
-                  <Separator className="mb-4" />
-                  <div className="flex justify-center">
-                    <Pagination
-                      page={list.page}
-                      total={totalPages}
-                      onChange={(p) => list.setPage(p)}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </Card>
+          <TransactionMainCard
+            list={list}
+            modals={modals}
+            baseCurrency={baseCurrency}
+            userLocale={userLocale}
+            totalPages={totalPages}
+          />
         }
         aside={
           <TransactionSummaryPanel

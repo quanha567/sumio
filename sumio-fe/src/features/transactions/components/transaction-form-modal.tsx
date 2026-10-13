@@ -41,10 +41,86 @@ interface TransactionFormModalProps {
   }) => Promise<void>;
 }
 
+const TYPE_TABS: { id: "expense" | "income"; label: string }[] = [
+  { id: "expense", label: "Expense" },
+  { id: "income", label: "Income" },
+];
+
 function getSubmitButtonLabel(isBusy: boolean, isEditing: boolean): string {
   if (isBusy) return "Saving...";
   if (isEditing) return "Update";
   return "Create Transaction";
+}
+
+interface FormInputsProps {
+  selectedType: "income" | "expense";
+  onTypeChange: (type: "income" | "expense") => void;
+  displayCurrency: string;
+  filteredCategories: CategoryDto[];
+}
+
+function TransactionFormInputs({
+  selectedType,
+  onTypeChange,
+  displayCurrency,
+  filteredCategories,
+}: FormInputsProps) {
+  return (
+    <>
+      <div>
+        <Text variant="caption" className="mb-1.5 block">
+          Transaction Type
+        </Text>
+        <SegmentedTabs
+          ariaLabel="Transaction Type"
+          tabs={TYPE_TABS}
+          value={selectedType}
+          onChange={onTypeChange}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <TextField
+          name="amount"
+          type="number"
+          step="any"
+          min="0"
+          placeholder="0.00"
+          isRequired
+          label={`Amount (${displayCurrency})`}
+          rules={{
+            required: "Valid amount is required",
+            min: { value: 0.0001, message: "Valid amount is required" },
+            valueAsNumber: true,
+          }}
+        />
+
+        <TextField
+          name="date"
+          type="date"
+          isRequired
+          label="Date"
+          rules={{ required: "Date is required" }}
+        />
+      </div>
+
+      <SelectField
+        name="categoryId"
+        label="Category"
+        isRequired
+        placeholder={
+          filteredCategories.length === 0 ? "No categories available" : "Select a category"
+        }
+        options={filteredCategories.map((c) => ({ id: c.id, label: c.name }))}
+      />
+
+      <TextField
+        name="description"
+        label="Description"
+        placeholder="e.g. Grocery shopping, Lunch, Monthly salary"
+      />
+    </>
+  );
 }
 
 export function TransactionFormModal({
@@ -87,6 +163,7 @@ export function TransactionFormModal({
   });
 
   const displayCurrency = effectiveTx ? effectiveTx.currency : baseCurrency;
+  const isBusy = isSubmitting || isSaving;
 
   return (
     <Modal
@@ -104,60 +181,11 @@ export function TransactionFormModal({
           </Alert>
         )}
 
-        <div>
-          <Text variant="caption" className="mb-1.5 block">
-            Transaction Type
-          </Text>
-          <SegmentedTabs
-            ariaLabel="Transaction Type"
-            tabs={[
-              { id: "expense", label: "Expense" },
-              { id: "income", label: "Income" },
-            ]}
-            value={selectedType}
-            onChange={handleTypeChange}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TextField
-            name="amount"
-            type="number"
-            step="any"
-            min="0"
-            placeholder="0.00"
-            isRequired
-            label={`Amount (${displayCurrency})`}
-            rules={{
-              required: "Valid amount is required",
-              min: { value: 0.0001, message: "Valid amount is required" },
-              valueAsNumber: true,
-            }}
-          />
-
-          <TextField
-            name="date"
-            type="date"
-            isRequired
-            label="Date"
-            rules={{ required: "Date is required" }}
-          />
-        </div>
-
-        <SelectField
-          name="categoryId"
-          label="Category"
-          isRequired
-          placeholder={
-            filteredCategories.length === 0 ? "No categories available" : "Select a category"
-          }
-          options={filteredCategories.map((c) => ({ id: c.id, label: c.name }))}
-        />
-
-        <TextField
-          name="description"
-          label="Description"
-          placeholder="e.g. Grocery shopping, Lunch, Monthly salary"
+        <TransactionFormInputs
+          selectedType={selectedType}
+          onTypeChange={handleTypeChange}
+          displayCurrency={displayCurrency}
+          filteredCategories={filteredCategories}
         />
 
         <Modal.Footer>
@@ -165,13 +193,13 @@ export function TransactionFormModal({
             type="button"
             intent="ghost"
             onPress={() => handleOpenChange(false)}
-            isDisabled={isSubmitting || isSaving}
+            isDisabled={isBusy}
           >
             Cancel
           </Button>
 
-          <Button type="submit" intent="primary" isDisabled={isSubmitting || isSaving}>
-            {getSubmitButtonLabel(isSubmitting || isSaving, isEditing)}
+          <Button type="submit" intent="primary" isDisabled={isBusy}>
+            {getSubmitButtonLabel(isBusy, isEditing)}
           </Button>
         </Modal.Footer>
       </Form>

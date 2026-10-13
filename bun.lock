@@ -90,6 +90,7 @@
         "@tanstack/react-router": "^1.170.41",
         "@tanstack/react-table": "9.2.8",
         "@tanstack/react-virtual": "^3.14.17",
+        "@tanstack/table-core": "9.2.8",
         "@ts-rest/core": "^3.51.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",

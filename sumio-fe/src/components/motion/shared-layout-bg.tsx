@@ -37,13 +37,13 @@ export interface SharedLayoutBgProps extends Omit<HTMLAttributes<HTMLElement>, "
 const variants: Variants = {
   initial: { opacity: 0, filter: "blur(6px)" },
   animate: { opacity: 1, filter: "blur(0px)" },
-  exit: (isActive: boolean) => (!isActive ? { opacity: 0, filter: "blur(6px)" } : {}),
+  exit: (isActive: boolean) => (isActive ? {} : { opacity: 0, filter: "blur(6px)" }),
 };
 
 const reducedVariants: Variants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  exit: (isActive: boolean) => (!isActive ? { opacity: 0 } : {}),
+  exit: (isActive: boolean) => (isActive ? {} : { opacity: 0 }),
 };
 
 export function SharedLayoutBg({
@@ -62,7 +62,7 @@ export function SharedLayoutBg({
   const reduce = useReducedMotion();
 
   const renderedChildren = Children.toArray(children)
-    .filter(isValidElement)
+    .filter((child): child is ReactElement => isValidElement(child))
     .map((child, index) => {
       const el = child as ReactElement<{
         className?: string;
@@ -82,7 +82,7 @@ export function SharedLayoutBg({
         },
         <>
           <AnimatePresence custom={activeId !== null}>
-            {activeId !== null ? (
+            {activeId === null ? null : (
               <motion.div
                 variants={reduce ? reducedVariants : variants}
                 initial="initial"
@@ -103,7 +103,7 @@ export function SharedLayoutBg({
                   />
                 ) : null}
               </motion.div>
-            ) : null}
+            )}
           </AnimatePresence>
           <div className="relative z-10">{el.props.children}</div>
         </>,

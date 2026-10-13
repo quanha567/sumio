@@ -9,6 +9,7 @@ import {
   Tag,
   X,
 } from "lucide-react";
+import type { RefObject } from "react";
 import { useEffect, useMemo, useRef } from "react";
 
 import { Button, SearchField, SelectPill, Spinner, Toolbar } from "@/components/atoms";
@@ -44,6 +45,58 @@ interface ToolbarFiltersProps {
   onResetFilters?: () => void;
 }
 
+const TYPE_OPTIONS: SelectOption[] = [
+  {
+    id: "all",
+    label: "All types",
+    icon: <ArrowUpDown className="text-muted size-3.5" />,
+  },
+  {
+    id: "income",
+    label: "Income",
+    icon: <ArrowDownLeft className="text-finance-income size-3.5" />,
+  },
+  {
+    id: "expense",
+    label: "Expense",
+    icon: <ArrowUpRight className="text-finance-expense size-3.5" />,
+  },
+];
+
+const DATE_OPTIONS: SelectOption[] = [
+  { id: "all", label: "All dates" },
+  { id: "this-month", label: "This month" },
+  { id: "last-month", label: "Last month" },
+];
+
+function useSlashKeyFocus(inputRef: RefObject<HTMLInputElement | null>) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === "/" &&
+        document.activeElement?.tagName !== "INPUT" &&
+        document.activeElement?.tagName !== "TEXTAREA"
+      ) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [inputRef]);
+}
+
+function resolveTypeIcon(typeFilter: "all" | "income" | "expense") {
+  if (typeFilter === "income") {
+    return <ArrowDownLeft className="text-finance-income size-3.5" />;
+  }
+  if (typeFilter === "expense") {
+    return <ArrowUpRight className="text-finance-expense size-3.5" />;
+  }
+  return <ArrowUpDown className="text-muted size-3.5" />;
+}
+
 function ToolbarFilters({
   typeFilter,
   setTypeFilter,
@@ -58,50 +111,9 @@ function ToolbarFilters({
   onResetFilters,
 }: ToolbarFiltersProps) {
   const searchInputRef = useRef<HTMLInputElement>(null);
+  useSlashKeyFocus(searchInputRef);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.key === "/" &&
-        document.activeElement?.tagName !== "INPUT" &&
-        document.activeElement?.tagName !== "TEXTAREA"
-      ) {
-        e.preventDefault();
-        searchInputRef.current?.focus();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  const typeOptions: SelectOption[] = [
-    {
-      id: "all",
-      label: "All types",
-      icon: <ArrowUpDown className="text-muted size-3.5" />,
-    },
-    {
-      id: "income",
-      label: "Income",
-      icon: <ArrowDownLeft className="text-finance-income size-3.5" />,
-    },
-    {
-      id: "expense",
-      label: "Expense",
-      icon: <ArrowUpRight className="text-finance-expense size-3.5" />,
-    },
-  ];
-
-  const activeTypeIcon = useMemo(() => {
-    if (typeFilter === "income") {
-      return <ArrowDownLeft className="text-finance-income size-3.5" />;
-    }
-    if (typeFilter === "expense") {
-      return <ArrowUpRight className="text-finance-expense size-3.5" />;
-    }
-    return <ArrowUpDown className="text-muted size-3.5" />;
-  }, [typeFilter]);
+  const activeTypeIcon = useMemo(() => resolveTypeIcon(typeFilter), [typeFilter]);
 
   const categoryOptions: SelectOption[] = useMemo(
     () => [
@@ -112,12 +124,6 @@ function ToolbarFilters({
     ],
     [categories, typeFilter],
   );
-
-  const dateOptions: SelectOption[] = [
-    { id: "all", label: "All dates" },
-    { id: "this-month", label: "This month" },
-    { id: "last-month", label: "Last month" },
-  ];
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -138,41 +144,37 @@ function ToolbarFilters({
         className="w-32"
         value={typeFilter}
         onChange={(val) => setTypeFilter(val as "all" | "income" | "expense")}
-        options={typeOptions}
+        options={TYPE_OPTIONS}
         icon={activeTypeIcon}
-        isActive={typeFilter !== "all"}
       />
 
       <SelectPill
-        ariaLabel="Filter by category"
-        className="w-40"
+        ariaLabel="Filter transaction category"
+        className="w-36"
         value={categoryFilter}
         onChange={(val) => setCategoryFilter(val)}
         options={categoryOptions}
-        icon={<Tag className="size-3.5" />}
-        isActive={categoryFilter !== "all"}
+        icon={<Tag className="text-muted size-3.5" />}
       />
 
       <SelectPill
-        ariaLabel="Filter date range"
-        className="w-36"
+        ariaLabel="Filter transaction date"
+        className="w-32"
         value={dateFilter}
         onChange={(val) => setDateFilter(val as "all" | "this-month" | "last-month")}
-        options={dateOptions}
-        icon={<Calendar className="size-3.5" />}
-        isActive={dateFilter !== "all"}
+        options={DATE_OPTIONS}
+        icon={<Calendar className="text-muted size-3.5" />}
       />
 
       {hasActiveFilters && onResetFilters && (
         <Button
-          intent="ghost"
+          variant="ghost"
           size="sm"
           onPress={onResetFilters}
-          aria-label="Reset all filters"
-          className="gap-1"
+          className="text-muted hover:text-foreground h-8 px-2 text-xs"
         >
-          <X className="size-3.5" />
-          <span>Reset</span>
+          <X className="mr-1 size-3" />
+          Reset
         </Button>
       )}
     </div>
@@ -201,10 +203,7 @@ export function TransactionToolbar({
     searchQuery.trim() !== "";
 
   return (
-    <Toolbar
-      aria-label="Transaction filters and actions"
-      className="flex flex-wrap items-center justify-between gap-3"
-    >
+    <Toolbar className="bg-surface-secondary/40 flex-col items-stretch gap-3 rounded-xl p-2.5 sm:flex-row sm:items-center sm:justify-between">
       <ToolbarFilters
         typeFilter={typeFilter}
         setTypeFilter={setTypeFilter}
@@ -219,22 +218,28 @@ export function TransactionToolbar({
         onResetFilters={onResetFilters}
       />
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-end gap-2 border-t pt-2 sm:border-t-0 sm:pt-0">
         <Button
-          isIconOnly
-          intent="ghost"
+          variant="outline"
           size="sm"
           onPress={onRefresh}
-          isDisabled={isLoading}
+          disabled={isLoading}
           aria-label="Refresh transactions"
-          title="Refresh"
+          className="h-8"
         >
-          {isLoading ? <Spinner size="sm" /> : <RefreshCw className="size-3.5" />}
+          {isLoading ? (
+            <Spinner size="sm" />
+          ) : (
+            <>
+              <RefreshCw className="mr-1.5 size-3.5" />
+              <span>Refresh</span>
+            </>
+          )}
         </Button>
 
-        <Button intent="primary" size="sm" className="gap-1.5" onPress={onAddTransaction}>
-          <Plus className="size-3.5" />
-          <span>Add transaction</span>
+        <Button intent="primary" size="sm" onPress={onAddTransaction} className="h-8 shadow-xs">
+          <Plus className="mr-1.5 size-3.5" />
+          <span>New</span>
         </Button>
       </div>
     </Toolbar>

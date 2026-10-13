@@ -36,23 +36,38 @@ function computeDateRange(filter: "all" | "this-month" | "last-month"): {
   return {};
 }
 
+function parseTransactionSearch(rawSearch: Record<string, unknown>): TransactionSearch {
+  const page = typeof rawSearch?.page === "number" && rawSearch.page > 0 ? rawSearch.page : 1;
+  const type =
+    rawSearch?.type === "income" || rawSearch?.type === "expense" ? rawSearch.type : "all";
+  const categoryId = typeof rawSearch?.categoryId === "string" ? rawSearch.categoryId : "all";
+  const date =
+    rawSearch?.date === "this-month" || rawSearch?.date === "last-month" ? rawSearch.date : "all";
+  const q = typeof rawSearch?.q === "string" ? rawSearch.q : "";
+
+  return { page, type, categoryId, date, q };
+}
+
+function buildQueryParams(
+  search: TransactionSearch,
+  dateRange: { from?: string; to?: string },
+): Partial<ListTransactionsQuery> {
+  return {
+    page: search.page,
+    pageSize: PAGE_SIZE,
+    type: search.type === "all" ? undefined : search.type,
+    categoryId: search.categoryId === "all" ? undefined : search.categoryId,
+    from: dateRange.from,
+    to: dateRange.to,
+    q: search.q ? search.q : undefined,
+  };
+}
+
 export function useTransactionFilters() {
   const rawSearch = useSearch({ strict: false }) as Record<string, unknown>;
   const navigate = useNavigate({ from: "/transactions" });
 
-  const search: TransactionSearch = useMemo(
-    () => ({
-      page: typeof rawSearch?.page === "number" && rawSearch.page > 0 ? rawSearch.page : 1,
-      type: rawSearch?.type === "income" || rawSearch?.type === "expense" ? rawSearch.type : "all",
-      categoryId: typeof rawSearch?.categoryId === "string" ? rawSearch.categoryId : "all",
-      date:
-        rawSearch?.date === "this-month" || rawSearch?.date === "last-month"
-          ? rawSearch.date
-          : "all",
-      q: typeof rawSearch?.q === "string" ? rawSearch.q : "",
-    }),
-    [rawSearch],
-  );
+  const search = useMemo(() => parseTransactionSearch(rawSearch), [rawSearch]);
 
   const handleDebouncedSearch = useCallback(
     (val: string) => {
@@ -75,17 +90,7 @@ export function useTransactionFilters() {
 
   const dateRange = useMemo(() => computeDateRange(search.date), [search.date]);
 
-  const queryParams = useMemo<Partial<ListTransactionsQuery>>(() => {
-    return {
-      page: search.page,
-      pageSize: PAGE_SIZE,
-      type: search.type === "all" ? undefined : search.type,
-      categoryId: search.categoryId === "all" ? undefined : search.categoryId,
-      from: dateRange.from,
-      to: dateRange.to,
-      q: search.q ? search.q : undefined,
-    };
-  }, [search.page, search.type, search.categoryId, search.q, dateRange]);
+  const queryParams = useMemo(() => buildQueryParams(search, dateRange), [search, dateRange]);
 
   const setPage = useCallback(
     (newPage: number) => {
