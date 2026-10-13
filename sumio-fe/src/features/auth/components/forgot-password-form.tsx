@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Mail } from "lucide-react";
 
-import { Alert, Button, Form, Heading, Text, TextField } from "@/components/ui";
+import { Alert, Button, Form, Heading, linkStyles, Text, TextField } from "@/components/ui";
 
 import { useForgotPasswordForm } from "../hooks/use-forgot-password-form";
 import { ForgotPasswordSuccess } from "./forgot-password-success";
@@ -53,10 +53,7 @@ export function ForgotPasswordForm() {
       </Form>
 
       <div className="pt-2 text-center">
-        <Link
-          to="/login"
-          className="text-muted hover:text-foreground inline-flex items-center gap-2 text-sm font-medium transition-colors"
-        >
+        <Link to="/login" className={linkStyles({ intent: "muted" })}>
           <ArrowLeft className="size-4" />
           <span>Remember your password? Sign in</span>
         </Link>

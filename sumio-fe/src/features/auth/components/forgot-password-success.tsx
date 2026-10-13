@@ -17,7 +17,7 @@ export function ForgotPasswordSuccess({ email }: ForgotPasswordSuccessProps) {
         <Heading level={1}>Check your inbox</Heading>
         <Text variant="muted" size="sm">
           We have sent a password reset link to{" "}
-          <Text as="span" weight="semibold" className="text-foreground">
+          <Text as="span" variant="body" weight="semibold">
             {email}
           </Text>
           . Please follow the instructions in the email.

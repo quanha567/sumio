@@ -3,6 +3,7 @@ import { ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 
 import beachIllustration from "@/assets/illustrations/auth-beach.jpg";
+import { IconBadge } from "@/components/common";
 import { BrandLogo } from "@/components/layout";
 import { Card, Heading, Text } from "@/components/ui";
 
@@ -77,7 +78,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
 
         {/* Footer Security Assurance */}
         <div className="flex items-center gap-2">
-          <ShieldCheck className="text-accent size-4" />
+          <IconBadge icon={ShieldCheck} tone="accent" size="sm" shape="circle" />
           <Text variant="caption">Your data is safe and secure</Text>
         </div>
       </div>

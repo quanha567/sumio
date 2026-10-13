@@ -1,23 +1,19 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-import { cn } from "@/components/ui";
+import { cn, ColorDot, Text } from "@/components/ui";
 
 export interface BarSeries {
-  /** Key of the numeric field in each data row. */
   key: string;
   name: string;
   /** Any CSS color, e.g. "var(--chart-1)". */
   color: string;
 }
 
-export interface GroupedBarChartProps {
-  data: object[];
-  /** Key of the category field (x axis). */
-  xKey: string;
+export interface GroupedBarChartProps<T extends Record<string, unknown>> {
+  data: T[];
+  xKey: keyof T & string;
   series: BarSeries[];
-  max: number;
-  /** Number of y-axis steps above 0. */
-  steps?: number;
+  height?: number;
   formatValue?: (value: number) => string;
   className?: string;
 }
@@ -38,24 +34,27 @@ function CustomChartTooltip({ active, payload, label, formatValue }: CustomChart
 
   return (
     <div className="border-border bg-surface/95 rounded-xl border px-3 py-2 shadow-md backdrop-blur-sm transition-all">
-      {label && <p className="text-foreground mb-1.5 text-xs font-semibold">{label}</p>}
+      {label && (
+        <Text variant="label" className="mb-1.5">
+          {label}
+        </Text>
+      )}
+
       <div className="flex flex-col gap-1.5">
         {payload.map((entry) => (
           <div key={entry.name} className="flex items-center justify-between gap-4 text-xs">
-            <span className="text-muted flex items-center gap-1.5">
-              <span
-                className="size-2 shrink-0 rounded-full"
-                style={{ backgroundColor: entry.color }}
-              />
-              <span>{entry.name}</span>
+            <span className="flex items-center gap-1.5">
+              <ColorDot color={entry.color} size="sm" />
+              <Text variant="muted">{entry.name}</Text>
             </span>
-            <span className="text-foreground font-semibold tabular-nums">
+
+            <Text variant="body-sm" weight="semibold" className="tabular-nums">
               {entry.value !== undefined
                 ? formatValue
                   ? formatValue(Number(entry.value))
                   : entry.value
                 : null}
-            </span>
+            </Text>
           </div>
         ))}
       </div>
@@ -63,45 +62,45 @@ function CustomChartTooltip({ active, payload, label, formatValue }: CustomChart
   );
 }
 
-export function GroupedBarChart({
+export function GroupedBarChart<T extends Record<string, unknown>>({
   data,
   xKey,
   series,
-  max,
-  steps = 5,
-  formatValue = String,
+  height = 240,
+  formatValue,
   className,
-}: GroupedBarChartProps) {
-  const ticks = Array.from({ length: steps + 1 }, (_, i) => (max / steps) * i);
-
+}: GroupedBarChartProps<T>) {
   return (
-    <div className={cn("h-48 w-full", className)}>
+    <div className={cn("w-full", className)} style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -12 }} barGap={4}>
-          <CartesianGrid vertical={false} strokeDasharray="4 4" stroke="var(--border)" />
+        <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
           <XAxis
-            dataKey={xKey}
+            dataKey={xKey as string}
+            stroke="var(--muted-foreground)"
+            fontSize={11}
             tickLine={false}
             axisLine={false}
-            tick={{ fill: "var(--muted)", fontSize: 11 }}
           />
           <YAxis
-            domain={[0, max]}
-            ticks={ticks}
+            stroke="var(--muted-foreground)"
+            fontSize={11}
             tickLine={false}
             axisLine={false}
             tickFormatter={formatValue}
-            tick={{ fill: "var(--muted)", fontSize: 10 }}
           />
-          <Tooltip cursor={false} content={<CustomChartTooltip formatValue={formatValue} />} />
+          <Tooltip
+            content={<CustomChartTooltip formatValue={formatValue} />}
+            cursor={{ fill: "var(--surface-secondary)", opacity: 0.5 }}
+          />
           {series.map((s) => (
             <Bar
               key={s.key}
               dataKey={s.key}
               name={s.name}
               fill={s.color}
-              radius={[6, 6, 0, 0]}
-              maxBarSize={16}
+              radius={[4, 4, 0, 0]}
+              maxBarSize={28}
             />
           ))}
         </BarChart>
@@ -120,8 +119,8 @@ export function ChartLegend({ series, className }: ChartLegendProps) {
     <ul className={cn("hidden items-center gap-3 sm:flex", className)}>
       {series.map((s) => (
         <li key={s.key} className="flex items-center gap-1.5">
-          <span className="size-2 shrink-0 rounded-full" style={{ backgroundColor: s.color }} />
-          <span className="text-muted text-xs">{s.name}</span>
+          <ColorDot color={s.color} size="sm" />
+          <Text variant="muted">{s.name}</Text>
         </li>
       ))}
     </ul>

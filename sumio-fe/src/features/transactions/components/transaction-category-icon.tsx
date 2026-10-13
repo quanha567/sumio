@@ -25,8 +25,6 @@ import { type Tone, toneStyles } from "@/components/ui";
 export interface CategoryMeta {
   icon: LucideIcon;
   tone: Tone;
-  bgClass: string;
-  textClass: string;
   chartColor: string;
 }
 
@@ -35,8 +33,6 @@ function createMeta(icon: LucideIcon, tone: Tone): CategoryMeta {
   return {
     icon,
     tone,
-    bgClass: style.soft,
-    textClass: style.text,
     chartColor: style.color,
   };
 }

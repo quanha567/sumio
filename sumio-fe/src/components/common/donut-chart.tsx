@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-import { cn } from "@/components/ui";
+import { cn, ColorDot, Text } from "@/components/ui";
 import { formatCurrency } from "@/lib/format";
 
 export interface DonutSegment {
@@ -35,14 +35,11 @@ function CustomDonutTooltip({ active, payload }: CustomDonutTooltipProps) {
   return (
     <div className="border-border bg-surface/95 rounded-xl border px-3 py-2 shadow-md backdrop-blur-sm transition-all">
       <div className="flex items-center gap-2 text-xs">
-        <span
-          className="size-2 shrink-0 rounded-full"
-          style={{ backgroundColor: item.payload?.color }}
-        />
-        <span className="text-muted">{item.name}:</span>
-        <span className="text-foreground font-semibold tabular-nums">
+        <ColorDot color={item.payload?.color} size="sm" />
+        <Text variant="muted">{item.name}:</Text>
+        <Text variant="body-sm" weight="semibold" className="tabular-nums">
           {item.value === undefined ? null : formatCurrency(item.value)}
-        </span>
+        </Text>
       </div>
     </div>
   );
@@ -70,6 +67,7 @@ export function DonutChart({ segments, size = 160, children, className }: DonutC
           <Tooltip content={<CustomDonutTooltip />} />
         </PieChart>
       </ResponsiveContainer>
+
       {children && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
           {children}

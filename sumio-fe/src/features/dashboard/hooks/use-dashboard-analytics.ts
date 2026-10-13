@@ -6,23 +6,15 @@ import { useTransactionsQuery } from "@/features/transactions";
 import { getCategoryMeta } from "@/features/transactions/components/transaction-category-icon";
 import { minorUnitsToMajor } from "@/lib/format";
 
-import {
-  spendingCategories as mockSpending,
-  transactions as mockTransactions,
-  upcomingBills,
-  weeklyCashflow,
-} from "../data/mock";
 import type { SpendingCategory, Transaction } from "../types";
 
 export interface DashboardAnalytics {
-  totalIncome: number | undefined;
-  totalExpense: number | undefined;
-  totalBalance: number | undefined;
-  savingsRate: string | undefined;
+  totalIncome: number;
+  totalExpense: number;
+  totalBalance: number;
+  savingsRate: string;
   dashboardTransactions: Transaction[];
   spendingCategories: SpendingCategory[];
-  weeklyCashflow: typeof weeklyCashflow;
-  upcomingBills: typeof upcomingBills;
   baseCurrency: string;
   userLocale: string;
   isLoading: boolean;
@@ -39,12 +31,12 @@ export function useDashboardAnalytics(): DashboardAnalytics {
   const analytics = useMemo(() => {
     if (!rawItems || rawItems.length === 0) {
       return {
-        totalIncome: undefined,
-        totalExpense: undefined,
-        totalBalance: undefined,
-        savingsRate: undefined,
-        dashboardTransactions: mockTransactions,
-        spendingCategories: mockSpending,
+        totalIncome: 0,
+        totalExpense: 0,
+        totalBalance: 0,
+        savingsRate: "0%",
+        dashboardTransactions: [],
+        spendingCategories: [],
       };
     }
 
@@ -55,6 +47,7 @@ export function useDashboardAnalytics(): DashboardAnalytics {
     const mapped: Transaction[] = rawItems.slice(0, 10).map((t) => {
       const meta = getCategoryMeta(t.category.name, t.type);
       const major = minorUnitsToMajor(t.amount, t.currency || baseCurrency);
+
       return {
         id: t.id,
         date: t.date,
@@ -92,14 +85,12 @@ export function useDashboardAnalytics(): DashboardAnalytics {
       totalBalance: net,
       savingsRate: sRate,
       dashboardTransactions: mapped,
-      spendingCategories: cats.length > 0 ? cats : mockSpending,
+      spendingCategories: cats,
     };
   }, [rawItems, baseCurrency]);
 
   return {
     ...analytics,
-    weeklyCashflow,
-    upcomingBills,
     baseCurrency,
     userLocale,
     isLoading,

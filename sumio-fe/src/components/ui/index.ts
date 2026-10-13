@@ -47,6 +47,7 @@ export * from "./tooltip";
 // Feedback, status & indicators
 export * from "./badge";
 export * from "./chip";
+export * from "./color-dot";
 export * from "./tag";
 export * from "./avatar";
 export * from "./progress";

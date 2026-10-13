@@ -1,12 +1,13 @@
 import { Plus } from "lucide-react";
 
-import { PageHeader } from "@/components/common";
-import { Button, Card, Pagination } from "@/components/ui";
+import { BatchActionBar, PageHeader } from "@/components/common";
+import { PageContainer, SplitLayout } from "@/components/layout";
+import { Button, Card, Pagination, Separator } from "@/components/ui";
 import { useAuth } from "@/features/auth";
 
 import {
-  TransactionBatchBar,
-  TransactionModals,
+  DeleteConfirmModal,
+  TransactionFormModal,
   TransactionSummaryPanel,
   TransactionTableView,
   TransactionToolbar,
@@ -24,7 +25,7 @@ export function TransactionsPage() {
   const totalPages = Math.ceil(list.total / list.pageSize);
 
   return (
-    <div className="space-y-5">
+    <PageContainer>
       <PageHeader
         title="Transactions"
         description="Monitor and manage your financial cash flow."
@@ -36,8 +37,8 @@ export function TransactionsPage() {
         }
       />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        <div className="min-w-0 space-y-4 lg:col-span-8 xl:col-span-9">
+      <SplitLayout
+        main={
           <Card padding="md">
             <div className="space-y-4">
               <TransactionToolbar
@@ -56,10 +57,10 @@ export function TransactionsPage() {
                 onResetFilters={list.resetFilters}
               />
 
-              <TransactionBatchBar
+              <BatchActionBar
                 selectedCount={list.selectedIds.size}
                 onClearSelection={list.clearSelection}
-                onBatchDelete={list.handleBatchDelete}
+                onDelete={list.handleBatchDelete}
                 isDeleting={list.isBatchDeleting}
               />
 
@@ -79,19 +80,21 @@ export function TransactionsPage() {
               />
 
               {totalPages > 1 && (
-                <div className="border-border/40 flex justify-center border-t pt-4">
-                  <Pagination
-                    page={list.page}
-                    total={totalPages}
-                    onChange={(p) => list.setPage(p)}
-                  />
+                <div className="pt-2">
+                  <Separator className="mb-4" />
+                  <div className="flex justify-center">
+                    <Pagination
+                      page={list.page}
+                      total={totalPages}
+                      onChange={(p) => list.setPage(p)}
+                    />
+                  </div>
                 </div>
               )}
             </div>
           </Card>
-        </div>
-
-        <div className="lg:col-span-4 xl:col-span-3">
+        }
+        aside={
           <TransactionSummaryPanel
             transactions={list.transactions}
             currency={baseCurrency}
@@ -99,15 +102,29 @@ export function TransactionsPage() {
             onAddIncome={() => modals.openCreate("income")}
             onAddExpense={() => modals.openCreate("expense")}
           />
-        </div>
-      </div>
+        }
+      />
 
-      <TransactionModals
-        modals={modals}
+      <TransactionFormModal
+        isOpen={modals.isFormOpen}
+        onClose={modals.closeForm}
         categories={list.categories}
+        defaultType={modals.formDefaultType}
+        editingTransaction={modals.editingTx}
+        onSave={modals.handleSave}
+        baseCurrency={baseCurrency}
+        isSaving={modals.isSaving}
+      />
+
+      <DeleteConfirmModal
+        isOpen={modals.isDeleteOpen}
+        onClose={modals.closeDelete}
+        transaction={modals.deletingTx}
+        onConfirm={modals.handleConfirmDelete}
+        isDeleting={modals.isDeleting}
         baseCurrency={baseCurrency}
         userLocale={userLocale}
       />
-    </div>
+    </PageContainer>
   );
 }

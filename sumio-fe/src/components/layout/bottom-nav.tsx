@@ -2,18 +2,18 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "motion/react";
 
 import { SharedLayoutBg } from "@/components/motion/shared-layout-bg";
+import { ColorDot, Text } from "@/components/ui";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 
 import { navItems } from "./nav-items";
 
-/** Mobile Bottom Navigation Bar — uses SharedLayoutBg for smooth sliding active pill. */
+// Use first 5 items for mobile bottom bar
+const items = navItems.slice(0, 5);
+
 export function BottomNav() {
   const routerState = useRouterState();
   const pathname = routerState.location.pathname;
-
-  // Use first 5 items for mobile bottom bar
-  const items = navItems.slice(0, 5);
 
   return (
     <nav
@@ -48,18 +48,20 @@ export function BottomNav() {
                     <motion.div
                       layoutId="bottom-nav-dot"
                       transition={SPRING_LAYOUT}
-                      className="bg-accent absolute -bottom-1.5 size-1 rounded-full"
-                    />
+                      className="absolute -bottom-1.5"
+                    >
+                      <ColorDot tone="accent" size="xs" />
+                    </motion.div>
                   )}
                 </div>
-                <span
-                  className={cn(
-                    "text-[10px] leading-tight font-medium transition-all duration-150",
-                    isActive ? "font-semibold" : "",
-                  )}
+
+                <Text
+                  variant="caption"
+                  weight={isActive ? "semibold" : "medium"}
+                  className="leading-tight transition-all duration-150"
                 >
                   {item.label}
-                </span>
+                </Text>
               </div>
             );
 

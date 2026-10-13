@@ -5,16 +5,16 @@ import {
   Alert,
   Button,
   Checkbox,
-  customLinkVariants,
   Form,
+  Heading,
+  linkStyles,
   PasswordField,
+  Separator,
+  Text,
   TextField,
 } from "@/components/ui";
 
 import { useLoginForm } from "../hooks/use-login-form";
-import { AuthDivider } from "./auth-divider";
-import { AuthFooterLink } from "./auth-footer-link";
-import { AuthHeader } from "./auth-header";
 import { GoogleAuthButton } from "./google-auth-button";
 
 export function LoginForm() {
@@ -26,11 +26,12 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6">
-      <AuthHeader
-        title="Welcome back!"
-        emoji="👋"
-        subtitle="Sign in to continue your financial journey."
-      />
+      <div>
+        <Heading level={1}>Welcome back! 👋</Heading>
+        <Text variant="muted" size="sm" className="mt-1.5">
+          Sign in to continue your financial journey.
+        </Text>
+      </div>
 
       {authError && (
         <Alert intent="danger">
@@ -60,10 +61,7 @@ export function LoginForm() {
             Remember me
           </Checkbox>
 
-          <Link
-            to="/forgot-password"
-            className={customLinkVariants().base({ className: "text-sm" })}
-          >
+          <Link to="/forgot-password" className={linkStyles()}>
             Forgot password?
           </Link>
         </div>
@@ -80,7 +78,7 @@ export function LoginForm() {
         </Button>
       </Form>
 
-      <AuthDivider />
+      <Separator label="or" />
 
       <GoogleAuthButton
         isLoading={isGoogleSubmitting}
@@ -88,7 +86,12 @@ export function LoginForm() {
         onPress={() => void handleGoogleSignIn()}
       />
 
-      <AuthFooterLink prompt="Don't have an account?" linkLabel="Sign up" to="/register" />
+      <Text variant="muted" size="sm" className="text-center">
+        Don&apos;t have an account?{" "}
+        <Link to="/register" className={linkStyles()}>
+          Sign up
+        </Link>
+      </Text>
     </div>
   );
 }

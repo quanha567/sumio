@@ -42,6 +42,15 @@ This document specifies the rules and architectural guardrails for developing wi
 - Raw `console.log` is **forbidden** across the backend codebase.
 - Always use the NestJS `Logger` service (e.g. `Logger.log(...)`, `Logger.error(...)`, `Logger.warn(...)`) with an appropriate context tag.
 
+### 🚫 Rule 6: Zero-Downtime Database Migrations (Expand and Contract)
+
+- Schema migrations against Supabase PostgreSQL must strictly follow the **Expand and Contract** pattern to prevent table locks and deployment downtime:
+  1. **Expand**: Add new columns as `nullable` or with a safe `DEFAULT`. Existing deployed backend workers continue operating uninterrupted.
+  2. **Transition**: Deploy backend code that handles both old and new shapes (dual-write when needed, read from new column).
+  3. **Backfill**: Migrate legacy data in controlled batches.
+  4. **Contract**: Drop legacy columns or obsolete constraints in a follow-up release only after all traffic migrates.
+- Destructive operations (renaming columns directly or dropping active columns in a single release step) are **strictly forbidden**.
+
 ---
 
 ## 3. Code Limits & Structure

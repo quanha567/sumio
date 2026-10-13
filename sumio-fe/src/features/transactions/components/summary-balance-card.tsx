@@ -47,7 +47,11 @@ export function SummaryBalanceCard({
             />
           </div>
           <div className="mt-1">
-            <TrendBadge delta="+12%" direction="up" tone="income" caption="vs last month" />
+            <TrendBadge
+              delta={netBalance >= 0 ? "Surplus" : "Deficit"}
+              direction={netBalance >= 0 ? "up" : "down"}
+              tone={netBalance >= 0 ? "income" : "expense"}
+            />
           </div>
         </div>
 
@@ -65,7 +69,7 @@ export function SummaryBalanceCard({
               className="mt-2 block"
             />
             <div className="mt-1">
-              <TrendBadge delta="+8%" direction="up" tone="income" />
+              <TrendBadge delta="Recorded" direction="none" tone="income" />
             </div>
           </Card>
 
@@ -82,7 +86,7 @@ export function SummaryBalanceCard({
               className="mt-2 block"
             />
             <div className="mt-1">
-              <TrendBadge delta="+5%" direction="up" tone="expense" />
+              <TrendBadge delta="Recorded" direction="none" tone="expense" />
             </div>
           </Card>
         </div>

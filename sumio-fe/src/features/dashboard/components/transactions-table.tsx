@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 
@@ -66,7 +67,11 @@ const columns: ColumnDef<any, Transaction>[] = [
   },
   {
     accessorKey: "amount",
-    header: () => <span className="block text-right">Amount</span>,
+    header: () => (
+      <Text variant="label" className="block text-right">
+        Amount
+      </Text>
+    ),
     cell: ({ row }) => {
       const t = row.original;
       const isIncome = t.type === "income";
@@ -84,7 +89,11 @@ const columns: ColumnDef<any, Transaction>[] = [
   },
   {
     accessorKey: "type",
-    header: () => <span className="block text-center">Type</span>,
+    header: () => (
+      <Text variant="label" className="block text-center">
+        Type
+      </Text>
+    ),
     cell: ({ row }) => {
       const isIncome = row.original.type === "income";
 
@@ -101,7 +110,7 @@ function MobileTransactionItem(t: Transaction) {
   const isIncome = t.type === "income";
 
   return (
-    <div className="border-border/60 flex items-center gap-3 border-b py-2.5 last:border-0">
+    <div className="flex items-center gap-3 py-2.5">
       <IconBadge icon={t.icon} tone={isIncome ? "income" : "neutral"} size="sm" shape="circle" />
       <div className="min-w-0 flex-1">
         <Text variant="label" className="truncate">
@@ -131,6 +140,7 @@ interface TransactionsTableProps {
 }
 
 export function TransactionsTable({ transactions }: TransactionsTableProps) {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
 
@@ -141,7 +151,26 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
   );
 
   return (
-    <SectionCard title="Recent Transactions" action={<SectionLink label="View all" />}>
+    <SectionCard
+      title="Recent Transactions"
+      action={
+        <SectionLink
+          label="View all"
+          onPress={() =>
+            void navigate({
+              to: "/transactions",
+              search: {
+                page: 1,
+                type: "all",
+                categoryId: "all",
+                date: "all",
+                q: "",
+              },
+            })
+          }
+        />
+      }
+    >
       <div className="mb-3 flex items-center justify-between gap-3">
         <SegmentedTabs
           ariaLabel="Transaction type"

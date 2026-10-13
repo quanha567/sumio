@@ -9,20 +9,21 @@ import {
   Button,
   Checkbox,
   Chip,
+  cn,
+  ColorDot,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownPopover,
   DropdownTrigger,
   Metric,
+  Skeleton,
   Spinner,
   Text,
 } from "@/components/ui";
 import { formatMoney } from "@/lib/format";
 
 import { CategoryIcon } from "./transaction-category-icon";
-import { TransactionTableMobileRow } from "./transaction-table-mobile-row";
-import { TransactionTableSkeleton } from "./transaction-table-skeleton";
 
 interface TransactionTableViewProps {
   transactions: TransactionDto[];
@@ -126,14 +127,18 @@ export function TransactionTableView({
         header: "Category",
         cell: ({ row }) => (
           <Chip intent="secondary" className="max-w-37.5 truncate">
-            <span className="bg-accent size-1.5 shrink-0 rounded-full" />
+            <ColorDot tone="accent" size="xs" />
             <span className="truncate">{row.original.category.name}</span>
           </Chip>
         ),
       },
       {
         id: "amount",
-        header: () => <span className="block text-right">Amount</span>,
+        header: () => (
+          <Text variant="label" className="block text-right">
+            Amount
+          </Text>
+        ),
         cell: ({ row }) => {
           const t = row.original;
           const isIncome = t.type === "income";
@@ -258,5 +263,98 @@ export function TransactionTableView({
       }
       ariaLabel="Transactions table"
     />
+  );
+}
+
+function TransactionTableSkeleton() {
+  return (
+    <div className="space-y-4 p-5">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className="flex items-center justify-between gap-4 py-2">
+          <div className="flex items-center gap-3">
+            <Skeleton className="size-4" />
+            <Skeleton className="size-8" shape="circle" />
+            <div className="space-y-1.5">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-3 w-20" />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-6 w-16" shape="pill" />
+            <Skeleton className="size-7" shape="circle" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+interface TransactionTableMobileRowProps {
+  transaction: TransactionDto;
+  isSelected: boolean;
+  baseCurrency: string;
+  userLocale: string;
+  onToggleSelect: (isSelected: boolean) => void;
+  onEdit: (tx: TransactionDto) => void;
+  onDelete: (tx: TransactionDto) => void;
+}
+
+function TransactionTableMobileRow({
+  transaction: t,
+  isSelected,
+  baseCurrency,
+  userLocale,
+  onToggleSelect,
+  onEdit,
+  onDelete,
+}: TransactionTableMobileRowProps) {
+  const isIncome = t.type === "income";
+
+  return (
+    <li
+      className={cn(
+        "flex items-center gap-3 py-3.5 transition-colors",
+        isSelected && "bg-accent-subtle/50",
+      )}
+    >
+      <Checkbox
+        isSelected={isSelected}
+        onChange={onToggleSelect}
+        aria-label={`Select ${t.description}`}
+      />
+      <CategoryIcon categoryName={t.category.name} type={t.type} size="md" />
+      <div className="min-w-0 flex-1">
+        <Text variant="label" className="block truncate">
+          {t.description || "Untitled Transaction"}
+        </Text>
+        <Text variant="caption" className="block">
+          {t.category.name} • <span className="tabular-nums">{t.date}</span>
+        </Text>
+      </div>
+      <div className="text-right">
+        <Metric
+          value={`${isIncome ? "+ " : "- "}${formatMoney(t.amount, t.currency || baseCurrency, userLocale)}`}
+          tone={isIncome ? "income" : "expense"}
+          size="sm"
+          className="block"
+        />
+        <div className="mt-1 flex items-center justify-end gap-1">
+          <Button isIconOnly intent="ghost" size="sm" onPress={() => onEdit(t)} aria-label="Edit">
+            <Edit2 className="size-3.5" />
+          </Button>
+          <Button
+            isIconOnly
+            intent="ghost"
+            size="sm"
+            onPress={() => onDelete(t)}
+            aria-label="Delete"
+          >
+            <Trash2 className="text-danger size-3.5" />
+          </Button>
+        </div>
+      </div>
+    </li>
   );
 }

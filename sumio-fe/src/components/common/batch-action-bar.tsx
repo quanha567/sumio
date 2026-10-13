@@ -1,25 +1,30 @@
 import { Trash2, X } from "lucide-react";
+import type { ReactNode } from "react";
 
 import { Button, Separator, Text, Toolbar } from "@/components/ui";
 
-interface TransactionBatchBarProps {
+export interface BatchActionBarProps {
   selectedCount: number;
   onClearSelection: () => void;
-  onBatchDelete?: () => void;
-  onDeleteSelected?: () => void;
+  onDelete?: () => void;
   isDeleting?: boolean;
+  deleteLabel?: string;
+  children?: ReactNode;
 }
 
-export function TransactionBatchBar({
+/**
+ * Standard floating batch action bar for table/card bulk operations.
+ * Encapsulates floating backdrop-blur styling, counter, and actions.
+ */
+export function BatchActionBar({
   selectedCount,
   onClearSelection,
-  onBatchDelete,
-  onDeleteSelected,
+  onDelete,
   isDeleting,
-}: TransactionBatchBarProps) {
+  deleteLabel = "Delete",
+  children,
+}: BatchActionBarProps) {
   if (selectedCount === 0) return null;
-
-  const handleDelete = onBatchDelete || onDeleteSelected;
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 fixed bottom-6 left-1/2 z-40 -translate-x-1/2 transform duration-200">
@@ -34,18 +39,24 @@ export function TransactionBatchBar({
           selected
         </Text>
 
-        <Separator orientation="vertical" className="bg-background/25 h-4" />
+        {children}
 
-        <Button
-          size="sm"
-          intent="danger"
-          className="gap-1.5"
-          onPress={handleDelete}
-          isDisabled={isDeleting}
-        >
-          <Trash2 className="size-3.5" />
-          {isDeleting ? "Deleting..." : "Delete"}
-        </Button>
+        {onDelete && (
+          <>
+            <Separator orientation="vertical" className="bg-background/25 h-4" />
+
+            <Button
+              size="sm"
+              intent="danger"
+              className="gap-1.5"
+              onPress={onDelete}
+              isDisabled={isDeleting}
+            >
+              <Trash2 className="size-3.5" />
+              {isDeleting ? "Deleting..." : deleteLabel}
+            </Button>
+          </>
+        )}
 
         <Button
           size="sm"

@@ -10,7 +10,7 @@ This document specifies the rules and architectural guardrails for developing wi
 - **Toolchain**: Vite+ (`vp dev`, `vp check`, `vp test`, `vp build`)
 - **Routing**: `@tanstack/react-router` with code-based route tree (`src/routes/`)
 - **Server State**: `@tanstack/react-query` v5
-- **Design & Styling**: Tailwind CSS v4, HeroUI v3 wrappers (`src/components/ui/`), Mint theme tokens
+- **Design & Styling**: Tailwind CSS v4, HeroUI v3 wrappers (`src/components/ui/`), Sage & Forest theme tokens (ADR-0013)
 - **Contracts**: `@sumio/contract` and `@sumio/common`
 
 ---

@@ -107,23 +107,16 @@ export function Topbar({ user }: TopbarProps) {
       {/* Right: bell + user */}
       <div className="flex items-center gap-3">
         <Badge.Anchor>
-          <Button
-            isIconOnly
-            intent="outline"
-            aria-label="Notifications"
-            className="border-border text-muted hover:text-foreground size-9 rounded-lg"
-          >
+          <Button isIconOnly variant="ghost" size="sm" aria-label="Notifications">
             <Bell className="size-4" />
           </Button>
           <Badge intent="danger" size="sm" />
         </Badge.Anchor>
 
         <div className="flex items-center gap-2.5">
-          <Avatar className="ring-border size-8 ring-2">
+          <Avatar className="size-8">
             {user.avatarUrl && <AvatarImage src={user.avatarUrl} alt={user.name} />}
-            <AvatarFallback className="bg-accent-subtle text-accent text-xs font-semibold">
-              {initials(user.name)}
-            </AvatarFallback>
+            <AvatarFallback>{initials(user.name)}</AvatarFallback>
           </Avatar>
           <div className="hidden flex-col text-left sm:flex">
             <Text variant="label">{user.name}</Text>
@@ -132,10 +125,10 @@ export function Topbar({ user }: TopbarProps) {
           <Button
             isIconOnly
             variant="ghost"
+            size="sm"
             aria-label="Log out"
             title="Log out"
             onPress={() => void handleLogout()}
-            className="text-muted hover:bg-danger-subtle hover:text-danger size-8"
           >
             <LogOut className="size-3.5" />
           </Button>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { DonutChart } from "@/components/common";
-import { Metric, SectionCard, SelectPill, Text } from "@/components/ui";
+import { DonutChart, EmptyState } from "@/components/common";
+import { ColorDot, Metric, SectionCard, SelectPill, Text } from "@/components/ui";
 import { formatCurrency } from "@/lib/format";
 
 import type { SpendingCategory } from "../types";
@@ -27,10 +27,11 @@ interface SpendingOverviewProps {
 export function SpendingOverview({ categories }: SpendingOverviewProps) {
   const [period, setPeriod] = useState(periods[0].id);
   const total = categories.reduce((sum, c) => sum + c.amount, 0);
+
   const rows = categories.map((c, i) => ({
     ...c,
     color: palette[i % palette.length],
-    percent: Math.round((c.amount / total) * 100),
+    percent: total > 0 ? Math.round((c.amount / total) * 100) : 0,
   }));
 
   return (
@@ -41,36 +42,47 @@ export function SpendingOverview({ categories }: SpendingOverviewProps) {
         <SelectPill ariaLabel="Period" options={periods} value={period} onChange={setPeriod} />
       }
     >
-      <div className="flex flex-col items-center gap-5 sm:flex-row">
-        <DonutChart
-          segments={rows.map((r) => ({ label: r.name, value: r.amount, color: r.color }))}
-        >
-          <Metric value={formatCurrency(total)} size="md" />
-          <Text variant="caption">Total spent</Text>
-        </DonutChart>
+      {rows.length === 0 ? (
+        <EmptyState
+          title="No spending recorded"
+          description="No expenses recorded for this period."
+          variant="clean"
+          className="py-8"
+        />
+      ) : (
+        <div className="flex flex-col items-center gap-5 sm:flex-row">
+          <DonutChart
+            segments={rows.map((r) => ({ label: r.name, value: r.amount, color: r.color }))}
+          >
+            <Metric value={formatCurrency(total)} size="md" />
+            <Text variant="caption">Total spent</Text>
+          </DonutChart>
 
-        <ul className="w-full flex-1 space-y-2">
-          {rows.map((r) => (
-            <li key={r.name} className="flex items-center justify-between gap-2">
-              <span className="flex items-center gap-2">
-                <span
-                  className="size-2.5 shrink-0 rounded-full"
-                  style={{ backgroundColor: r.color }}
-                />
-                <Text variant="body-sm">{r.name}</Text>
-              </span>
-              <span className="flex items-center gap-3">
-                <Text variant="muted" size="xs" className="w-8 text-right tabular-nums">
-                  {r.percent}%
-                </Text>
-                <Text variant="body-sm" weight="semibold" className="w-16 text-right tabular-nums">
-                  {formatCurrency(r.amount)}
-                </Text>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+          <ul className="w-full flex-1 space-y-2">
+            {rows.map((r) => (
+              <li key={r.name} className="flex items-center justify-between gap-2">
+                <span className="flex items-center gap-2">
+                  <ColorDot color={r.color} />
+                  <Text variant="body-sm">{r.name}</Text>
+                </span>
+
+                <span className="flex items-center gap-3">
+                  <Text variant="muted" size="xs" className="w-8 text-right tabular-nums">
+                    {r.percent}%
+                  </Text>
+                  <Text
+                    variant="body-sm"
+                    weight="semibold"
+                    className="w-16 text-right tabular-nums"
+                  >
+                    {formatCurrency(r.amount)}
+                  </Text>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </SectionCard>
   );
 }

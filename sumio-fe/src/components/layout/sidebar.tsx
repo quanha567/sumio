@@ -27,8 +27,10 @@ interface NavSidebarProps {
   savingsTarget?: number;
 }
 
-export function NavSidebar({ savingsSaved = 2040, savingsTarget = 3000 }: NavSidebarProps) {
-  const percent = Math.round((savingsSaved / savingsTarget) * 100);
+export function NavSidebar({ savingsSaved, savingsTarget }: NavSidebarProps) {
+  const hasSavingsGoal =
+    savingsSaved !== undefined && savingsTarget !== undefined && savingsTarget > 0;
+  const percent = hasSavingsGoal ? Math.round((savingsSaved / savingsTarget) * 100) : 0;
   const { logout } = useAuth();
   const { state } = useAnimatedSidebar();
   const routerState = useRouterState();
@@ -100,15 +102,15 @@ export function NavSidebar({ savingsSaved = 2040, savingsTarget = 3000 }: NavSid
       </AnimatedSidebarContent>
 
       <AnimatedSidebarFooter className={cn("gap-2.5", collapsed ? "px-2" : "px-3")}>
-        {!collapsed && (
+        {!collapsed && hasSavingsGoal && (
           <Card intent="secondary" className="flex items-center gap-3 p-3">
             <ProgressRing value={percent} ariaLabel="Monthly saving goal" color="sand">
-              <span className="text-[10px] font-bold">{percent}%</span>
+              {percent}%
             </ProgressRing>
             <div className="min-w-0">
               <Text variant="label">Monthly saving goal</Text>
               <Text variant="caption">
-                {formatCurrency(savingsSaved)} / {formatCurrency(savingsTarget)}
+                {formatCurrency(savingsSaved ?? 0)} / {formatCurrency(savingsTarget ?? 0)}
               </Text>
             </div>
           </Card>

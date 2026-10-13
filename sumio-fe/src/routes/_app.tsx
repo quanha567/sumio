@@ -1,5 +1,4 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import { AppShell } from "@/components/layout";
 import { Spinner } from "@/components/ui";
@@ -11,13 +10,6 @@ export const Route = createFileRoute("/_app")({
 
 function AppRouteComponent() {
   const { firebaseUser, profile, isLoading } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isLoading && !firebaseUser) {
-      void navigate({ to: "/login" });
-    }
-  }, [isLoading, firebaseUser, navigate]);
 
   if (isLoading) {
     return (
@@ -27,13 +19,21 @@ function AppRouteComponent() {
     );
   }
 
+  if (!firebaseUser) {
+    redirect({
+      to: "/login",
+    });
+  }
+
+  const displayName =
+    profile?.displayName ||
+    firebaseUser?.displayName ||
+    (firebaseUser?.email ? firebaseUser.email.split("@")[0] : "User");
+
   const currentUser = {
-    name: profile?.displayName || firebaseUser?.displayName || "Summer Wells",
+    name: displayName,
     subtitle: profile?.email || firebaseUser?.email || "Personal Account",
-    avatarUrl:
-      profile?.photoUrl ||
-      firebaseUser?.photoURL ||
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+    avatarUrl: profile?.photoUrl || firebaseUser?.photoURL || undefined,
   };
 
   return (

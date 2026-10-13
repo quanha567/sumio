@@ -1,3 +1,4 @@
+export * from "./batch-action-bar";
 export * from "./confirm-modal";
 export * from "./data-table";
 export * from "./donut-chart";
@@ -5,7 +6,6 @@ export * from "./empty-state";
 export * from "./grouped-bar-chart";
 export * from "./icon-badge";
 export * from "./page-header";
-export * from "./search-filter-bar";
 export * from "./sparkline";
 export * from "./stat-card";
 export * from "./trend-badge";

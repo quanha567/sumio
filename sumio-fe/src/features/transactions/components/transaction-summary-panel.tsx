@@ -1,10 +1,11 @@
 import type { TransactionDto } from "@sumio/contract";
+import { ArrowRight, PlusCircle } from "lucide-react";
 import { useMemo } from "react";
 
-import type { DonutSegment } from "@/components/common";
+import { type DonutSegment, IconBadge } from "@/components/common";
+import { Button, Card, Heading, Text } from "@/components/ui";
 
 import { SummaryBalanceCard } from "./summary-balance-card";
-import { SummaryQuickActions } from "./summary-quick-actions";
 import { SummarySpendingCard } from "./summary-spending-card";
 import { getCategoryMeta } from "./transaction-category-icon";
 
@@ -89,5 +90,56 @@ export function TransactionSummaryPanel({
 
       <SummaryQuickActions onAddIncome={onAddIncome} onAddExpense={onAddExpense} />
     </div>
+  );
+}
+
+interface SummaryQuickActionsProps {
+  onAddIncome: () => void;
+  onAddExpense: () => void;
+}
+
+function SummaryQuickActions({ onAddIncome, onAddExpense }: SummaryQuickActionsProps) {
+  return (
+    <Card padding="md">
+      <Heading level={3}>Quick Actions</Heading>
+
+      <div className="mt-3.5 space-y-2">
+        <Button
+          intent="outline"
+          onPress={onAddIncome}
+          className="h-auto w-full justify-between p-3 text-left"
+        >
+          <div className="flex items-center gap-3">
+            <IconBadge icon={PlusCircle} tone="income" size="sm" />
+            <div>
+              <Text variant="label" className="block">
+                Add Income
+              </Text>
+              <Text variant="caption">Salary, freelance, etc.</Text>
+            </div>
+          </div>
+
+          <ArrowRight className="size-4 opacity-60" />
+        </Button>
+
+        <Button
+          intent="outline"
+          onPress={onAddExpense}
+          className="h-auto w-full justify-between p-3 text-left"
+        >
+          <div className="flex items-center gap-3">
+            <IconBadge icon={PlusCircle} tone="expense" size="sm" />
+            <div>
+              <Text variant="label" className="block">
+                Add Expense
+              </Text>
+              <Text variant="caption">Food, shopping, transport...</Text>
+            </div>
+          </div>
+
+          <ArrowRight className="size-4 opacity-60" />
+        </Button>
+      </div>
+    </Card>
   );
 }

@@ -4,7 +4,7 @@ We decided to wrap 100% of HeroUI components in `src/components/ui/`, adopt a Du
 
 ## Context
 
-In [ADR 0002](./0002-frontend-design-system-and-tokens.md), we established a strict Component Wrapper architecture prohibiting direct imports from `@heroui/react` in feature directories. However, only a subset of HeroUI components were initially wrapped. Some existing wrappers contained flaws:
+In our initial design foundation, we established a strict Component Wrapper architecture prohibiting direct imports from `@heroui/react` in feature directories. However, only a subset of HeroUI components were initially wrapped. Some existing wrappers contained flaws:
 
 - Using raw template string concatenation (`${className}`) instead of `cn()`.
 - Leaking arbitrary Tailwind colors (e.g. `bg-emerald-100`) rather than semantic OKLCH Mint tokens.

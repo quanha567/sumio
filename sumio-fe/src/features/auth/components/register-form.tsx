@@ -1,11 +1,19 @@
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, Lock, Mail, User } from "lucide-react";
 
-import { Alert, Button, Form, PasswordField, TextField } from "@/components/ui";
+import {
+  Alert,
+  Button,
+  Form,
+  Heading,
+  linkStyles,
+  PasswordField,
+  Separator,
+  Text,
+  TextField,
+} from "@/components/ui";
 
 import { useRegisterForm } from "../hooks/use-register-form";
-import { AuthDivider } from "./auth-divider";
-import { AuthFooterLink } from "./auth-footer-link";
-import { AuthHeader } from "./auth-header";
 import { GoogleAuthButton } from "./google-auth-button";
 
 export function RegisterForm() {
@@ -14,11 +22,12 @@ export function RegisterForm() {
 
   return (
     <div className="space-y-6">
-      <AuthHeader
-        title="Create account"
-        emoji="🌱"
-        subtitle="Start your journey to financial freedom today."
-      />
+      <div>
+        <Heading level={1}>Create account 🌱</Heading>
+        <Text variant="muted" size="sm" className="mt-1.5">
+          Start your journey to financial freedom today.
+        </Text>
+      </div>
 
       {authError && (
         <Alert intent="danger">
@@ -34,7 +43,7 @@ export function RegisterForm() {
           name="displayName"
           type="text"
           label="Full name"
-          placeholder="Summer Wells"
+          placeholder="Your full name"
           prefix={<User className="size-4" />}
         />
 
@@ -72,7 +81,7 @@ export function RegisterForm() {
         </Button>
       </Form>
 
-      <AuthDivider />
+      <Separator label="or" />
 
       <GoogleAuthButton
         isLoading={isGoogleSubmitting}
@@ -80,7 +89,12 @@ export function RegisterForm() {
         onPress={() => void handleGoogleSignIn()}
       />
 
-      <AuthFooterLink prompt="Already have an account?" linkLabel="Sign in" to="/login" />
+      <Text variant="muted" size="sm" className="text-center">
+        Already have an account?{" "}
+        <Link to="/login" className={linkStyles()}>
+          Sign in
+        </Link>
+      </Text>
     </div>
   );
 }

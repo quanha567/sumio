@@ -1,5 +1,5 @@
 import logo from "@/assets/brand/logo.png";
-import { cn } from "@/components/ui";
+import { cn, Heading, Text } from "@/components/ui";
 
 interface BrandLogoProps {
   className?: string;
@@ -18,8 +18,10 @@ export function BrandLogo({ className, iconOnly = false }: BrandLogoProps) {
     <div className={cn("flex items-center gap-2.5", className)}>
       <img src={logo} alt="" className="size-9 rounded-xl object-cover" />
       <div className="leading-tight">
-        <p className="text-accent text-xl font-extrabold tracking-tight">Sumio</p>
-        <p className="text-muted text-[11px]">Better money, brighter days</p>
+        <Heading level={2} className="text-accent text-xl font-extrabold tracking-tight">
+          Sumio
+        </Heading>
+        <Text variant="caption">Better money, brighter days</Text>
       </div>
     </div>
   );
