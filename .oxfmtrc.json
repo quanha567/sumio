@@ -1,0 +1,36 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "always",
+  "sortImports": {
+    "newlinesBetween": true,
+    "sortSideEffects": true,
+    "internalPattern": ["@/"],
+    "customGroups": [
+      {
+        "groupName": "workspace",
+        "elementNamePattern": ["@sumio/*", "@sumio/**"]
+      },
+      {
+        "groupName": "internal-alias",
+        "elementNamePattern": ["@/**"]
+      }
+    ],
+    "groups": [
+      ["value-builtin", "value-external", "type-builtin", "type-external"],
+      "workspace",
+      "internal-alias",
+      ["value-parent", "value-sibling", "value-index", "type-parent", "type-sibling", "type-index"],
+      "unknown"
+    ]
+  },
+  "sortPackageJson": true,
+  "ignorePatterns": ["**/dist/**", "**/node_modules/**", "**/routeTree.gen.ts"]
+}

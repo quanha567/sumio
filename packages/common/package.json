@@ -1,0 +1,32 @@
+{
+  "name": "@sumio/common",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src/",
+    "fmt": "oxfmt --write",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.13",
+    "lodash-es": "^4.17.21",
+    "nanoid": "^5.0.9"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "typescript": "^7.0.2"
+  }
+}

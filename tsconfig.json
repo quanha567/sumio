@@ -1,0 +1,9 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./sumio-fe" },
+    { "path": "./sumio-be" },
+    { "path": "./packages/common" },
+    { "path": "./packages/contract" }
+  ]
+}

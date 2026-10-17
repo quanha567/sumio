@@ -67,6 +67,30 @@
       "skillPath": "skills/productivity/handoff/SKILL.md",
       "computedHash": "9ea2a5de5ca2d717f913356de982fdc4fe27d28a300c16598cd43a4865491008"
     },
+    "heroui-migration": {
+      "source": "heroui-inc/heroui",
+      "sourceType": "github",
+      "skillPath": "skills/heroui-migration/SKILL.md",
+      "computedHash": "ff03a6828cfa9556accc64e5e9a46d4b824de331882162b7a36743df9ce83e1a"
+    },
+    "heroui-native": {
+      "source": "heroui-inc/heroui",
+      "sourceType": "github",
+      "skillPath": "skills/heroui-native/SKILL.md",
+      "computedHash": "0c69432d03bb4ab6ce85158631c3d2b05f2efd5c2ddefecca161d7e697054704"
+    },
+    "heroui-react": {
+      "source": "heroui-inc/heroui",
+      "sourceType": "github",
+      "skillPath": "skills/heroui-react/SKILL.md",
+      "computedHash": "c3633cb324aef2a51a9828c96776897ec2273d8d092cfcfb4dfa754006c7b8df"
+    },
+    "humanizer": {
+      "source": "blader/humanizer",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "f17e3360d6ad1a9f93774fbe89347376968c4060137ac04872baa49b3a4a4175"
+    },
     "implement": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -144,6 +168,18 @@
       "sourceType": "github",
       "skillPath": "skills/in-progress/setup-ts-deep-modules/SKILL.md",
       "computedHash": "0b0e7124ad1272d59e44bcb4224275e76421351294a91480ada62234158c1023"
+    },
+    "supabase-server": {
+      "source": "supabase/server",
+      "sourceType": "github",
+      "skillPath": "skills/supabase-server/SKILL.md",
+      "computedHash": "c4c29a1ac1c1c11da456604fb07127d69524afedbc358e4ac41540db013d0fef"
+    },
+    "tailwind-design-system": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/frontend-mobile-development/skills/tailwind-design-system/SKILL.md",
+      "computedHash": "9e60f9fad6a645b173f076102b76f67d2dc4a1c0867e26c4bff9b9c7dd7f99cd"
     },
     "tdd": {
       "source": "mattpocock/skills",

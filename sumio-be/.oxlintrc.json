@@ -1,0 +1,96 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "import"],
+  "jsPlugins": ["@stylistic/eslint-plugin"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "pedantic": "warn",
+    "perf": "warn"
+  },
+  "rules": {
+    "@stylistic/padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "directive", "next": "*" },
+      { "blankLine": "any", "prev": "directive", "next": "directive" },
+      { "blankLine": "always", "prev": "import", "next": "*" },
+      { "blankLine": "any", "prev": "import", "next": "import" },
+      { "blankLine": "always", "prev": "*", "next": "return" },
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": ["multiline-block-like", "multiline-expression", "multiline-const", "multiline-let"]
+      },
+      {
+        "blankLine": "always",
+        "prev": [
+          "multiline-block-like",
+          "multiline-expression",
+          "multiline-const",
+          "multiline-let"
+        ],
+        "next": "*"
+      },
+      { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
+      { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] },
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": ["function", "class", "export", "interface", "type"]
+      },
+      {
+        "blankLine": "always",
+        "prev": ["function", "class", "export", "interface", "type"],
+        "next": "*"
+      },
+      { "blankLine": "any", "prev": "export", "next": "export" },
+      { "blankLine": "any", "prev": ["interface", "type"], "next": ["interface", "type"] }
+    ],
+    "@stylistic/lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true, "exceptAfterOverload": true }
+    ],
+    "import/newline-after-import": "error",
+    "import/no-unassigned-import": "off",
+    "no-unused-vars": "error",
+    "no-console": "error",
+    "no-underscore-dangle": "off",
+    "no-throw-literal": "error",
+    "no-nested-ternary": "error",
+    "prefer-const": "error",
+    "max-params": ["error", { "max": 3 }],
+    "no-else-return": ["error", { "allowElseIf": false }],
+    "typescript/no-extraneous-class": "off",
+    "typescript/no-explicit-any": "error",
+    "typescript/consistent-type-imports": "error",
+    "unicorn/prefer-node-protocol": "error",
+    "no-duplicate-imports": "off",
+    "no-var": "error",
+    "func-name-matching": "error",
+    "eqeqeq": "error",
+    "no-param-reassign": "error",
+    "no-unneeded-ternary": "error",
+    "prefer-template": "error",
+    "no-template-curly-in-string": "error",
+    "yoda": "error",
+    "no-self-compare": "error",
+    "unicorn/filename-case": ["error", { "case": "kebabCase" }],
+    "unicorn/catch-error-name": ["error", { "name": "error" }],
+    "max-lines": ["error", { "max": 250, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": ["warn", { "max": 50, "skipBlankLines": true, "skipComments": true }]
+  },
+  "env": {
+    "es2024": true,
+    "node": true
+  },
+  "overrides": [
+    {
+      "files": ["src/**/*.controller.ts", "src/**/*.service.ts", "src/**/*.module.ts"],
+      "rules": {
+        "max-params": ["error", { "max": 7 }]
+      }
+    }
+  ],
+  "ignorePatterns": ["dist/**", "node_modules/**"]
+}
