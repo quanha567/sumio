@@ -58,12 +58,15 @@ export class UserSettings extends Entity<string> {
     if (props.baseCurrency) this._baseCurrency = props.baseCurrency;
     if (props.locale) this._locale = props.locale;
     if (props.theme) this._theme = props.theme;
+
     if (props.weekStartsOn !== undefined) {
       if (props.weekStartsOn < 0 || props.weekStartsOn > 6) {
         throw new Error("weekStartsOn must be between 0 (Sunday) and 6 (Saturday)");
       }
+
       this._weekStartsOn = props.weekStartsOn;
     }
+
     this._updatedAt = new Date();
   }
 

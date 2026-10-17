@@ -18,6 +18,8 @@ import {
   useState,
 } from "react";
 
+import type { VoidFunction } from "@sumio/common";
+
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 
@@ -66,10 +68,11 @@ export function SharedLayoutBg({
     .map((child, index) => {
       const el = child as ReactElement<{
         className?: string;
-        onMouseEnter?: () => void;
+        onMouseEnter?: VoidFunction;
         children?: ReactNode;
       }>;
       const childKey = el.key ? String(el.key) : `item-${index}`;
+
       return cloneElement(
         el,
         {

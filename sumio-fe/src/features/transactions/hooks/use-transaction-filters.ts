@@ -1,6 +1,15 @@
-import type { ListTransactionsQuery } from "@sumio/contract";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { startTransition, useCallback, useMemo } from "react";
+
+import {
+  getLastMonthRange,
+  getThisMonthRange,
+  type DateRange,
+  type OnChange,
+  type OnPageChange,
+  type VoidFunction,
+} from "@sumio/common";
+import type { ListTransactionsQuery } from "@sumio/contract";
 
 import type { TransactionSearch } from "@/routes/_app/transactions";
 
@@ -8,31 +17,15 @@ import { useDebouncedSearch } from "./use-debounced-search";
 
 export const PAGE_SIZE = 10;
 
-function computeDateRange(filter: "all" | "this-month" | "last-month"): {
-  from?: string;
-  to?: string;
-} {
-  if (filter === "all") return {};
-  const now = new Date();
+function computeDateRange(filter: "all" | "this-month" | "last-month"): DateRange {
   if (filter === "this-month") {
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, "0");
-    const lastDay = new Date(y, now.getMonth() + 1, 0).getDate();
-    return {
-      from: `${y}-${m}-01`,
-      to: `${y}-${m}-${String(lastDay).padStart(2, "0")}`,
-    };
+    return getThisMonthRange();
   }
+
   if (filter === "last-month") {
-    const d = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const lastDay = new Date(y, d.getMonth() + 1, 0).getDate();
-    return {
-      from: `${y}-${m}-01`,
-      to: `${y}-${m}-${String(lastDay).padStart(2, "0")}`,
-    };
+    return getLastMonthRange();
   }
+
   return {};
 }
 
@@ -66,13 +59,13 @@ function buildQueryParams(
 export interface TransactionFiltersResult {
   search: TransactionSearch;
   searchInput: string;
-  setSearchInput: (value: string) => void;
+  setSearchInput: OnChange<string>;
   queryParams: Partial<ListTransactionsQuery>;
-  setPage: (newPage: number) => void;
-  setTypeFilter: (type: "all" | "income" | "expense") => void;
-  setCategoryFilter: (categoryId: string) => void;
-  setDateFilter: (date: "all" | "this-month" | "last-month") => void;
-  resetFilters: () => void;
+  setPage: OnPageChange;
+  setTypeFilter: OnChange<"all" | "income" | "expense">;
+  setCategoryFilter: OnChange<string>;
+  setDateFilter: OnChange<"all" | "this-month" | "last-month">;
+  resetFilters: VoidFunction;
 }
 
 export function useTransactionFilters(): TransactionFiltersResult {
@@ -84,6 +77,7 @@ export function useTransactionFilters(): TransactionFiltersResult {
   const handleDebouncedSearch = useCallback(
     (val: string) => {
       const trimmed = val.trim();
+
       if (trimmed !== (search.q || "")) {
         startTransition(() => {
           void navigate({
@@ -156,6 +150,7 @@ export function useTransactionFilters(): TransactionFiltersResult {
 
   const resetFilters = useCallback(() => {
     setSearchInput("");
+
     startTransition(() => {
       void navigate({
         search: (prev) => ({

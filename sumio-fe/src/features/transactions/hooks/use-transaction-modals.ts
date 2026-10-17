@@ -1,6 +1,18 @@
-import type { Nullable } from "@sumio/common";
-import type { CreateTransactionDto, TransactionDto, UpdateTransactionDto } from "@sumio/contract";
 import { useCallback, useState } from "react";
+
+import type {
+  AsyncCallback,
+  AsyncVoidFunction,
+  Nullable,
+  OnChange,
+  VoidFunction,
+} from "@sumio/common";
+import type {
+  CreateTransactionDto,
+  TransactionDto,
+  TransactionType,
+  UpdateTransactionDto,
+} from "@sumio/contract";
 
 import {
   useCreateTransactionMutation,
@@ -10,34 +22,34 @@ import {
 
 export interface TransactionModalsResult {
   isFormOpen: boolean;
-  formDefaultType: "income" | "expense";
+  formDefaultType: TransactionType;
   editingTx: Nullable<TransactionDto>;
   isDeleteOpen: boolean;
   deletingTx: Nullable<TransactionDto>;
-  openCreate: (defaultType?: "income" | "expense") => void;
-  openEdit: (tx: TransactionDto) => void;
-  closeForm: () => void;
-  openDelete: (tx: TransactionDto) => void;
-  closeDelete: () => void;
-  handleSave: (dto: CreateTransactionDto | UpdateTransactionDto) => Promise<void>;
-  handleConfirmDelete: () => Promise<void>;
+  openCreate: (defaultType?: TransactionType) => void;
+  openEdit: OnChange<TransactionDto>;
+  closeForm: VoidFunction;
+  openDelete: OnChange<TransactionDto>;
+  closeDelete: VoidFunction;
+  handleSave: AsyncCallback<[dto: CreateTransactionDto | UpdateTransactionDto]>;
+  handleConfirmDelete: AsyncVoidFunction;
   isSaving: boolean;
   isDeleting: boolean;
 }
 
 export function useTransactionModals(): TransactionModalsResult {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formDefaultType, setFormDefaultType] = useState<"income" | "expense">("expense");
-  const [editingTx, setEditingTx] = useState<TransactionDto | null>(null);
+  const [formDefaultType, setFormDefaultType] = useState<TransactionType>("expense");
+  const [editingTx, setEditingTx] = useState<Nullable<TransactionDto>>(null);
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [deletingTx, setDeletingTx] = useState<TransactionDto | null>(null);
+  const [deletingTx, setDeletingTx] = useState<Nullable<TransactionDto>>(null);
 
   const createMutation = useCreateTransactionMutation();
   const updateMutation = useUpdateTransactionMutation();
   const deleteMutation = useDeleteTransactionMutation();
 
-  const openCreate = useCallback((defaultType: "income" | "expense" = "expense") => {
+  const openCreate = useCallback((defaultType: TransactionType = "expense") => {
     setEditingTx(null);
     setFormDefaultType(defaultType);
     setIsFormOpen(true);
@@ -71,6 +83,7 @@ export function useTransactionModals(): TransactionModalsResult {
       } else {
         await createMutation.mutateAsync(dto as CreateTransactionDto);
       }
+
       closeForm();
     },
     [editingTx, updateMutation, createMutation, closeForm],

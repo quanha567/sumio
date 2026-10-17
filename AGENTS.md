@@ -9,9 +9,9 @@ This document is the **canonical Single Source of Truth** for all developers and
 The Sumio platform is structured as a Bun monorepo comprising:
 
 - [`sumio-fe/`](file:///d:/projects/sumio/sumio-fe): React 19 single-page frontend application (Vite+, TanStack Router/Query, Tailwind CSS v4, HeroUI wrappers).
-- [`sumio-be/`](file:///d:/projects/sumio/sumio-be): NestJS serverless backend service (Fastify adapter on Cloudflare Workers, TypeORM, Supabase PostgreSQL).
+- [`sumio-be/`](file:///d:/projects/sumio/sumio-be): NestJS serverless backend service (Cloudflare Workers via `httpServerHandler`, TypeORM, Supabase PostgreSQL).
 - [`packages/contract/`](file:///d:/projects/sumio/packages/contract): Shared `@sumio/contract` library containing Zod schemas, contract DTOs, and `@ts-rest` API definitions.
-- [`packages/common/`](file:///d:/projects/sumio/packages/common): Shared `@sumio/common` library providing utilities (`dayjs`, `nanoid`, `es-toolkit`, currency algorithms).
+- [`packages/common/`](file:///d:/projects/sumio/packages/common): Shared `@sumio/common` library providing utilities (`dayjs`, `nanoid`, `lodash-es`, currency algorithms).
 
 ### Workspace Dependency Rules
 
@@ -71,7 +71,7 @@ All code throughout the monorepo must strictly adhere to these formatting guidel
 
 ### Import Organization
 
-- **Sorting**: Imports are automatically grouped and sorted by `oxfmt`:
+- **Sorting**: Imports are automatically grouped and sorted via `bun fmt` / `bun fmt:imports`:
   1. External dependencies (`react`, `@nestjs/common`, etc.)
   2. Workspace packages (`@sumio/contract`, `@sumio/common`)
   3. Internal aliases (`@/...`)
@@ -85,6 +85,14 @@ All code throughout the monorepo must strictly adhere to these formatting guidel
 - **Functions & Handlers**: Leave **1 blank line** between individual functions, callbacks (`useCallback`), and methods.
 - **Return Statements**: Leave **1 blank line** before `return` statements (unless the function is a single-line return).
 - **Consecutive Blank Lines**: Never have 2 or more consecutive blank lines anywhere in a file.
+
+### Deterministic Naming & Clean Code Guardrails
+
+- **File Naming**: Strictly `kebab-case` with layer suffixes (`*.controller.ts`, `*.use-case.ts`, `*.repository.ts`, `*-modal.tsx`).
+- **No `I` Prefix on Interfaces**: Always `<Entity>Repository`, `<Entity>Record` (never `ITransactionRepository`).
+- **Event Props vs Handlers**: Event props must be `on<Action>` (e.g. `onPress`, `onChange`), and handlers must be `handle<Action>` (`react/jsx-handler-names`).
+- **Guard Clauses & Early Return**: Validate edge cases and return early; avoid arrow-nested `if/else` structures (`no-else-return`).
+- **Automated Guardrails**: No nested ternaries (`no-nested-ternary`), max 3 positional parameters per function (`max-params: 3`), and strictly zero `any` (`typescript/no-explicit-any: error`).
 
 ---
 

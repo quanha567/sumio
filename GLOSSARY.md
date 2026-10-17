@@ -51,19 +51,19 @@ A dedicated, independent semantic token layer (`finance-income`, `finance-expens
 _Avoid_: Status colors for income, using brand green for positive money
 
 **Component Wrapper**:
-An encapsulated atomic UI primitive located strictly in `src/components/ui/` that binds HeroUI v3 and Tailwind CSS v4 to Sumio's design tokens. Wrappers must only override the minimal styles required to align with theme tokens, strictly preserving third-party built-in accessibility, navigation, and core behaviors. Feature modules are forbidden from importing third-party UI packages directly.
+An encapsulated atomic UI primitive located strictly in `src/components/atoms/` that binds HeroUI v3 and Tailwind CSS v4 to Sumio's design tokens. Wrappers must only override the minimal styles required to align with theme tokens, strictly preserving third-party built-in accessibility, navigation, and core behaviors. Feature modules, routes, templates, and molecules are forbidden from importing third-party UI packages directly.
 _Avoid_: Custom component, HeroUI element, direct `@heroui/*` imports in features
 
-**Common Base Component**:
-A reusable, domain-agnostic composite component located strictly in `src/components/common/` assembled from `src/components/ui/` compound primitives, offering an ergonomic props-first API (80/20 rule) to eliminate repetitive boilerplate in feature modules.
-_Avoid_: Feature component, ad-hoc dialog, helper widget
+**Molecule Component**:
+A reusable, domain-agnostic composite component located strictly in `src/components/molecules/` assembled from `src/components/atoms/` compound primitives, offering an ergonomic props-first API (80/20 rule) to eliminate repetitive boilerplate in feature modules.
+_Avoid_: Feature component, ad-hoc dialog, helper widget, common base component
 
 **Adaptive Virtualized DataTable**:
-A unified data table component in `src/components/common/data-table/` combining TanStack Table v9 and TanStack Virtual: rendering URL-synchronized paginated columns on desktop and transitioning to a virtualized card-row list on mobile.
+A unified data table component in `src/components/molecules/data-table.tsx` combining TanStack Table v9 and TanStack Virtual: rendering URL-synchronized paginated columns on desktop and transitioning to a virtualized card-row list on mobile.
 _Avoid_: Desktop-only table, unvirtualized mobile list
 
 **Internal Breakpoint Encapsulation**:
-The architectural practice of embedding responsive utility breakpoints (`xs`, `sm`, `md`, `lg`) directly inside `ui/` primitives and `common/` base components (for touch targets, paddings, typography scales, and flex flows), relieving feature modules from managing responsive scaffolding.
+The architectural practice of embedding responsive utility breakpoints (`xs`, `sm`, `md`, `lg`) directly inside `atoms/` primitives and `molecules/` base components (for touch targets, paddings, typography scales, and flex flows), relieving feature modules from managing responsive scaffolding.
 _Avoid_: Feature media queries, manual breakpoint boilerplate
 
 **Dual Compound API**:
@@ -95,11 +95,11 @@ The responsive rendering pattern that presents full multi-column tables on deskt
 _Avoid_: Horizontal table scrolling, responsive table hack
 
 **Semantic Token Encapsulation**:
-The strict architectural boundary where all colors, font scales, weights, borders, radii, and elevations are declared in `index.css` and encapsulated solely within `src/components/ui/`. Features and routes are strictly forbidden from authoring raw styling classes.
+The strict architectural boundary where all colors, font scales, weights, borders, radii, and elevations are declared in `index.css` and encapsulated solely within `src/components/atoms/`. Features, templates, and routes are strictly forbidden from authoring raw styling classes.
 _Avoid_: Inline styling, ad-hoc text size classes, arbitrary background colors
 
 **Layout-Only Utility Rule**:
-The engineering constraint restricting CSS classes in feature views (`src/features/*`, `src/routes/*`) strictly to layout positioning and dimensional flow (`flex`, `grid`, `gap-*`, `p-*`, `m-*`, `w-*`, `h-*`, `col-span-*`), offloading all visual design to primitives.
+The engineering constraint restricting CSS classes in feature views (`src/features/*`, `src/routes/*`, `src/components/templates/*`) strictly to layout positioning and dimensional flow (`flex`, `grid`, `gap-*`, `p-*`, `m-*`, `w-*`, `h-*`, `col-span-*`), offloading all visual design to primitives.
 _Avoid_: Styling classes in features, custom borders on feature cards
 
 **Ergonomic Base Primitive**:
@@ -189,7 +189,7 @@ The TypeScript package (`@sumio/contract`) in `packages/contract` defining Zod s
 _Avoid_: API types, shared DTOs, endpoint interface
 
 **Shared Common Package**:
-The TypeScript workspace package (`@sumio/common`) in `packages/common` providing common utility types (`Nullable`, `Optional`, `PaginatedResult`), pre-configured libraries (`dayjs`, `es-toolkit`, `lodash-es`, `nanoid`), and currency minor units algorithms across frontend and backend.
+The TypeScript workspace package (`@sumio/common`) in `packages/common` providing common utility types (`Nullable`, `Optional`, `PaginatedResult`), pre-configured libraries (`dayjs`, `lodash-es`, `nanoid`), and currency minor units algorithms across frontend and backend.
 _Avoid_: Shared lib, helper package, misc utils
 
 **JIT User Provisioning**:
@@ -205,8 +205,8 @@ The connection pooling endpoint (PgBouncer/Supavisor) for Supabase PostgreSQL le
 _Avoid_: Direct DB URL, raw postgres socket
 
 **Worker Adapter**:
-The serverless dispatch layer bridging Cloudflare Worker `fetch` events to the underlying NestJS Fastify application instance.
-_Avoid_: Express wrapper, lambda handler
+The serverless dispatch layer bridging Cloudflare Worker `fetch` events to the underlying NestJS application instance via `httpServerHandler`.
+_Avoid_: Fastify wrapper, lambda handler
 
 **User Identity**:
 The record linking an external authentication provider (Firebase Auth) to a canonical Sumio `User` entity.

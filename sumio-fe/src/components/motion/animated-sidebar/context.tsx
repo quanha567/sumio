@@ -11,6 +11,8 @@ import {
   useSyncExternalStore,
 } from "react";
 
+import type { VoidFunction } from "@sumio/common";
+
 import { cn } from "@/lib/utils";
 
 import {
@@ -33,17 +35,21 @@ export const AnimatedSidebarPanelContext = createContext<AnimatedSidebarPanelCon
 
 export function useAnimatedSidebar(): AnimatedSidebarContextValue {
   const context = use(AnimatedSidebarContext);
+
   if (!context) {
     throw new Error("useAnimatedSidebar must be used inside AnimatedSidebarProvider.");
   }
+
   return context;
 }
 
 export function useAnimatedSidebarPanel(): AnimatedSidebarPanelContextValue {
   const context = use(AnimatedSidebarPanelContext);
+
   if (!context) {
     throw new Error("Animated Sidebar parts must be used inside AnimatedSidebar.");
   }
+
   return context;
 }
 
@@ -51,7 +57,7 @@ export function useIsMobile(): boolean {
   return useSyncExternalStore(subscribeToMobileQuery, getMobileSnapshot, getServerMobileSnapshot);
 }
 
-function useAnimatedSidebarShortcut(toggleSidebar: () => void) {
+function useAnimatedSidebarShortcut(toggleSidebar: VoidFunction) {
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
       if (
@@ -64,6 +70,7 @@ function useAnimatedSidebarShortcut(toggleSidebar: () => void) {
     };
 
     window.addEventListener("keydown", handleShortcut);
+
     return () => window.removeEventListener("keydown", handleShortcut);
   }, [toggleSidebar]);
 }

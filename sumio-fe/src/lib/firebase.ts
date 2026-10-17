@@ -1,5 +1,5 @@
-import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
-import { getAuth, type Auth, GoogleAuthProvider } from "firebase/auth";
+import { getApps, initializeApp, type FirebaseApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, type Auth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -16,4 +16,5 @@ export const app: FirebaseApp =
 
 export const auth: Auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+
 googleProvider.setCustomParameters({ prompt: "select_account" });

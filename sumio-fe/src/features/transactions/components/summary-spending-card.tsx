@@ -1,8 +1,9 @@
-import { formatCurrencyAmount } from "@sumio/common";
 import { ChevronRight } from "lucide-react";
 
+import { formatCurrencyAmount } from "@sumio/common";
+
 import { Button, Card, ColorDot, Heading, Metric, Text } from "@/components/atoms";
-import { DonutChart, type DonutSegment, EmptyState } from "@/components/molecules";
+import { DonutChart, EmptyState, type DonutSegment } from "@/components/molecules";
 
 interface SummarySpendingCardProps {
   totalExpense: number;
@@ -16,13 +17,13 @@ export function SummarySpendingCard({
   spendingSegments,
   currency,
   locale,
-}: SummarySpendingCardProps) {
+}: SummarySpendingCardProps): React.JSX.Element {
   return (
     <Card padding="md">
       <div className="flex items-center justify-between">
         <Heading level={3}>Spending by Category</Heading>
         <Button isIconOnly variant="ghost" size="sm" aria-label="More category details">
-          <ChevronRight className="size-4" />
+          <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
 

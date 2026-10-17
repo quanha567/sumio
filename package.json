@@ -15,6 +15,7 @@
     "build:contract": "bun --filter @sumio/contract build",
     "build": "bun --filter @sumio/common build && bun --filter @sumio/contract build && bun --filter sumio-be build && bun --filter sumio-fe build",
     "lint": "bun --filter '*' lint",
+    "lint:fix": "bun --filter '*' lint:fix",
     "fmt": "bun --filter '*' fmt",
     "test": "bun --filter '*' test",
     "prepare": "husky"
@@ -22,9 +23,11 @@
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.3",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "oxfmt": "^0.72.0",
-    "oxlint": "^1.87.0"
+    "oxlint": "^1.87.0",
+    "typescript": "^7.0.2"
   }
 }

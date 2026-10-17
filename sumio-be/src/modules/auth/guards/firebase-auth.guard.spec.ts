@@ -62,9 +62,11 @@ describe("FirebaseAuthGuard", () => {
 
     expect(result).toBe(true);
     expect(mockTokenVerifier.verifyIdToken).toHaveBeenCalledWith("valid-token-123");
+
     expect(mockSyncUserUseCase.execute).toHaveBeenCalledWith(
       expect.objectContaining({ firebaseUid: "fb-123", email: "test@example.com" }),
     );
+
     expect(req.user).toEqual({
       id: mockUser.id.value,
       email: mockUser.email.value,

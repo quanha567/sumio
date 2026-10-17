@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_app")({
   errorComponent: RouteErrorBoundary,
 });
 
-function AppRouteComponent() {
+function AppRouteComponent(): React.JSX.Element {
   const { firebaseUser, profile, isLoading, logout } = useAuth();
 
   if (isLoading) {

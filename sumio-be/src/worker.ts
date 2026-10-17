@@ -1,6 +1,6 @@
-import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { httpServerHandler } from "cloudflare:node";
+import "reflect-metadata";
 
 import { AppModule } from "@/app.module";
 import { DomainExceptionFilter } from "@/shared";

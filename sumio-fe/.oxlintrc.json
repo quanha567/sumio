@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "jsx-a11y", "typescript", "unicorn", "oxc"],
+  "plugins": ["react", "jsx-a11y", "typescript", "unicorn", "oxc", "import"],
+  "jsPlugins": ["@stylistic/eslint-plugin"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn",
@@ -8,14 +9,73 @@
     "perf": "warn"
   },
   "rules": {
+    "@stylistic/padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "directive", "next": "*" },
+      { "blankLine": "any", "prev": "directive", "next": "directive" },
+      { "blankLine": "always", "prev": "import", "next": "*" },
+      { "blankLine": "any", "prev": "import", "next": "import" },
+      { "blankLine": "always", "prev": "*", "next": "return" },
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": ["multiline-block-like", "multiline-expression", "multiline-const", "multiline-let"]
+      },
+      {
+        "blankLine": "always",
+        "prev": [
+          "multiline-block-like",
+          "multiline-expression",
+          "multiline-const",
+          "multiline-let"
+        ],
+        "next": "*"
+      },
+      { "blankLine": "always", "prev": ["const", "let", "var"], "next": "*" },
+      { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] },
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": ["function", "class", "export", "interface", "type"]
+      },
+      {
+        "blankLine": "always",
+        "prev": ["function", "class", "export", "interface", "type"],
+        "next": "*"
+      },
+      { "blankLine": "any", "prev": "export", "next": "export" },
+      { "blankLine": "any", "prev": ["interface", "type"], "next": ["interface", "type"] }
+    ],
+    "@stylistic/lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true, "exceptAfterOverload": true }
+    ],
+    "import/newline-after-import": "error",
+    "import/no-unassigned-import": "off",
     "no-unused-vars": "error",
     "no-console": ["error", { "allow": ["warn", "error"] }],
     "no-nested-ternary": "error",
     "prefer-const": "error",
     "max-params": ["error", { "max": 3 }],
+    "no-else-return": ["error", { "allowElseIf": false }],
+    "react/jsx-handler-names": [
+      "error",
+      {
+        "eventHandlerPrefix": "handle",
+        "eventHandlerPropPrefix": "on",
+        "checkLocalVariables": false,
+        "checkInlineFunction": false
+      }
+    ],
     "react/react-in-jsx-scope": "off",
     "react/jsx-key": "error",
     "react/jsx-no-target-blank": "error",
+    "react/jsx-pascal-case": ["error", { "allowAllCaps": true }],
+    "react/jsx-boolean-value": ["error", "never"],
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],
+    "react/jsx-no-useless-fragment": "error",
+    "react/function-component-definition": ["error", { "namedComponents": "function-declaration" }],
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "warn",
     "react/no-array-index-key": "error",
@@ -27,6 +87,17 @@
     "typescript/consistent-type-imports": "error",
     "unicorn/prefer-node-protocol": "error",
     "unicorn/prefer-top-level-await": "off",
+    "unicorn/filename-case": ["error", { "case": "kebabCase" }],
+    "unicorn/catch-error-name": ["error", { "name": "error" }],
+    "no-var": "error",
+    "func-name-matching": "error",
+    "eqeqeq": "error",
+    "no-param-reassign": "error",
+    "no-unneeded-ternary": "error",
+    "prefer-template": "error",
+    "no-template-curly-in-string": "error",
+    "yoda": "error",
+    "no-self-compare": "error",
     "no-duplicate-imports": "off",
     "max-lines": ["error", { "max": 350, "skipBlankLines": true, "skipComments": true }],
     "max-lines-per-function": [

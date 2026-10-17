@@ -1,46 +1,54 @@
-import { toMajorUnits, toMinorUnits, type Nullable } from "@sumio/common";
-import type { CategoryDto, TransactionDto } from "@sumio/contract";
 import { useEffect, useMemo, useState } from "react";
-import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
+
+import {
+  todayDateString,
+  toMajorUnits,
+  toMinorUnits,
+  type AsyncCallback,
+  type Nullable,
+  type OnChange,
+  type VoidFunction,
+} from "@sumio/common";
+import type { CategoryDto, TransactionDto, TransactionType } from "@sumio/contract";
 
 export interface TransactionFormData {
-  type: "income" | "expense";
+  type: TransactionType;
   amount: number;
   date: string;
   description: string;
   categoryId: string;
 }
 
+export type TransactionSubmitPayload = {
+  type: TransactionType;
+  amount: number;
+  date: string;
+  description: string;
+  categoryId: string;
+};
+
 export interface UseTransactionFormModalProps {
   categories: CategoryDto[];
   baseCurrency: string;
   effectiveTx?: Nullable<TransactionDto>;
-  defaultType?: "income" | "expense";
+  defaultType?: TransactionType;
   isOpen: boolean;
-  onSuccess?: () => void;
-  handleSubmitAction?: (data: {
-    type: "income" | "expense";
-    // minor units
-    amount: number;
-    date: string;
-    description: string;
-    categoryId: string;
-  }) => Promise<void>;
+  onSuccess?: VoidFunction;
+  onSubmitAction?: AsyncCallback<[payload: TransactionSubmitPayload]>;
+  handleSubmitAction?: AsyncCallback<[payload: TransactionSubmitPayload]>;
 }
 
 export interface TransactionFormModalResult {
   form: UseFormReturn<TransactionFormData>;
-  selectedType: "income" | "expense";
-  handleTypeChange: (newType: "income" | "expense") => void;
+  selectedType: TransactionType;
+  handleTypeChange: OnChange<TransactionType>;
   filteredCategories: CategoryDto[];
   isSubmitting: boolean;
   serverError: Nullable<string>;
   onFormSubmit: (data: TransactionFormData) => Promise<void>;
-}
-
-function getTodayString(): string {
-  return new Date().toISOString().slice(0, 10);
+  handleSubmit: (data: TransactionFormData) => Promise<void>;
 }
 
 export function useTransactionFormModal({
@@ -50,10 +58,11 @@ export function useTransactionFormModal({
   defaultType = "expense",
   isOpen,
   onSuccess,
+  onSubmitAction,
   handleSubmitAction,
 }: UseTransactionFormModalProps): TransactionFormModalResult {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+  const [serverError, setServerError] = useState<Nullable<string>>(null);
 
   const initialValues = useMemo<TransactionFormData>(() => {
     if (effectiveTx) {
@@ -65,12 +74,14 @@ export function useTransactionFormModal({
         categoryId: effectiveTx.category.id,
       };
     }
+
     const initialType = defaultType || "expense";
     const defaultCat = categories.find((c) => c.type === initialType)?.id || "";
+
     return {
       type: initialType,
       amount: "" as unknown as number,
-      date: getTodayString(),
+      date: todayDateString(),
       description: "",
       categoryId: defaultCat,
     };
@@ -86,9 +97,10 @@ export function useTransactionFormModal({
 
   const filteredCategories = categories.filter((c) => c.type === selectedType);
 
-  const handleTypeChange = (newType: "income" | "expense") => {
+  const handleTypeChange = (newType: TransactionType) => {
     setValue("type", newType);
     const firstCat = categories.find((c) => c.type === newType)?.id || "";
+
     setValue("categoryId", firstCat);
   };
 
@@ -112,17 +124,21 @@ export function useTransactionFormModal({
       if (minorAmount <= 0) {
         setServerError("Amount must be greater than 0");
         setIsSubmitting(false);
+
         return;
       }
 
       if (!data.categoryId) {
         setServerError("Please select a category");
         setIsSubmitting(false);
+
         return;
       }
 
-      if (handleSubmitAction) {
-        await handleSubmitAction({
+      const submitAction = onSubmitAction ?? handleSubmitAction;
+
+      if (submitAction) {
+        await submitAction({
           type: data.type,
           amount: minorAmount,
           date: data.date,
@@ -132,8 +148,8 @@ export function useTransactionFormModal({
       }
 
       if (onSuccess) onSuccess();
-    } catch (err) {
-      setServerError(err instanceof Error ? err.message : "Failed to save transaction");
+    } catch (error) {
+      setServerError(error instanceof Error ? error.message : "Failed to save transaction");
     } finally {
       setIsSubmitting(false);
     }
@@ -147,5 +163,6 @@ export function useTransactionFormModal({
     isSubmitting,
     serverError,
     onFormSubmit,
+    handleSubmit: onFormSubmit,
   };
 }

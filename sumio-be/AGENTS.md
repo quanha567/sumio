@@ -6,7 +6,7 @@ This document specifies the rules and architectural guardrails for developing wi
 
 ## 1. Tech Stack & Serverless Runtime
 
-- **Framework**: NestJS v12 with Fastify HTTP adapter
+- **Framework**: NestJS v12 with Express adapter (via Cloudflare Workers `httpServerHandler`)
 - **Runtime**: Cloudflare Workers via Wrangler (`wrangler.jsonc`)
 - **Database & ORM**: PostgreSQL (Supabase) via TypeORM (`src/database/`)
 - **Contract & Validation**: `@ts-rest/nest`, `@sumio/contract`, Zod
@@ -50,6 +50,17 @@ This document specifies the rules and architectural guardrails for developing wi
   3. **Backfill**: Migrate legacy data in controlled batches.
   4. **Contract**: Drop legacy columns or obsolete constraints in a follow-up release only after all traffic migrates.
 - Destructive operations (renaming columns directly or dropping active columns in a single release step) are **strictly forbidden**.
+
+### 🚫 Rule 7: Clean Architecture Naming & Guardrails
+
+- **Deterministic Layer Suffixes**: Use `<verb>-<entity>.use-case.ts`, `<entity>.controller.ts`, `<entity>.repository.ts`, `<entity>.entity.ts`.
+- **No `I` Prefix on Interfaces**: Domain repository ports must be named `<Entity>Repository` (e.g. `TransactionRepository`, never `ITransactionRepository`).
+- **Semantic Method Verbs**:
+  - `findById`: Returns `Promise<T | null>` (returns null when not found, never throws).
+  - `getById` / `getByIdOrThrow`: Returns `Promise<T>` and throws `NotFoundDomainException` if missing.
+  - `list`: Returns paginated collection `{ items, total }`.
+- **Guard Clauses & Early Return**: Always validate edge cases and return early to prevent deeply nested indentation (`no-else-return`).
+- **Clean Code Limits**: No nested ternary operators (`no-nested-ternary`), strictly max 3 positional function parameters (`max-params: 3`), and zero `any` (`typescript/no-explicit-any: error`).
 
 ---
 

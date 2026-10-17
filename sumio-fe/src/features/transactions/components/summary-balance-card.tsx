@@ -1,5 +1,6 @@
-import { formatCurrencyAmount } from "@sumio/common";
 import { ArrowDownLeft, ArrowUpRight, MoreHorizontal } from "lucide-react";
+
+import { formatCurrencyAmount } from "@sumio/common";
 
 import { Button, Card, Metric, Text } from "@/components/atoms";
 import { IconBadge, Sparkline, TrendBadge } from "@/components/molecules";
@@ -20,7 +21,7 @@ export function SummaryBalanceCard({
   currency,
   locale,
   sparklineData,
-}: SummaryBalanceCardProps) {
+}: SummaryBalanceCardProps): React.JSX.Element {
   return (
     <Card padding="md">
       <div className="flex items-center justify-between">
@@ -28,7 +29,7 @@ export function SummaryBalanceCard({
           This Month
         </Text>
         <Button isIconOnly variant="ghost" size="sm" aria-label="More options">
-          <MoreHorizontal className="size-4" />
+          <MoreHorizontal className="h-4 w-4" />
         </Button>
       </div>
 

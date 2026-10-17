@@ -13,9 +13,11 @@ export class Currency extends ValueObject<{ code: string }> {
 
   public static create(code: string): Currency {
     const normalized = code.trim().toUpperCase();
+
     if (!VALID_CURRENCIES.has(normalized)) {
       throw new Error(`Unsupported currency code: ${code}`);
     }
+
     return new Currency(normalized);
   }
 

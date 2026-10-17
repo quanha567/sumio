@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+import type { OnChange } from "@sumio/common";
+
+import { useDebouncedCallback } from "@/lib/hooks/use-debounced-callback";
 
 export function useDebouncedSearch(
   initialValue: string,
-  onDebounce: (value: string) => void,
+  onDebounce: OnChange<string>,
   delay = 300,
-): readonly [string, (value: string) => void] {
+): readonly [string, OnChange<string>] {
   const [value, setValue] = useState(initialValue);
   const [prevInitial, setPrevInitial] = useState(initialValue);
 
@@ -13,13 +17,12 @@ export function useDebouncedSearch(
     setValue(initialValue);
   }
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onDebounce(value);
-    }, delay);
+  const debouncedOnSearch = useDebouncedCallback(onDebounce, delay);
 
-    return () => clearTimeout(timer);
-  }, [value, delay, onDebounce]);
+  const handleChange = (newValue: string): void => {
+    setValue(newValue);
+    debouncedOnSearch(newValue);
+  };
 
-  return [value, setValue] as const;
+  return [value, handleChange] as const;
 }

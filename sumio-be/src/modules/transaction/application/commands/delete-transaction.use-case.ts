@@ -21,6 +21,7 @@ export class DeleteTransactionUseCase implements IUseCase<DeleteTransactionComma
 
   public async execute({ userId, id }: DeleteTransactionCommand): Promise<void> {
     const deleted = await this.transactions.delete(userId, id);
+
     if (!deleted) throw new TransactionNotFoundError();
   }
 }

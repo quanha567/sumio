@@ -17,7 +17,7 @@ import {
 import { useLoginForm } from "../hooks/use-login-form";
 import { GoogleAuthButton } from "./google-auth-button";
 
-export function LoginForm() {
+export function LoginForm(): React.JSX.Element {
   const { form, authError, isSubmitting, isGoogleSubmitting, onSubmit, handleGoogleSignIn } =
     useLoginForm();
 
@@ -48,10 +48,10 @@ export function LoginForm() {
           type="email"
           label="Email address"
           placeholder="you@example.com"
-          prefix={<Mail className="size-4" />}
+          prefix={<Mail className="h-4 w-4" />}
         />
 
-        <PasswordField name="password" prefix={<Lock className="size-4" />} />
+        <PasswordField name="password" prefix={<Lock className="h-4 w-4" />} />
 
         <div className="flex items-center justify-between pt-1">
           <Checkbox
@@ -74,7 +74,7 @@ export function LoginForm() {
           className="mt-2 w-full gap-2"
         >
           <span>{isSubmitting ? "Signing in..." : "Sign in"}</span>
-          <ArrowRight className="size-4" />
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </Form>
 

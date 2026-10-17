@@ -5,9 +5,11 @@ export abstract class Entity<TId> {
     if (!other) {
       return false;
     }
+
     if (this === other) {
       return true;
     }
+
     return this.id === other.id;
   }
 }

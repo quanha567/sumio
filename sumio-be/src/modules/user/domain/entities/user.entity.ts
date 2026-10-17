@@ -89,8 +89,10 @@ export class User extends Entity<UserId> {
         claims,
         lastSignInAt: new Date(),
       });
+
       this._identities.push(newIdentity);
     }
+
     this._updatedAt = new Date();
   }
 

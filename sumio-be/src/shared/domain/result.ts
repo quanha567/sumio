@@ -16,6 +16,7 @@ export class Result<T, E = string> {
     if (!this.isSuccess) {
       throw new Error("Cannot retrieve the value from a failed result.");
     }
+
     return this._value as T;
   }
 
@@ -23,6 +24,7 @@ export class Result<T, E = string> {
     if (this.isSuccess) {
       throw new Error("Cannot retrieve the error from a successful result.");
     }
+
     return this._error as E;
   }
 

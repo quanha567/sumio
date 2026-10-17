@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Nullable } from "@sumio/common";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
-import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
+
+import type { AsyncCallback, AsyncVoidFunction, Nullable, VoidFunction } from "@sumio/common";
 
 import { useAuth } from "../context/auth-context";
 import { registerSchema, type RegisterFormData } from "../schemas/auth.schema";
@@ -11,14 +12,15 @@ import { registerSchema, type RegisterFormData } from "../schemas/auth.schema";
 export interface RegisterFormResult {
   form: UseFormReturn<RegisterFormData>;
   showPassword: boolean;
-  togglePassword: () => void;
+  togglePassword: VoidFunction;
   showConfirmPassword: boolean;
-  toggleConfirmPassword: () => void;
+  toggleConfirmPassword: VoidFunction;
   authError: Nullable<string>;
   isSubmitting: boolean;
   isGoogleSubmitting: boolean;
-  onSubmit: (data: RegisterFormData) => Promise<void>;
-  handleGoogleSignIn: () => Promise<void>;
+  onSubmit: AsyncCallback<[data: RegisterFormData]>;
+  handleSubmit: AsyncCallback<[data: RegisterFormData]>;
+  handleGoogleSignIn: AsyncVoidFunction;
 }
 
 export function useRegisterForm(): RegisterFormResult {
@@ -55,8 +57,9 @@ export function useRegisterForm(): RegisterFormResult {
         setAuthError(null);
         await signUpWithEmail(data.email, data.password, data.displayName);
         void navigate({ to: "/" });
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Failed to create account.";
+      } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : "Failed to create account.";
+
         if (msg.includes("email-already-in-use")) {
           setAuthError("This email address is already registered. Please sign in instead.");
         } else {
@@ -75,11 +78,12 @@ export function useRegisterForm(): RegisterFormResult {
       setAuthError(null);
       await signInWithGoogle();
       void navigate({ to: "/" });
-    } catch (err: unknown) {
+    } catch (error: unknown) {
       const msg =
-        err instanceof Error
-          ? err.message
+        error instanceof Error
+          ? error.message
           : "Google sign-in was cancelled or encountered an error.";
+
       if (!msg.includes("popup-closed-by-user")) {
         setAuthError(msg);
       }
@@ -98,6 +102,7 @@ export function useRegisterForm(): RegisterFormResult {
     isSubmitting,
     isGoogleSubmitting,
     onSubmit,
+    handleSubmit: onSubmit,
     handleGoogleSignIn,
   };
 }

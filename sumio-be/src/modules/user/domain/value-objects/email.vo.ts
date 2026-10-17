@@ -13,9 +13,11 @@ export class Email extends ValueObject<{ value: string }> {
 
   public static create(email: string): Email {
     const trimmed = email.trim();
+
     if (!EMAIL_REGEX.test(trimmed)) {
       throw new Error(`Invalid email address: ${email}`);
     }
+
     return new Email(trimmed);
   }
 

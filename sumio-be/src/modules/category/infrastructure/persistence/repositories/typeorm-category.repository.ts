@@ -16,6 +16,7 @@ export class TypeOrmCategoryRepository implements ICategoryRepository {
     if (!this.dataSource.isInitialized) {
       await this.dataSource.initialize();
     }
+
     return this.dataSource.getRepository(CategoryOrmEntity);
   }
 
@@ -26,16 +27,19 @@ export class TypeOrmCategoryRepository implements ICategoryRepository {
       where: { userId },
       order: { type: "ASC", name: "ASC" },
     });
+
     return rows.map(({ id, name, type, createdAt }) => ({ id, name, type, createdAt }));
   }
 
   public async findByIdAndUser(userId: string, id: string): Promise<CategoryRecord | null> {
     const row = await (await this.repo()).findOne({ where: { id, userId } });
+
     return row ? { id: row.id, name: row.name, type: row.type, createdAt: row.createdAt } : null;
   }
 
   public async insertIgnoringDuplicates(userId: string, categories: NewCategory[]): Promise<void> {
     if (categories.length === 0) return;
+
     await (
       await this.repo()
     )

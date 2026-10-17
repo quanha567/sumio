@@ -6,7 +6,7 @@ import { Alert, Button, Form, Heading, linkStyles, Text, TextField } from "@/com
 import { useForgotPasswordForm } from "../hooks/use-forgot-password-form";
 import { ForgotPasswordSuccess } from "./forgot-password-success";
 
-export function ForgotPasswordForm() {
+export function ForgotPasswordForm(): React.JSX.Element {
   const { form, authError, isSubmitting, isSuccess, sentEmail, onSubmit } = useForgotPasswordForm();
 
   if (isSuccess) {
@@ -37,7 +37,7 @@ export function ForgotPasswordForm() {
           type="email"
           label="Email address"
           placeholder="you@example.com"
-          prefix={<Mail className="size-4" />}
+          prefix={<Mail className="h-4 w-4" />}
         />
 
         <Button
@@ -48,13 +48,13 @@ export function ForgotPasswordForm() {
           className="mt-2 w-full gap-2"
         >
           <span>{isSubmitting ? "Sending reset link..." : "Send reset link"}</span>
-          <ArrowRight className="size-4" />
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </Form>
 
       <div className="pt-2 text-center">
         <Link to="/login" className={linkStyles({ intent: "muted" })}>
-          <ArrowLeft className="size-4" />
+          <ArrowLeft className="h-4 w-4" />
           <span>Remember your password? Sign in</span>
         </Link>
       </div>

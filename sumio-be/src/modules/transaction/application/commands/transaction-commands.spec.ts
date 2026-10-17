@@ -106,6 +106,7 @@ describe("CreateTransactionUseCase", () => {
 
   it("rejects a category that does not belong to the user", async () => {
     const useCase = new CreateTransactionUseCase(makeTransactions(), makeCategories([]));
+
     await expect(useCase.execute(input)).rejects.toBeInstanceOf(InvalidCategoryError);
   });
 
@@ -116,6 +117,7 @@ describe("CreateTransactionUseCase", () => {
     await expect(
       useCase.execute({ ...input, dto: { ...input.dto, categoryId: salary.id } }),
     ).rejects.toBeInstanceOf(InvalidCategoryError);
+
     expect(transactions.create).not.toHaveBeenCalled();
   });
 });
@@ -139,6 +141,7 @@ describe("UpdateTransactionUseCase", () => {
     await expect(
       useCase.execute({ userId: USER, id: "tx-1", dto: { type: "income" } }),
     ).rejects.toBeInstanceOf(InvalidCategoryError);
+
     expect(transactions.update).not.toHaveBeenCalled();
   });
 
@@ -171,12 +174,14 @@ describe("UpdateTransactionUseCase", () => {
 describe("DeleteTransactionUseCase", () => {
   it("deletes the user's own transaction", async () => {
     const transactions = makeTransactions(makeRecord());
+
     await new DeleteTransactionUseCase(transactions).execute({ userId: USER, id: "tx-1" });
     expect(transactions.delete).toHaveBeenCalledWith(USER, "tx-1");
   });
 
   it("throws not-found when nothing was deleted", async () => {
     const useCase = new DeleteTransactionUseCase(makeTransactions(null));
+
     await expect(useCase.execute({ userId: USER, id: "nope" })).rejects.toBeInstanceOf(
       TransactionNotFoundError,
     );

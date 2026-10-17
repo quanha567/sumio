@@ -1,9 +1,11 @@
-import type { TransactionDto } from "@sumio/contract";
 import { ArrowRight, PlusCircle } from "lucide-react";
 import { useMemo } from "react";
 
+import type { VoidFunction } from "@sumio/common";
+import type { TransactionDto } from "@sumio/contract";
+
 import { Button, Card, Heading, Text } from "@/components/atoms";
-import { type DonutSegment, IconBadge } from "@/components/molecules";
+import { IconBadge, type DonutSegment } from "@/components/molecules";
 
 import { SummaryBalanceCard } from "./summary-balance-card";
 import { SummarySpendingCard } from "./summary-spending-card";
@@ -13,8 +15,8 @@ interface TransactionSummaryPanelProps {
   transactions: TransactionDto[];
   currency: string;
   locale: string;
-  onAddIncome: () => void;
-  onAddExpense: () => void;
+  onAddIncome: VoidFunction;
+  onAddExpense: VoidFunction;
 }
 
 export function TransactionSummaryPanel({
@@ -23,7 +25,7 @@ export function TransactionSummaryPanel({
   locale,
   onAddIncome,
   onAddExpense,
-}: TransactionSummaryPanelProps) {
+}: TransactionSummaryPanelProps): React.JSX.Element {
   const { totalIncome, totalExpense, netBalance, spendingSegments, sparklineData } = useMemo(() => {
     let inc = 0;
     let exp = 0;
@@ -41,21 +43,26 @@ export function TransactionSummaryPanel({
         exp += tx.amount;
         runningBalance -= tx.amount;
         const prev = catMap.get(tx.category.name) ?? 0;
+
         catMap.set(tx.category.name, prev + tx.amount);
       }
+
       spark.push(runningBalance);
     }
 
     let segments: DonutSegment[] = [];
+
     if (exp > 0) {
       for (const [name, amount] of catMap.entries()) {
         const meta = getCategoryMeta(name, "expense");
+
         segments.push({
           label: name,
           value: amount,
           color: meta.chartColor,
         });
       }
+
       segments = segments.toSorted((a, b) => b.value - a.value);
     }
 
@@ -94,11 +101,14 @@ export function TransactionSummaryPanel({
 }
 
 interface SummaryQuickActionsProps {
-  onAddIncome: () => void;
-  onAddExpense: () => void;
+  onAddIncome: VoidFunction;
+  onAddExpense: VoidFunction;
 }
 
-function SummaryQuickActions({ onAddIncome, onAddExpense }: SummaryQuickActionsProps) {
+function SummaryQuickActions({
+  onAddIncome,
+  onAddExpense,
+}: SummaryQuickActionsProps): React.JSX.Element {
   return (
     <Card padding="md">
       <Heading level={3}>Quick Actions</Heading>
@@ -119,7 +129,7 @@ function SummaryQuickActions({ onAddIncome, onAddExpense }: SummaryQuickActionsP
             </div>
           </div>
 
-          <ArrowRight className="size-4 opacity-60" />
+          <ArrowRight className="h-4 w-4 opacity-60" />
         </Button>
 
         <Button
@@ -137,7 +147,7 @@ function SummaryQuickActions({ onAddIncome, onAddExpense }: SummaryQuickActionsP
             </div>
           </div>
 
-          <ArrowRight className="size-4 opacity-60" />
+          <ArrowRight className="h-4 w-4 opacity-60" />
         </Button>
       </div>
     </Card>

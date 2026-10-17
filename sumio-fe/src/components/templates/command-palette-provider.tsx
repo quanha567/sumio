@@ -8,10 +8,10 @@ import {
   Settings,
   Target,
 } from "lucide-react";
-import { createContext, type ReactNode, useCallback, use, useMemo, useState } from "react";
+import { createContext, type ReactNode, use, useCallback, useMemo, useState } from "react";
 
-import type { CommandItem } from "@/components/motion/command-palette";
 import { CommandPalette } from "@/components/motion/command-palette";
+import type { CommandItem } from "@/components/motion/command-palette";
 
 export interface CommandPaletteContextValue {
   open: boolean;
@@ -69,6 +69,7 @@ export function CommandPaletteProvider({ children }: CommandPaletteProviderProps
             q: "",
           },
         });
+
         setOpen(false);
       },
     },

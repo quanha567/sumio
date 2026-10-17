@@ -12,8 +12,9 @@ import {
   PaginationSummary,
   type PaginationRootProps,
 } from "@heroui/react";
-import type { OnPageChange } from "@sumio/common";
 import type { ReactNode } from "react";
+
+import type { OnPageChange } from "@sumio/common";
 
 export interface PaginationProps extends Omit<PaginationRootProps, "children" | "onChange"> {
   page?: number;

@@ -21,9 +21,11 @@ describe("DomainExceptionFilter", () => {
     } as unknown as ArgumentsHost;
 
     const exception = new ValidationDomainException("Invalid input", "INVALID_INPUT");
+
     filter.catch(exception, host);
 
     expect(mockStatus).toHaveBeenCalledWith(400);
+
     expect(mockSend).toHaveBeenCalledWith(
       expect.objectContaining({
         statusCode: 400,
@@ -48,9 +50,11 @@ describe("DomainExceptionFilter", () => {
     } as unknown as ArgumentsHost;
 
     const exception = new NotFoundDomainException("Resource not found", "ITEM_NOT_FOUND");
+
     filter.catch(exception, host);
 
     expect(mockStatus).toHaveBeenCalledWith(404);
+
     expect(mockSend).toHaveBeenCalledWith(
       expect.objectContaining({
         statusCode: 404,

@@ -12,14 +12,16 @@ import {
   type SearchFieldSearchIconProps,
 } from "@heroui/react";
 import { searchFieldVariants, type VariantProps } from "@heroui/styles";
-import type { ComponentProps, Ref } from "react";
 import { useImperativeHandle, useRef } from "react";
+import type { ComponentProps, Ref } from "react";
+
+import type { VoidFunction } from "@sumio/common";
 
 import { cn } from "./cn";
 
 export interface SearchFieldHandle {
-  focus: () => void;
-  clear: () => void;
+  focus: VoidFunction;
+  clear: VoidFunction;
 }
 
 interface SearchFieldGroupWrapperProps extends SearchFieldGroupProps {

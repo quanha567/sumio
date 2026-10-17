@@ -155,8 +155,9 @@ const [filters, setFilters] = useState({ page: 1, q: "" }); // FORBIDDEN
 Always use `createColumnHelper` with a typed row model:
 
 ```tsx
-import type { TransactionDto } from "@sumio/contract";
 import { createColumnHelper } from "@tanstack/react-table";
+
+import type { TransactionDto } from "@sumio/contract";
 
 const helper = createColumnHelper<TransactionDto>();
 
@@ -392,16 +393,38 @@ const button = tv({
 
 ---
 
-## `@sumio/common` utilities
+## `@sumio/common` Utilities & Type Reuse
 
-Always import utility functions from `@sumio/common` — never re-implement:
+Always import utility functions and common types from `@sumio/common` — never re-implement or define duplicate versions:
 
-| Utility         | Import                                                           | Notes                                 |
-| --------------- | ---------------------------------------------------------------- | ------------------------------------- |
-| Date formatting | `import { dayjs } from "@sumio/common"`                          | Configured with locale and plugins    |
-| ID generation   | `import { nanoid } from "@sumio/common"`                         | Do not import nanoid directly         |
-| Array utilities | `import { ... } from "@sumio/common"`                            | From es-toolkit — do not re-implement |
-| Currency math   | `import { formatMinorUnits, toMinorUnits } from "@sumio/common"` | Never use floating-point for money    |
+| Category                   | Import / Usage                                                                                                                                                             | Available Utilities                                                                              |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **`lodash-es` utilities**  | `import { debounce, throttle, cloneDeep, isEqual, isEmpty, pick, omit, clamp, chunk, merge, get, set } from "@sumio/common"`                                               | Re-exported directly at root as named imports for clean tree-shaking; wildcard imports forbidden |
+| **Date utilities**         | `import { dayjs, formatDate, formatDisplayDate, formatDateTime, formatTime, todayDateString, getThisMonthRange, getLastMonthRange, fromNow } from "@sumio/common"`         | Standard UTC & local formatting, pre-configured plugins (`utc`, `timezone`, `relativeTime`)      |
+| **Number & Percent**       | `import { formatNumber, formatPercent, formatCompactNumber } from "@sumio/common"`                                                                                         | Locale-aware digit grouping, percentage, and compact notations (e.g. `1.5K`)                     |
+| **Currency math & format** | `import { formatCurrencyAmount, formatSignedCurrencyAmount, formatMajorCurrencyAmount, formatSignedMajorCurrencyAmount, toMajorUnits, toMinorUnits } from "@sumio/common"` | Handling monetary amounts as integer minor units per ISO 4217 (ADR 0006)                         |
+| **ID generation**          | `import { generateId, nanoid } from "@sumio/common"`                                                                                                                       | Fast 12-char URL-safe collision-resistant nanoid generation                                      |
+
+### 4-Tier Type Hierarchy & Strict Reuse Rules
+
+To prevent code bloat and type fragmentation, all types must follow this strict 4-tier hierarchy:
+
+1. **Tier 1 — API & Domain Data Models (`@sumio/contract`)**:
+   - Always consume Zod inferred types (`TransactionDto`, `CategoryDto`, `TransactionType`, `CreateTransactionDto`...).
+   - **FORBIDDEN**: Defining custom interfaces describing backend entity models in `sumio-fe` or `sumio-be` (e.g., do not define `type TransactionType = "income" | "expense"` locally).
+
+2. **Tier 2 — General Utility & Data Types (`@sumio/common`)**:
+   - Core TS helpers: `Dictionary<T>`, `NonEmptyArray<T>`, `ValueOrPromise<T>`, `StrictOmit<T, K>`, `Predicate<T>`, `DeepReadonly<T>`, `Nullable<T>`, `Optional<T>`, `Maybe<T>`, `DeepPartial<T>`, `AsyncResult<T, E>`.
+   - Data & Filter helpers: `DateRange`, `SortDirection`, `SortParams<TKey>`, `LoadingState`, `CategoryBreakdown`, `PaginationParams`, `PaginationMetadata`, `PaginatedResult<T>`.
+   - Handler & UI helpers: `OnChange<T>`, `OnValueChange<TValue, TKey>`, `OnFieldChange<TName, TValue>`, `OnSelect<T, TItem>`, `OnToggle`, `OnPageChange`, `OnPress<T>`, `VoidFunction`, `AsyncVoidFunction`, `Callback`, `AsyncCallback`.
+   - **FORBIDDEN**: Re-inventing ad-hoc types for `Record<string, unknown>`, `T | null`, `(page: number) => void`, or manual date ranges.
+
+3. **Tier 3 — Shared React / Component Props (`@/types/react.types`)**:
+   - `WithChildren<P>`, `WithRequiredChildren<P>`, `WithClassName<P>`, `PolymorphicProps<T, P>`.
+
+4. **Tier 4 — Feature-Local Types (`features/<feature>/...`)**:
+   - Strictly reserved for local component props (`*Props`), local form values (`*FormData`), or local hook controllers (`*Result`).
+   - If a view item wraps a domain model with presentation details, name it explicitly (e.g., `DashboardTransactionItem`) to avoid confusion with Tier 1 domain models.
 
 ---
 
@@ -437,3 +460,5 @@ fetch("/api/transactions?page=1");
 - [ ] Chart colors from `--chart-1..6` tokens only
 - [ ] Motion wrappers have `useReducedMotion()` fallback
 - [ ] Money formatted via `@sumio/common` utilities — no floating-point arithmetic
+- [ ] Common utilities and lodash functions imported from `@sumio/common` — no duplicate custom implementations
+- [ ] Types adhere to 4-tier hierarchy — no duplicate entity/contract types or ad-hoc common utility types

@@ -6,7 +6,7 @@ import { SharedLayoutBg } from "@/components/motion/shared-layout-bg";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 
-import { SUBMENU_ITEM_VARIANTS, SUBMENU_VARIANTS, getLabelTransition } from "./constants";
+import { getLabelTransition, SUBMENU_ITEM_VARIANTS, SUBMENU_VARIANTS } from "./constants";
 import { useAnimatedSidebar, useAnimatedSidebarPanel } from "./context";
 import type {
   AnimatedSidebarMenuItemProps,
@@ -124,8 +124,10 @@ export function AnimatedSidebarMenuSubButton({
   const select = (event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
     if (disabled) {
       event.preventDefault();
+
       return;
     }
+
     onSelect?.();
     if (context.isMobile && closeOnSelect) context.setOpenMobile(false);
   };
@@ -268,13 +270,17 @@ export function AnimatedSidebarMenuButton({
   const select = (event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
     if (disabled) {
       event.preventDefault();
+
       return;
     }
+
     onSelect?.();
     const shouldCloseOnSelect = closeOnSelect ?? ariaExpanded === undefined;
+
     if (context.isMobile && shouldCloseOnSelect) {
       context.setOpenMobile(false);
     }
+
     if (ariaExpanded !== undefined && panel.collapsed && !context.isMobile) {
       context.setOpen(true);
     }

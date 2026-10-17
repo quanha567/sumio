@@ -15,22 +15,27 @@ const makeRepo = (existing: Awaited<ReturnType<ICategoryRepository["findAllByUse
         ...item,
         createdAt: new Date(),
       }));
+
       return Promise.resolve();
     }),
   };
+
   return repo;
 };
 
 describe("SeedDefaultCategoriesUseCase", () => {
   it("inserts the default set with unique ids for the user", async () => {
     const repo = makeRepo();
+
     await new SeedDefaultCategoriesUseCase(repo).execute("user-1");
 
     const [userId, items] = (repo.insertIgnoringDuplicates as ReturnType<typeof vi.fn>).mock
       .calls[0];
+
     expect(userId).toBe("user-1");
     expect(items).toHaveLength(DEFAULT_CATEGORIES.length);
     expect(new Set(items.map((item: { id: string }) => item.id)).size).toBe(items.length);
+
     expect(
       items.map((item: { name: string; type: string }) => `${item.type}:${item.name}`),
     ).toContain("income:Salary");

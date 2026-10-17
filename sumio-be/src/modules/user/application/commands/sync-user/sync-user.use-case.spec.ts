@@ -8,6 +8,7 @@ import { SyncUserUseCase } from "./sync-user.use-case";
 
 const makeSeeder = () => {
   const seeder = { execute: vi.fn().mockImplementation(() => Promise.resolve()) };
+
   return seeder as unknown as SeedDefaultCategoriesUseCase & typeof seeder;
 };
 

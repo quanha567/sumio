@@ -10,6 +10,7 @@ describe("cn utility", () => {
   it("handles conditional classes", () => {
     const isPrimary = true;
     const isLarge = false;
+
     expect(cn("base-btn", isPrimary && "btn-primary", isLarge && "btn-lg")).toBe(
       "base-btn btn-primary",
     );

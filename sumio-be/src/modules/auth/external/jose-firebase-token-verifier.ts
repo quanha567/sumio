@@ -31,8 +31,9 @@ export class JoseFirebaseTokenVerifier implements ITokenVerifier {
         picture: typeof payload.picture === "string" ? payload.picture : undefined,
         claims: payload as Record<string, unknown>,
       };
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Invalid or expired Firebase token.";
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Invalid or expired Firebase token.";
+
       throw new UnauthorizedException(`Authentication failed: ${message}`);
     }
   }

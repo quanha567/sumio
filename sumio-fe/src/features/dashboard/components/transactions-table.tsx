@@ -1,7 +1,8 @@
-import { formatSignedMajorCurrencyAmount } from "@sumio/common";
 import { useNavigate } from "@tanstack/react-router";
 import type { ColumnDef, TableFeatures } from "@tanstack/react-table";
 import { useState } from "react";
+
+import { formatSignedMajorCurrencyAmount } from "@sumio/common";
 
 import {
   Chip,
@@ -14,7 +15,7 @@ import {
 } from "@/components/atoms";
 import { DataTable, EmptyState, IconBadge } from "@/components/molecules";
 
-import type { Transaction, TransactionType } from "../types";
+import type { DashboardTransactionItem, TransactionType } from "../types";
 
 type Filter = "all" | TransactionType;
 
@@ -24,13 +25,13 @@ const tabs: { id: Filter; label: string }[] = [
   { id: "expense", label: "Expense" },
 ];
 
-const columns: ColumnDef<TableFeatures, Transaction>[] = [
+const columns: ColumnDef<TableFeatures, DashboardTransactionItem>[] = [
   {
     accessorKey: "date",
     header: "Date",
     cell: ({ getValue }) => (
       <Text variant="muted" size="xs" className="whitespace-nowrap tabular-nums">
-        {getValue() as string}
+        {getValue<string>()}
       </Text>
     ),
   },
@@ -106,7 +107,7 @@ const columns: ColumnDef<TableFeatures, Transaction>[] = [
   },
 ];
 
-function MobileTransactionItem(t: Transaction) {
+function MobileTransactionItem(t: DashboardTransactionItem): React.JSX.Element {
   const isIncome = t.type === "income";
 
   return (
@@ -136,10 +137,10 @@ function MobileTransactionItem(t: Transaction) {
 }
 
 interface TransactionsTableProps {
-  transactions: Transaction[];
+  transactions: DashboardTransactionItem[];
 }
 
-export function TransactionsTable({ transactions }: TransactionsTableProps) {
+export function TransactionsTable({ transactions }: TransactionsTableProps): React.JSX.Element {
   const navigate = useNavigate();
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");

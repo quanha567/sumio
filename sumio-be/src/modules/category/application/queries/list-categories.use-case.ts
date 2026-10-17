@@ -19,10 +19,12 @@ export class ListCategoriesUseCase implements IUseCase<string, CategoryRecord[]>
 
   public async execute(userId: string): Promise<CategoryRecord[]> {
     const categories = await this.categoryRepository.findAllByUser(userId);
+
     if (categories.length > 0) return categories;
 
     // Self-heal users provisioned before seeding existed (or whose seeding failed).
     await this.seedDefaultCategories.execute(userId);
+
     return this.categoryRepository.findAllByUser(userId);
   }
 }

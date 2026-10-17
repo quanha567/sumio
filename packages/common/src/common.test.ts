@@ -1,13 +1,15 @@
 import { describe, expect, it } from "bun:test";
 
 import {
+  cloneDeep,
   dayjs,
+  debounce,
   endOfDayUtc,
-  esToolkit,
   formatCompactNumber,
   formatCurrencyAmount,
   formatDate,
   formatDateTime,
+  formatDisplayDate,
   formatMajorCurrencyAmount,
   formatNumber,
   formatPercent,
@@ -16,8 +18,14 @@ import {
   formatTime,
   generateId,
   getCurrencyExponent,
-  lodash,
+  getLastMonthRange,
+  getThisMonthRange,
+  isEmpty,
+  isEqual,
+  omit,
+  pick,
   startOfDayUtc,
+  todayDateString,
   toMajorUnits,
   toMinorUnits,
   toUtcIsoString,
@@ -46,6 +54,21 @@ describe("@sumio/common", () => {
     it("should format dates and times correctly", () => {
       expect(formatDateTime("2026-03-01T14:30:00", "YYYY-MM-DD HH:mm")).toBe("2026-03-01 14:30");
       expect(formatTime("2026-03-01T14:30:00", "HH:mm")).toBe("14:30");
+    });
+
+    it("should calculate month date ranges correctly", () => {
+      const thisMonth = getThisMonthRange("2026-03-15");
+      expect(thisMonth.from).toBe("2026-03-01");
+      expect(thisMonth.to).toBe("2026-03-31");
+
+      const lastMonth = getLastMonthRange("2026-03-15");
+      expect(lastMonth.from).toBe("2026-02-01");
+      expect(lastMonth.to).toBe("2026-02-28");
+    });
+
+    it("should format display dates and today date string", () => {
+      expect(todayDateString()).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(formatDisplayDate("2026-03-15")).toBe("Mar 15, 2026");
     });
   });
 
@@ -108,9 +131,13 @@ describe("@sumio/common", () => {
       expect(typeof dayjs.utc).toBe("function");
     });
 
-    it("should have es-toolkit and lodash available", () => {
-      expect(typeof esToolkit.chunk).toBe("function");
-      expect(typeof lodash.groupBy).toBe("function");
+    it("should re-export common lodash utilities directly", () => {
+      expect(typeof debounce).toBe("function");
+      expect(cloneDeep({ a: 1 })).toEqual({ a: 1 });
+      expect(isEqual({ a: 1 }, { a: 1 })).toBe(true);
+      expect(isEmpty({})).toBe(true);
+      expect(pick({ a: 1, b: 2 }, ["a"])).toEqual({ a: 1 });
+      expect(omit({ a: 1, b: 2 }, ["a"])).toEqual({ b: 2 });
     });
   });
 });

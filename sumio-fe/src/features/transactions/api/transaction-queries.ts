@@ -1,3 +1,6 @@
+import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
+
 import type {
   CategoryListDto,
   CreateTransactionDto,
@@ -6,8 +9,6 @@ import type {
   TransactionListDto,
   UpdateTransactionDto,
 } from "@sumio/contract";
-import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
-import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "@/components/atoms";
 import { useAuth } from "@/features/auth";
@@ -67,6 +68,7 @@ export function useCreateTransactionMutation(): UseMutationResult<
   return useMutation<TransactionDto, Error, CreateTransactionDto>({
     mutationFn: (dto) => {
       if (!token) throw new Error("Chưa đăng nhập");
+
       return createTransactionApi(token, dto);
     },
     onSuccess: () => {
@@ -90,6 +92,7 @@ export function useUpdateTransactionMutation(): UseMutationResult<
   return useMutation<TransactionDto, Error, { id: string; dto: UpdateTransactionDto }>({
     mutationFn: ({ id, dto }) => {
       if (!token) throw new Error("Chưa đăng nhập");
+
       return updateTransactionApi(token, id, dto);
     },
     onSuccess: () => {
@@ -109,6 +112,7 @@ export function useDeleteTransactionMutation(): UseMutationResult<void, Error, s
   return useMutation<void, Error, string>({
     mutationFn: (id) => {
       if (!token) throw new Error("Chưa đăng nhập");
+
       return deleteTransactionApi(token, id);
     },
     onSuccess: () => {
@@ -153,6 +157,7 @@ export function useBatchDeleteTransactionsMutation(): UseMutationResult<
     },
     onSuccess: (result) => {
       void queryClient.invalidateQueries({ queryKey: transactionKeys.all });
+
       if (result.failed === 0) {
         toast(`Đã xóa thành công ${result.succeeded} giao dịch`);
       } else {

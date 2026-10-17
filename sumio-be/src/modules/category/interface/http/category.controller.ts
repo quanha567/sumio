@@ -1,8 +1,9 @@
 import { Controller, Inject, UseGuards } from "@nestjs/common";
-import { categoryContract } from "@sumio/contract";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 
-import { type AuthenticatedUser, CurrentUser, FirebaseAuthGuard } from "@/modules/auth";
+import { categoryContract } from "@sumio/contract";
+
+import { CurrentUser, FirebaseAuthGuard, type AuthenticatedUser } from "@/modules/auth";
 import { ListCategoriesUseCase } from "@/modules/category/application/queries/list-categories.use-case";
 
 @Controller()
@@ -17,6 +18,7 @@ export class CategoryController {
   public list(@CurrentUser() user: AuthenticatedUser) {
     return tsRestHandler(categoryContract.list, async () => {
       const categories = await this.listCategoriesUseCase.execute(user.id);
+
       return {
         status: 200,
         body: {

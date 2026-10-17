@@ -1,20 +1,21 @@
-import { toMajorUnits } from "@sumio/common";
 import { Receipt } from "lucide-react";
 import { useMemo } from "react";
+
+import { toMajorUnits, type CategoryBreakdown } from "@sumio/common";
 
 import { useAuth } from "@/features/auth";
 import { useTransactionsQuery } from "@/features/transactions";
 import { getCategoryMeta } from "@/features/transactions/components/transaction-category-icon";
 
-import type { SpendingCategory, Transaction } from "../types";
+import type { DashboardTransactionItem } from "../types";
 
 export interface DashboardAnalytics {
   totalIncome: number;
   totalExpense: number;
   totalBalance: number;
   savingsRate: string;
-  dashboardTransactions: Transaction[];
-  spendingCategories: SpendingCategory[];
+  dashboardTransactions: DashboardTransactionItem[];
+  spendingCategories: CategoryBreakdown[];
   baseCurrency: string;
   userLocale: string;
   isPending?: boolean;
@@ -45,7 +46,7 @@ export function useDashboardAnalytics(): DashboardAnalytics {
     let exp = 0;
     const catMap = new Map<string, number>();
 
-    const mapped: Transaction[] = rawItems.slice(0, 10).map((t) => {
+    const mapped: DashboardTransactionItem[] = rawItems.slice(0, 10).map((t) => {
       const meta = getCategoryMeta(t.category.name, t.type);
       const major = toMajorUnits(t.amount, t.currency || baseCurrency);
 
@@ -66,6 +67,7 @@ export function useDashboardAnalytics(): DashboardAnalytics {
       } else {
         exp += t.amount;
         const current = catMap.get(t.category.name) ?? 0;
+
         catMap.set(t.category.name, current + t.amount);
       }
     }
@@ -73,7 +75,7 @@ export function useDashboardAnalytics(): DashboardAnalytics {
     const net = inc - exp;
     const sRate = inc > 0 ? `${Math.max(0, Math.round(((inc - exp) / inc) * 100))}%` : "0%";
 
-    const cats: SpendingCategory[] = Array.from(catMap.entries())
+    const cats: CategoryBreakdown[] = Array.from(catMap.entries())
       .map(([name, amount]) => ({
         name,
         amount: toMajorUnits(amount, baseCurrency),

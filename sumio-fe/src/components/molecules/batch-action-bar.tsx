@@ -1,12 +1,14 @@
 import { Trash2, X } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { VoidFunction } from "@sumio/common";
+
 import { Button, Separator, Text, Toolbar } from "@/components/atoms";
 
 export interface BatchActionBarProps {
   selectedCount: number;
-  onClearSelection: () => void;
-  onDelete?: () => void;
+  onClearSelection: VoidFunction;
+  onDelete?: VoidFunction;
   isDeleting?: boolean;
   deleteLabel?: string;
   children?: ReactNode;
@@ -23,7 +25,7 @@ export function BatchActionBar({
   isDeleting,
   deleteLabel = "Delete",
   children,
-}: BatchActionBarProps) {
+}: BatchActionBarProps): React.JSX.Element | null {
   if (selectedCount === 0) return null;
 
   return (

@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
-import type { ReactNode, RefObject } from "react";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import type { ReactNode, RefObject } from "react";
 import { createPortal } from "react-dom";
 
 import { cn } from "@/lib/utils";
@@ -42,6 +42,7 @@ function useMobileSidebarBodyLock(
 
     const focusFrame = requestAnimationFrame(() => {
       const firstFocusable = panelRef.current?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+
       (firstFocusable ?? panelRef.current)?.focus({ preventScroll: true });
     });
 
@@ -68,10 +69,12 @@ function handleMobileSidebarKeyDown(
   if (event.key === "Escape") {
     event.preventDefault();
     setOpenMobile(false);
+
     return;
   }
 
   if (event.key !== "Tab") return;
+
   const focusable = panelRef.current
     ? Array.from(panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
     : [];
@@ -79,12 +82,15 @@ function handleMobileSidebarKeyDown(
   if (focusable.length === 0) {
     event.preventDefault();
     panelRef.current?.focus();
+
     return;
   }
 
   const first = focusable[0];
   const last = focusable.at(-1);
+
   if (!last) return;
+
   if (event.shiftKey && document.activeElement === first) {
     event.preventDefault();
     last.focus();
@@ -112,14 +118,17 @@ export function MobileSidebar({ ariaLabel, children, className, side }: MobileSi
 
   const [hidden, setHidden] = useState(!context.openMobile);
   const [prevOpenMobile, setPrevOpenMobile] = useState(context.openMobile);
+
   if (prevOpenMobile !== context.openMobile) {
     setPrevOpenMobile(context.openMobile);
+
     if (context.openMobile) {
       setHidden(false);
     }
   }
 
   const openMobileRef = useRef(context.openMobile);
+
   useEffect(() => {
     openMobileRef.current = context.openMobile;
   }, [context.openMobile]);

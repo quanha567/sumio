@@ -1,9 +1,11 @@
+import type { VoidFunction } from "@sumio/common";
+
 import { Button } from "@/components/atoms";
 
 interface GoogleAuthButtonProps {
   isLoading: boolean;
   disabled?: boolean;
-  onPress: () => void;
+  onPress: VoidFunction;
   label?: string;
 }
 
@@ -12,7 +14,7 @@ export function GoogleAuthButton({
   disabled = false,
   onPress,
   label = "Continue with Google",
-}: GoogleAuthButtonProps) {
+}: GoogleAuthButtonProps): React.JSX.Element {
   return (
     <Button
       type="button"
@@ -22,7 +24,7 @@ export function GoogleAuthButton({
       onPress={onPress}
       className="w-full gap-2.5"
     >
-      <svg className="size-4" viewBox="0 0 24 24">
+      <svg className="h-4 w-4" viewBox="0 0 24 24">
         <path
           fill="#4285F4"
           d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3h3.88c2.27-2.09 3.66-5.17 3.66-9.09z"

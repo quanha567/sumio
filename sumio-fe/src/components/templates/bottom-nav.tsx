@@ -13,6 +13,7 @@ const items = navItems.slice(0, 5);
 function checkBottomNavActive(to: string | undefined, pathname: string): boolean {
   if (!to) return false;
   if (to === "/") return pathname === "/";
+
   return pathname.startsWith(to);
 }
 

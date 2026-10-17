@@ -1,6 +1,6 @@
 import { UserIdentity } from "../../../domain/entities/user-identity.entity";
 import { UserSettings } from "../../../domain/entities/user-settings.entity";
-import { User, type UserStatus } from "../../../domain/entities/user.entity";
+import { type UserStatus, User } from "../../../domain/entities/user.entity";
 import { Currency } from "../../../domain/value-objects/currency.vo";
 import { Email } from "../../../domain/value-objects/email.vo";
 import { UserId } from "../../../domain/value-objects/user-id.vo";
@@ -49,6 +49,7 @@ export class UserMapper {
 
   public static toOrm(domain: User): UserOrmEntity {
     const orm = new UserOrmEntity();
+
     orm.id = domain.id.value;
     orm.email = domain.email.value;
     orm.displayName = domain.displayName;
@@ -59,6 +60,7 @@ export class UserMapper {
 
     orm.identities = domain.identities.map((identity: UserIdentity) => {
       const idOrm = new UserIdentityOrmEntity();
+
       idOrm.id = identity.id;
       idOrm.userId = domain.id.value;
       idOrm.provider = identity.provider;
@@ -66,10 +68,12 @@ export class UserMapper {
       idOrm.claims = identity.claims;
       idOrm.lastSignInAt = identity.lastSignInAt;
       idOrm.createdAt = identity.createdAt;
+
       return idOrm;
     });
 
     const settingsOrm = new UserSettingsOrmEntity();
+
     settingsOrm.userId = domain.id.value;
     settingsOrm.baseCurrency = domain.settings.baseCurrency.code;
     settingsOrm.locale = domain.settings.locale;

@@ -16,7 +16,7 @@ import {
 import { useRegisterForm } from "../hooks/use-register-form";
 import { GoogleAuthButton } from "./google-auth-button";
 
-export function RegisterForm() {
+export function RegisterForm(): React.JSX.Element {
   const { form, authError, isSubmitting, isGoogleSubmitting, onSubmit, handleGoogleSignIn } =
     useRegisterForm();
 
@@ -44,7 +44,7 @@ export function RegisterForm() {
           type="text"
           label="Full name"
           placeholder="Your full name"
-          prefix={<User className="size-4" />}
+          prefix={<User className="h-4 w-4" />}
         />
 
         <TextField
@@ -52,21 +52,21 @@ export function RegisterForm() {
           type="email"
           label="Email address"
           placeholder="you@example.com"
-          prefix={<Mail className="size-4" />}
+          prefix={<Mail className="h-4 w-4" />}
         />
 
         <PasswordField
           name="password"
           label="Password (min 8 characters)"
           placeholder="Create a strong password"
-          prefix={<Lock className="size-4" />}
+          prefix={<Lock className="h-4 w-4" />}
         />
 
         <PasswordField
           name="confirmPassword"
           label="Confirm password"
           placeholder="Re-enter your password"
-          prefix={<Lock className="size-4" />}
+          prefix={<Lock className="h-4 w-4" />}
         />
 
         <Button
@@ -77,7 +77,7 @@ export function RegisterForm() {
           className="mt-3 w-full gap-2"
         >
           <span>{isSubmitting ? "Creating account..." : "Sign up"}</span>
-          <ArrowRight className="size-4" />
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </Form>
 

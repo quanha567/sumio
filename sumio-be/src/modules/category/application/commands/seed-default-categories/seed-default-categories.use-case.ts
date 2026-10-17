@@ -1,6 +1,5 @@
-import { randomUUID } from "node:crypto";
-
 import { Inject, Injectable } from "@nestjs/common";
+import { randomUUID } from "node:crypto";
 
 import type { IUseCase } from "../../../../../shared/application/use-case.interface";
 import { DEFAULT_CATEGORIES } from "../../../domain/default-categories";

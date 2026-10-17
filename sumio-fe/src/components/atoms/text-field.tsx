@@ -11,8 +11,8 @@ import {
 } from "@heroui/react";
 import { textFieldVariants, tv, type VariantProps } from "@heroui/styles";
 import type { ComponentProps, ReactNode } from "react";
-import type { RegisterOptions } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
+import type { RegisterOptions } from "react-hook-form";
 
 import { cn } from "./cn";
 import { Input } from "./input";

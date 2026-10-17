@@ -1,6 +1,7 @@
-import { formatMajorCurrencyAmount } from "@sumio/common";
 import type { ReactNode } from "react";
 import { Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+
+import { formatMajorCurrencyAmount } from "@sumio/common";
 
 import { cn, ColorDot, Text } from "@/components/atoms";
 

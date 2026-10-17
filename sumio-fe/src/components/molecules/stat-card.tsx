@@ -1,7 +1,7 @@
 import { Info, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { Card, cn, Metric, Text, type Tone, toneStyles } from "@/components/atoms";
+import { Card, cn, Metric, Text, toneStyles, type Tone } from "@/components/atoms";
 
 import { IconBadge } from "./icon-badge";
 import { Sparkline } from "./sparkline";

@@ -1,5 +1,3 @@
-import type { Nullable } from "@sumio/common";
-import type { UserProfileDto } from "@sumio/contract";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -20,6 +18,9 @@ import {
   type ReactNode,
 } from "react";
 
+import type { AsyncVoidFunction, Nullable } from "@sumio/common";
+import type { UserProfileDto } from "@sumio/contract";
+
 import { apiClient } from "@/lib/api-client";
 import { auth, googleProvider } from "@/lib/firebase";
 
@@ -30,10 +31,10 @@ export interface AuthContextType {
   isLoading: boolean;
   signInWithEmail: (email: string, pass: string) => Promise<void>;
   signUpWithEmail: (email: string, pass: string, displayName?: string) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: AsyncVoidFunction;
   resetPassword: (email: string) => Promise<void>;
-  logout: () => Promise<void>;
-  refreshProfile: () => Promise<void>;
+  logout: AsyncVoidFunction;
+  refreshProfile: AsyncVoidFunction;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -49,6 +50,7 @@ function useAuthSession() {
       const res = await apiClient.auth.getMe({
         headers: { authorization: `Bearer ${jwt}` },
       });
+
       if (res.status === 200) {
         setProfile(res.body);
       }
@@ -60,6 +62,7 @@ function useAuthSession() {
   const refreshProfile = useCallback(async () => {
     if (!firebaseUser) return;
     const jwt = await firebaseUser.getIdToken(true);
+
     setToken(jwt);
     await fetchProfile(jwt);
   }, [firebaseUser, fetchProfile]);
@@ -67,9 +70,11 @@ function useAuthSession() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setFirebaseUser(user);
+
       if (user) {
         try {
           const jwt = await user.getIdToken();
+
           setToken(jwt);
           await fetchProfile(jwt);
         } catch {
@@ -79,6 +84,7 @@ function useAuthSession() {
         setToken(null);
         setProfile(null);
       }
+
       setIsLoading(false);
     });
 
@@ -115,6 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async (email: string, pass: string) => {
       const cred = await signInWithEmailAndPassword(auth, email, pass);
       const jwt = await cred.user.getIdToken();
+
       setToken(jwt);
       await fetchProfile(jwt);
     },
@@ -124,10 +131,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signUpWithEmail = useCallback(
     async (email: string, pass: string, displayName?: string) => {
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
       if (displayName) {
         await updateProfile(cred.user, { displayName });
       }
+
       const jwt = await cred.user.getIdToken(true);
+
       setToken(jwt);
       await fetchProfile(jwt);
     },
@@ -137,6 +147,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signInWithGoogle = useCallback(async () => {
     const cred = await signInWithPopup(auth, googleProvider);
     const jwt = await cred.user.getIdToken();
+
     setToken(jwt);
     await fetchProfile(jwt);
   }, [fetchProfile, setToken]);
@@ -184,8 +195,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth(): AuthContextType {
   const context = use(AuthContext);
+
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
+
   return context;
 }

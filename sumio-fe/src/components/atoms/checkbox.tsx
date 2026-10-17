@@ -7,8 +7,9 @@ import {
   CheckboxRoot,
 } from "@heroui/react";
 import { checkboxGroupVariants, checkboxVariants, tv, type VariantProps } from "@heroui/styles";
-import type { OnToggle } from "@sumio/common";
 import type { ComponentProps } from "react";
+
+import type { OnToggle } from "@sumio/common";
 
 import { cn } from "./cn";
 import type { UnifiedColor } from "./tone";

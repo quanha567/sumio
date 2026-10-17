@@ -36,9 +36,11 @@ export function renderCommandIcon(
       />
     );
   }
+
   if (hasIcons) {
     return <span className="relative z-10 size-4 shrink-0" />;
   }
+
   return null;
 }
 
@@ -101,6 +103,7 @@ export function CommandPaletteList({
             const idx = rows.indexOf(it);
             const isActive = idx === active;
             const Icon = it.icon;
+
             return (
               <button
                 key={it.id}

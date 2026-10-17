@@ -15,6 +15,7 @@ export class UserId extends ValueObject<{ value: string }> {
     if (!UUID_REGEX.test(id)) {
       throw new Error(`Invalid UserId format: ${id}`);
     }
+
     return new UserId(id);
   }
 

@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Nullable } from "@sumio/common";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
-import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
+
+import type { AsyncCallback, AsyncVoidFunction, Nullable, VoidFunction } from "@sumio/common";
 
 import { useAuth } from "../context/auth-context";
 import { loginSchema, type LoginFormData } from "../schemas/auth.schema";
@@ -11,12 +12,13 @@ import { loginSchema, type LoginFormData } from "../schemas/auth.schema";
 export interface LoginFormResult {
   form: UseFormReturn<LoginFormData>;
   showPassword: boolean;
-  togglePassword: () => void;
+  togglePassword: VoidFunction;
   authError: Nullable<string>;
   isSubmitting: boolean;
   isGoogleSubmitting: boolean;
-  onSubmit: (data: LoginFormData) => Promise<void>;
-  handleGoogleSignIn: () => Promise<void>;
+  onSubmit: AsyncCallback<[data: LoginFormData]>;
+  handleSubmit: AsyncCallback<[data: LoginFormData]>;
+  handleGoogleSignIn: AsyncVoidFunction;
 }
 
 export function useLoginForm(): LoginFormResult {
@@ -47,9 +49,12 @@ export function useLoginForm(): LoginFormResult {
         setAuthError(null);
         await signInWithEmail(data.email, data.password);
         void navigate({ to: "/" });
-      } catch (err: unknown) {
+      } catch (error: unknown) {
         const msg =
-          err instanceof Error ? err.message : "Failed to sign in. Please verify your credentials.";
+          error instanceof Error
+            ? error.message
+            : "Failed to sign in. Please verify your credentials.";
+
         if (
           msg.includes("user-not-found") ||
           msg.includes("wrong-password") ||
@@ -72,11 +77,12 @@ export function useLoginForm(): LoginFormResult {
       setAuthError(null);
       await signInWithGoogle();
       void navigate({ to: "/" });
-    } catch (err: unknown) {
+    } catch (error: unknown) {
       const msg =
-        err instanceof Error
-          ? err.message
+        error instanceof Error
+          ? error.message
           : "Google sign-in was cancelled or encountered an error.";
+
       if (!msg.includes("popup-closed-by-user")) {
         setAuthError(msg);
       }
@@ -93,6 +99,7 @@ export function useLoginForm(): LoginFormResult {
     isSubmitting,
     isGoogleSubmitting,
     onSubmit,
+    handleSubmit: onSubmit,
     handleGoogleSignIn,
   };
 }

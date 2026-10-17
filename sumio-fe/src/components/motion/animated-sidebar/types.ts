@@ -8,6 +8,8 @@ import type {
   RefObject,
 } from "react";
 
+import type { OnChange, VoidFunction } from "@sumio/common";
+
 export type SidebarState = "expanded" | "collapsed";
 export type SidebarSide = "left" | "right";
 export type SidebarVariant = "sidebar" | "floating" | "inset";
@@ -19,10 +21,10 @@ export interface AnimatedSidebarContextValue {
   open: boolean;
   openMobile: boolean;
   reduce: boolean;
-  setOpen: (open: boolean) => void;
-  setOpenMobile: (open: boolean) => void;
+  setOpen: OnChange<boolean>;
+  setOpenMobile: OnChange<boolean>;
   state: SidebarState;
-  toggleSidebar: () => void;
+  toggleSidebar: VoidFunction;
   triggerRef: RefObject<HTMLButtonElement | null>;
   setTriggerNode: (node: HTMLButtonElement | null) => void;
 }
@@ -126,7 +128,7 @@ export interface AnimatedSidebarMenuSubButtonProps {
   closeOnSelect?: boolean;
   target?: "_blank" | "_self" | "_parent" | "_top";
   rel?: string;
-  onSelect?: () => void;
+  onSelect?: VoidFunction;
   className?: string;
 }
 
@@ -141,6 +143,6 @@ export interface AnimatedSidebarMenuButtonProps {
   closeOnSelect?: boolean;
   target?: "_blank" | "_self" | "_parent" | "_top";
   rel?: string;
-  onSelect?: () => void;
+  onSelect?: VoidFunction;
   className?: string;
 }

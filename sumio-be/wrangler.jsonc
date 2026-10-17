@@ -20,9 +20,6 @@
     "@nestjs/microservices": "./src/stubs/empty.ts",
     "@nestjs/microservices/microservices-module.js": "./src/stubs/empty.ts",
     "@nestjs/websockets/socket-module.js": "./src/stubs/empty.ts",
-    "@fastify/multipart": "./src/stubs/empty.ts",
-    "@fastify/static": "./src/stubs/empty.ts",
-    "@fastify/view": "./src/stubs/empty.ts",
   },
   "env": {
     "dev": {

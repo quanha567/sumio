@@ -34,6 +34,7 @@ export class TypeOrmTransactionRepository implements ITransactionRepository {
     if (!this.dataSource.isInitialized) {
       await this.dataSource.initialize();
     }
+
     return this.dataSource.getRepository(TransactionOrmEntity);
   }
 
@@ -48,6 +49,7 @@ export class TypeOrmTransactionRepository implements ITransactionRepository {
     if (filter.categoryId)
       query.andWhere("t.categoryId = :categoryId", { categoryId: filter.categoryId });
     if (filter.type) query.andWhere("t.type = :type", { type: filter.type });
+
     if (filter.q) {
       query.andWhere(String.raw`t.description ILIKE :q ESCAPE '\'`, {
         q: `%${escapeLike(filter.q)}%`,
@@ -67,15 +69,19 @@ export class TypeOrmTransactionRepository implements ITransactionRepository {
 
   public async findById(userId: string, id: string): Promise<TransactionRecord | null> {
     const row = await (await this.repo()).findOne({ where: { id, userId } });
+
     return row ? toRecord(row) : null;
   }
 
   public async create(transaction: NewTransaction): Promise<TransactionRecord> {
     const repo = await this.repo();
     const id = transaction.id ?? crypto.randomUUID();
+
     await repo.insert({ ...transaction, id });
     const created = await this.findById(transaction.userId, id);
+
     if (!created) throw new Error("Transaction vanished right after insert.");
+
     return created;
   }
 
@@ -86,12 +92,15 @@ export class TypeOrmTransactionRepository implements ITransactionRepository {
   ): Promise<TransactionRecord | null> {
     const repo = await this.repo();
     const result = await repo.update({ id, userId }, patch);
+
     if (!result.affected) return null;
+
     return this.findById(userId, id);
   }
 
   public async delete(userId: string, id: string): Promise<boolean> {
     const result = await (await this.repo()).delete({ id, userId });
+
     return (result.affected ?? 0) > 0;
   }
 }

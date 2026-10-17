@@ -1,5 +1,5 @@
-import type { Nullable } from "@sumio/common";
-import type { CategoryDto, TransactionDto } from "@sumio/contract";
+import type { AsyncCallback, Nullable, OnChange, VoidFunction } from "@sumio/common";
+import type { CategoryDto, TransactionDto, TransactionType } from "@sumio/contract";
 
 import {
   Alert,
@@ -12,37 +12,26 @@ import {
   TextField,
 } from "@/components/atoms";
 
-import { useTransactionFormModal } from "../hooks/use-transaction-form-modal";
+import {
+  useTransactionFormModal,
+  type TransactionSubmitPayload,
+} from "../hooks/use-transaction-form-modal";
 
 interface TransactionFormModalProps {
   isOpen: boolean;
-  onClose?: () => void;
-  onOpenChange?: (open: boolean) => void;
+  onClose?: VoidFunction;
+  onOpenChange?: OnChange<boolean>;
   categories: CategoryDto[];
   baseCurrency: string;
   transactionToEdit?: Nullable<TransactionDto>;
   editingTransaction?: Nullable<TransactionDto>;
-  defaultType?: "income" | "expense";
+  defaultType?: TransactionType;
   isSaving?: boolean;
-  onSubmit?: (data: {
-    type: "income" | "expense";
-    // minor units
-    amount: number;
-    date: string;
-    description: string;
-    categoryId: string;
-  }) => Promise<void>;
-  onSave?: (data: {
-    type: "income" | "expense";
-    // minor units
-    amount: number;
-    date: string;
-    description: string;
-    categoryId: string;
-  }) => Promise<void>;
+  onSubmit?: AsyncCallback<[payload: TransactionSubmitPayload]>;
+  onSave?: AsyncCallback<[payload: TransactionSubmitPayload]>;
 }
 
-const TYPE_TABS: { id: "expense" | "income"; label: string }[] = [
+const TYPE_TABS: { id: TransactionType; label: string }[] = [
   { id: "expense", label: "Expense" },
   { id: "income", label: "Income" },
 ];
@@ -50,12 +39,13 @@ const TYPE_TABS: { id: "expense" | "income"; label: string }[] = [
 function getSubmitButtonLabel(isBusy: boolean, isEditing: boolean): string {
   if (isBusy) return "Saving...";
   if (isEditing) return "Update";
+
   return "Create Transaction";
 }
 
 interface FormInputsProps {
-  selectedType: "income" | "expense";
-  onTypeChange: (type: "income" | "expense") => void;
+  selectedType: TransactionType;
+  onTypeChange: OnChange<TransactionType>;
   displayCurrency: string;
   filteredCategories: CategoryDto[];
 }
@@ -65,7 +55,7 @@ function TransactionFormInputs({
   onTypeChange,
   displayCurrency,
   filteredCategories,
-}: FormInputsProps) {
+}: FormInputsProps): React.JSX.Element {
   return (
     <>
       <div>
@@ -136,7 +126,7 @@ export function TransactionFormModal({
   isSaving = false,
   onSubmit,
   onSave,
-}: TransactionFormModalProps) {
+}: TransactionFormModalProps): React.JSX.Element {
   const effectiveTx = editingTransaction ?? transactionToEdit;
   const isEditing = Boolean(effectiveTx);
 
@@ -160,7 +150,7 @@ export function TransactionFormModal({
     defaultType,
     isOpen,
     onSuccess: () => handleOpenChange(false),
-    handleSubmitAction: onSave ?? onSubmit,
+    onSubmitAction: onSave ?? onSubmit,
   });
 
   const displayCurrency = effectiveTx ? effectiveTx.currency : baseCurrency;

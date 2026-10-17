@@ -13,7 +13,7 @@ import {
 import { selectVariants, tv, type VariantProps } from "@heroui/styles";
 import type { ReactNode } from "react";
 
-import type { OnChange, SelectOption } from "@/types";
+import type { OnChange, SelectOption } from "@sumio/common";
 
 import { cn } from "./cn";
 

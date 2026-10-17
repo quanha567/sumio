@@ -1,8 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Nullable } from "@sumio/common";
 import { useCallback, useState } from "react";
-import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
+
+import type { AsyncCallback, Nullable } from "@sumio/common";
 
 import { useAuth } from "../context/auth-context";
 import { forgotPasswordSchema, type ForgotPasswordFormData } from "../schemas/auth.schema";
@@ -13,7 +14,8 @@ export interface ForgotPasswordFormResult {
   isSubmitting: boolean;
   isSuccess: boolean;
   sentEmail: string;
-  onSubmit: (data: ForgotPasswordFormData) => Promise<void>;
+  onSubmit: AsyncCallback<[data: ForgotPasswordFormData]>;
+  handleSubmit: AsyncCallback<[data: ForgotPasswordFormData]>;
 }
 
 export function useForgotPasswordForm(): ForgotPasswordFormResult {
@@ -38,8 +40,9 @@ export function useForgotPasswordForm(): ForgotPasswordFormResult {
         await resetPassword(data.email);
         setSentEmail(data.email);
         setIsSuccess(true);
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : "Failed to send reset email.";
+      } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : "Failed to send reset email.";
+
         if (msg.includes("user-not-found")) {
           setAuthError("No account found with this email address.");
         } else {
@@ -59,5 +62,6 @@ export function useForgotPasswordForm(): ForgotPasswordFormResult {
     isSuccess,
     sentEmail,
     onSubmit,
+    handleSubmit: onSubmit,
   };
 }

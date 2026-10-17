@@ -10,12 +10,13 @@ This directory maintains the immutable architectural decisions governing the Sum
 
 ### 1. Monorepo Infrastructure & CI/CD
 
-| ADR                                                                | Title                                                                              | Scope           | Status     |
-| :----------------------------------------------------------------- | :--------------------------------------------------------------------------------- | :-------------- | :--------- |
-| [ADR-0001](./0001-frontend-cicd-pipeline.md)                       | Branch-Based Promotion via Automated Pull Requests to Production                   | Root / Frontend | `Accepted` |
-| [ADR-0004](./0004-backend-cicd-pipeline.md)                        | Backend CI/CD Pipeline and Cloudflare Workers Delivery                             | Backend         | `Accepted` |
-| [ADR-0008](./0008-monorepo-common-package.md)                      | Monorepo Common Package (`@sumio/common`)                                          | Packages        | `Accepted` |
-| [ADR-0011](./0011-monorepo-rule-architecture-and-quality-gates.md) | Monorepo Rule Architecture, Hierarchical Agent Guidelines, and Local Quality Gates | Root            | `Accepted` |
+| ADR                                                                            | Title                                                                              | Scope              | Status     |
+| :----------------------------------------------------------------------------- | :--------------------------------------------------------------------------------- | :----------------- | :--------- |
+| [ADR-0001](./0001-frontend-cicd-pipeline.md)                                   | Branch-Based Promotion via Automated Pull Requests to Production                   | Root / Frontend    | `Accepted` |
+| [ADR-0004](./0004-backend-cicd-pipeline.md)                                    | Backend CI/CD Pipeline and Cloudflare Workers Delivery                             | Backend            | `Accepted` |
+| [ADR-0008](./0008-monorepo-common-package.md)                                  | Monorepo Common Package (`@sumio/common`)                                          | Packages           | `Accepted` |
+| [ADR-0011](./0011-monorepo-rule-architecture-and-quality-gates.md)             | Monorepo Rule Architecture, Hierarchical Agent Guidelines, and Local Quality Gates | Root               | `Accepted` |
+| [ADR-0021](./0021-standardize-utility-libraries-and-align-monorepo-tooling.md) | Standardize Utility Libraries and Align Monorepo Tooling                           | Monorepo / Tooling | `Accepted` |
 
 ### 2. Backend & Data Architecture
 
@@ -44,3 +45,5 @@ This directory maintains the immutable architectural decisions governing the Sum
 | [ADR-0016](./0016-strict-ui-primitives-and-semantic-token-encapsulation.md)         | Strict UI Primitives and Semantic Token Encapsulation                               | Frontend / UI     | `Accepted` |
 | [ADR-0017](./0017-ui-primitives-and-common-base-components-architecture.md)         | UI Primitives and Common Base Components Architecture (`ui/` vs `common/`)          | Frontend / UI     | `Accepted` |
 | [ADR-0018](./0018-page-layout-primitives-and-mock-data-purge.md)                    | Standard Page Layout Primitives and Complete Mock Data Purge                        | Frontend / Layout | `Accepted` |
+| [ADR-0019](./0019-atomic-design-component-layer-architecture.md)                    | Atomic Design Component Layer Architecture (`atoms/`, `molecules/`, `templates/`)   | Frontend / UI     | `Accepted` |
+| [ADR-0020](./0020-frontend-code-splitting-and-bundle-optimization.md)               | Frontend Code Splitting, Bundle Optimization, and Type Hygiene                      | Frontend / Perf   | `Accepted` |

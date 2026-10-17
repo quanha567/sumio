@@ -68,3 +68,39 @@ export function endOfDayUtc(date: DateInput): Date {
 export function fromNow(date: DateInput): string {
   return dayjs(date).fromNow();
 }
+
+/**
+ * Returns today's date formatted as YYYY-MM-DD (or custom pattern).
+ */
+export function todayDateString(pattern = "YYYY-MM-DD"): string {
+  return dayjs().format(pattern);
+}
+
+/**
+ * Returns the date range for the current month in YYYY-MM-DD.
+ */
+export function getThisMonthRange(baseDate?: DateInput): { from: string; to: string } {
+  const d = baseDate ? dayjs(baseDate) : dayjs();
+  return {
+    from: d.startOf("month").format("YYYY-MM-DD"),
+    to: d.endOf("month").format("YYYY-MM-DD"),
+  };
+}
+
+/**
+ * Returns the date range for the previous month in YYYY-MM-DD.
+ */
+export function getLastMonthRange(baseDate?: DateInput): { from: string; to: string } {
+  const d = (baseDate ? dayjs(baseDate) : dayjs()).subtract(1, "month");
+  return {
+    from: d.startOf("month").format("YYYY-MM-DD"),
+    to: d.endOf("month").format("YYYY-MM-DD"),
+  };
+}
+
+/**
+ * Formats a date for friendly user display (default: "MMM D, YYYY").
+ */
+export function formatDisplayDate(date: DateInput, pattern = "MMM D, YYYY"): string {
+  return dayjs(date).format(pattern);
+}

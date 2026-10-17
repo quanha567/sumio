@@ -1,6 +1,8 @@
-import { formatMajorCurrencyAmount } from "@sumio/common";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
+
+import { formatMajorCurrencyAmount } from "@sumio/common";
+import type { AsyncVoidFunction, VoidFunction } from "@sumio/common";
 
 import { Button, Card, ProgressRing, Text } from "@/components/atoms";
 import {
@@ -24,12 +26,13 @@ import { navItems } from "./nav-items";
 interface NavSidebarProps {
   savingsSaved?: number;
   savingsTarget?: number;
-  onLogout?: () => void | Promise<void>;
+  onLogout?: VoidFunction | AsyncVoidFunction;
 }
 
 function checkNavActive(to: string | undefined, pathname: string): boolean {
   if (!to) return false;
   if (to === "/") return pathname === "/";
+
   return pathname.startsWith(to);
 }
 

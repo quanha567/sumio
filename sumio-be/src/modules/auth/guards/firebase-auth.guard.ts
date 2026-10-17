@@ -1,13 +1,13 @@
-import type { CanActivate, ExecutionContext } from "@nestjs/common";
 import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
-import type { FastifyRequest } from "fastify";
+import type { CanActivate, ExecutionContext } from "@nestjs/common";
+import type { Request } from "express";
 
 import { SyncUserUseCase } from "@/modules/user/application/commands/sync-user/sync-user.use-case";
 
-import { type ITokenVerifier, TOKEN_VERIFIER } from "../ports/token-verifier.port";
+import { TOKEN_VERIFIER, type ITokenVerifier } from "../ports/token-verifier.port";
 import type { AuthenticatedUser } from "../types/authenticated-user.interface";
 
-type AuthenticatedRequest = FastifyRequest & { user?: AuthenticatedUser };
+type AuthenticatedRequest = Request & { user?: AuthenticatedUser };
 
 @Injectable()
 export class FirebaseAuthGuard implements CanActivate {
@@ -27,11 +27,13 @@ export class FirebaseAuthGuard implements CanActivate {
     }
 
     const token = authHeader.slice(7).trim();
+
     if (!token) {
       throw new UnauthorizedException("Bearer token is empty.");
     }
 
     const verified = await this.tokenVerifier.verifyIdToken(token);
+
     if (!verified.email) {
       throw new UnauthorizedException("Firebase user must have an email associated.");
     }

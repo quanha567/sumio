@@ -1,4 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
+
 import type { ListTransactionsQuery } from "@sumio/contract";
 
 import type { IUseCase } from "../../../../shared/application/use-case.interface";

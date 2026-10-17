@@ -1,5 +1,6 @@
-import { formatCurrencyAmount } from "@sumio/common";
 import { PiggyBank, TrendingDown, TrendingUp, Wallet } from "lucide-react";
+
+import { formatCurrencyAmount } from "@sumio/common";
 
 import { Skeleton } from "@/components/atoms";
 import { StatCard, type StatCardProps } from "@/components/molecules";
@@ -22,7 +23,7 @@ export function KpiCards({
   currency = "USD",
   locale = "en-US",
   isLoading,
-}: KpiCardsProps = {}) {
+}: KpiCardsProps = {}): React.JSX.Element {
   if (isLoading) {
     return (
       <StatCard.Grid>

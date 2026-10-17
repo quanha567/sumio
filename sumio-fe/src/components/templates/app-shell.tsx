@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import type { AsyncVoidFunction, VoidFunction } from "@sumio/common";
+
 import {
   AnimatedSidebarInset,
   AnimatedSidebarProvider,
@@ -12,7 +14,7 @@ import { Topbar, type TopbarUser } from "./topbar";
 
 interface AppShellProps {
   user: TopbarUser;
-  onLogout?: () => void | Promise<void>;
+  onLogout?: VoidFunction | AsyncVoidFunction;
   children: ReactNode;
 }
 

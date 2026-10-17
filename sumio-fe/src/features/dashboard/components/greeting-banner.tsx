@@ -1,6 +1,8 @@
 import { CalendarDays } from "lucide-react";
 import { useState } from "react";
 
+import { formatDisplayDate } from "@sumio/common";
+
 import clayHero from "@/assets/illustrations/dashboard-clay-hero.jpg";
 import { Card, Chip, Heading, Text } from "@/components/atoms";
 
@@ -9,19 +11,19 @@ interface GreetingBannerProps {
   date?: Date;
 }
 
-function greetingFor(hour: number) {
+function greetingFor(hour: number): string {
   if (hour < 12) return "Good morning";
   if (hour < 18) return "Good afternoon";
+
   return "Good evening";
 }
 
-export function GreetingBanner({ userName, date: dateProp }: GreetingBannerProps) {
+export function GreetingBanner({
+  userName,
+  date: dateProp,
+}: GreetingBannerProps): React.JSX.Element {
   const [date] = useState(() => dateProp ?? new Date());
-  const dateLabel = date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  const dateLabel = formatDisplayDate(date);
 
   return (
     <Card padding="none" className="animate-entrance relative overflow-hidden">
@@ -41,7 +43,7 @@ export function GreetingBanner({ userName, date: dateProp }: GreetingBannerProps
           </div>
         </div>
         <Chip intent="default" className="self-center">
-          <CalendarDays className="size-3.5" />
+          <CalendarDays className="h-3.5 w-3.5" />
           <span className="tabular-nums">{dateLabel}</span>
         </Chip>
       </Card.Content>

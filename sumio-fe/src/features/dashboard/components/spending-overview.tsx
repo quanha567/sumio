@@ -1,10 +1,9 @@
-import { formatMajorCurrencyAmount } from "@sumio/common";
 import { useState } from "react";
+
+import { formatMajorCurrencyAmount, type CategoryBreakdown } from "@sumio/common";
 
 import { ColorDot, Metric, SectionCard, SelectPill, Text } from "@/components/atoms";
 import { DonutChart, EmptyState } from "@/components/molecules";
-
-import type { SpendingCategory } from "../types";
 
 const palette = [
   "var(--chart-1)",
@@ -21,10 +20,10 @@ const periods = [
 ];
 
 interface SpendingOverviewProps {
-  categories: SpendingCategory[];
+  categories: CategoryBreakdown[];
 }
 
-export function SpendingOverview({ categories }: SpendingOverviewProps) {
+export function SpendingOverview({ categories }: SpendingOverviewProps): React.JSX.Element {
   const [period, setPeriod] = useState(periods[0].id);
   const total = categories.reduce((sum, c) => sum + c.amount, 0);
 

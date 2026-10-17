@@ -9,7 +9,28 @@
   "bracketSpacing": true,
   "bracketSameLine": false,
   "arrowParens": "always",
-  "sortImports": true,
+  "sortImports": {
+    "newlinesBetween": true,
+    "sortSideEffects": true,
+    "internalPattern": ["@/"],
+    "customGroups": [
+      {
+        "groupName": "workspace",
+        "elementNamePattern": ["@sumio/*", "@sumio/**"]
+      },
+      {
+        "groupName": "internal-alias",
+        "elementNamePattern": ["@/**"]
+      }
+    ],
+    "groups": [
+      ["value-builtin", "value-external", "type-builtin", "type-external"],
+      "workspace",
+      "internal-alias",
+      ["value-parent", "value-sibling", "value-index", "type-parent", "type-sibling", "type-index"],
+      "unknown"
+    ]
+  },
   "sortPackageJson": true,
   "sortTailwindcss": true,
   "ignorePatterns": ["dist/**", "node_modules/**", "src/routeTree.gen.ts"]

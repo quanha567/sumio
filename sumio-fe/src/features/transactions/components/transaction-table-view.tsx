@@ -1,7 +1,8 @@
-import { formatCurrencyAmount } from "@sumio/common";
-import type { TransactionDto } from "@sumio/contract";
 import { AlertCircle, Edit2, RefreshCw, Trash2 } from "lucide-react";
 import { useMemo } from "react";
+
+import { formatCurrencyAmount, type OnChange, type VoidFunction } from "@sumio/common";
+import type { TransactionDto } from "@sumio/contract";
 
 import { Alert, Button, Checkbox, Metric, Skeleton, Spinner, Text } from "@/components/atoms";
 import { DataTable, EmptyState } from "@/components/molecules";
@@ -15,12 +16,12 @@ export interface TransactionTableViewProps {
   isLoading: boolean;
   isError: boolean;
   errorMessage?: string;
-  onRetry?: () => void;
+  onRetry?: VoidFunction;
   selection: TransactionSelectionResult;
   baseCurrency: string;
   userLocale: string;
-  onEdit: (tx: TransactionDto) => void;
-  onDelete: (tx: TransactionDto) => void;
+  onEdit: OnChange<TransactionDto>;
+  onDelete: OnChange<TransactionDto>;
 }
 
 export function TransactionTableView({
@@ -34,7 +35,7 @@ export function TransactionTableView({
   userLocale,
   onEdit,
   onDelete,
-}: TransactionTableViewProps) {
+}: TransactionTableViewProps): React.JSX.Element {
   const { selectedIds, toggleSelectAll, toggleSelectRow } = selection;
   const isAllSelected = transactions.length > 0 && transactions.every((t) => selectedIds.has(t.id));
 
@@ -127,13 +128,13 @@ export function TransactionTableView({
   );
 }
 
-function TransactionTableSkeleton() {
+function TransactionTableSkeleton(): React.JSX.Element {
   return (
     <div className="space-y-4 p-5">
       {[1, 2, 3, 4, 5].map((i) => (
         <div key={i} className="flex items-center justify-between gap-4 py-2">
           <div className="flex items-center gap-3">
-            <Skeleton className="size-4" />
+            <Skeleton className="h-4 w-4" />
             <Skeleton className="size-8" shape="circle" />
             <div className="space-y-1.5">
               <Skeleton className="h-4 w-32" />
@@ -157,9 +158,9 @@ interface TransactionTableMobileRowProps {
   isSelected: boolean;
   baseCurrency: string;
   userLocale: string;
-  onToggleSelect: (isSelected: boolean) => void;
-  onEdit: (tx: TransactionDto) => void;
-  onDelete: (tx: TransactionDto) => void;
+  onToggleSelect: OnChange<boolean>;
+  onEdit: OnChange<TransactionDto>;
+  onDelete: OnChange<TransactionDto>;
 }
 
 function TransactionTableMobileRow({
@@ -170,7 +171,7 @@ function TransactionTableMobileRow({
   onToggleSelect,
   onEdit,
   onDelete,
-}: TransactionTableMobileRowProps) {
+}: TransactionTableMobileRowProps): React.JSX.Element {
   const isIncome = t.type === "income";
 
   return (
@@ -198,7 +199,7 @@ function TransactionTableMobileRow({
         />
         <div className="mt-1 flex items-center justify-end gap-1">
           <Button isIconOnly intent="ghost" size="sm" onPress={() => onEdit(t)} aria-label="Edit">
-            <Edit2 className="size-3.5" />
+            <Edit2 className="h-3.5 w-3.5" />
           </Button>
           <Button
             isIconOnly
@@ -208,7 +209,7 @@ function TransactionTableMobileRow({
             onPress={() => onDelete(t)}
             aria-label="Delete"
           >
-            <Trash2 className="size-3.5" />
+            <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>

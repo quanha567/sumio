@@ -1,4 +1,5 @@
-import { formatSignedCurrencyAmount, type Nullable } from "@sumio/common";
+import { formatSignedCurrencyAmount } from "@sumio/common";
+import type { AsyncVoidFunction, Nullable, OnChange, VoidFunction } from "@sumio/common";
 import type { TransactionDto } from "@sumio/contract";
 
 import { Card, Metric, Text } from "@/components/atoms";
@@ -6,10 +7,10 @@ import { ConfirmModal } from "@/components/molecules";
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
-  onClose?: () => void;
-  onOpenChange?: (open: boolean) => void;
+  onClose?: VoidFunction;
+  onOpenChange?: OnChange<boolean>;
   transaction: Nullable<TransactionDto>;
-  onConfirm: () => Promise<void>;
+  onConfirm: AsyncVoidFunction;
   isDeleting?: boolean;
   baseCurrency?: string;
   userLocale?: string;
@@ -22,7 +23,7 @@ export function DeleteConfirmModal({
   transaction,
   onConfirm,
   isDeleting,
-}: DeleteConfirmModalProps) {
+}: DeleteConfirmModalProps): React.JSX.Element | null {
   if (!transaction) return null;
 
   const handleClose = () => {

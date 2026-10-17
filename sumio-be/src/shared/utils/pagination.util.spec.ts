@@ -9,6 +9,7 @@ import {
 describe("pagination.util", () => {
   it("should calculate default pagination options", () => {
     const result = calculatePagination();
+
     expect(result).toEqual({
       page: 1,
       pageSize: 20,
@@ -19,6 +20,7 @@ describe("pagination.util", () => {
 
   it("should calculate custom pagination and respect maxPageSize", () => {
     const result = calculatePagination({ page: 3, pageSize: 250 }, 20, 100);
+
     expect(result).toEqual({
       page: 3,
       pageSize: 100,
@@ -29,7 +31,8 @@ describe("pagination.util", () => {
 
   it("should build paginated result correctly", () => {
     const items = ["a", "b", "c"];
-    const result = buildPaginatedResult(items, 10, 1, 3);
+    const result = buildPaginatedResult(items, 10, { page: 1, pageSize: 3 });
+
     expect(result).toEqual({
       items,
       total: 10,
@@ -40,6 +43,7 @@ describe("pagination.util", () => {
 
   it("should calculate pagination metadata with navigation flags", () => {
     const meta = calculatePaginationMetadata(55, 2, 20);
+
     expect(meta).toEqual({
       page: 2,
       pageSize: 20,

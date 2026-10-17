@@ -1,16 +1,17 @@
-import type { Nullable } from "@sumio/common";
-import type { CategoryDto, TransactionDto } from "@sumio/contract";
 import { useCallback } from "react";
+
+import type { AsyncVoidFunction, Nullable, VoidFunction } from "@sumio/common";
+import type { CategoryDto, TransactionDto } from "@sumio/contract";
 
 import {
   useBatchDeleteTransactionsMutation,
   useCategoriesQuery,
   useTransactionsQuery,
 } from "../api/transaction-queries";
-import type { TransactionFiltersResult } from "./use-transaction-filters";
 import { PAGE_SIZE, useTransactionFilters } from "./use-transaction-filters";
-import type { TransactionSelectionResult } from "./use-transaction-selection";
+import type { TransactionFiltersResult } from "./use-transaction-filters";
 import { useTransactionSelection } from "./use-transaction-selection";
+import type { TransactionSelectionResult } from "./use-transaction-selection";
 
 export { PAGE_SIZE };
 
@@ -25,11 +26,11 @@ export interface TransactionListController
   isFetching: boolean;
   isError: boolean;
   error: Nullable<Error>;
-  refetch: () => void;
+  refetch: VoidFunction;
   categories: CategoryDto[];
   isCategoriesPending: boolean;
   isCategoriesLoading: boolean;
-  handleBatchDelete: () => Promise<void>;
+  handleBatchDelete: AsyncVoidFunction;
   isBatchDeleting: boolean;
 }
 
@@ -50,8 +51,6 @@ export function useTransactionList(): TransactionListController {
 
   return {
     ...filters,
-
-    // Data queries
     transactions: items,
     total: transactionsQuery.data?.total ?? 0,
     page: filters.search.page,
@@ -62,12 +61,9 @@ export function useTransactionList(): TransactionListController {
     isError: transactionsQuery.isError,
     error: transactionsQuery.error,
     refetch: transactionsQuery.refetch,
-
     categories: categoriesQuery.data?.items ?? [],
     isCategoriesPending: categoriesQuery.isPending,
     isCategoriesLoading: categoriesQuery.isPending,
-
-    // Selection & batch actions
     ...selection,
     handleBatchDelete,
     isBatchDeleting: batchDeleteMutation.isPending,

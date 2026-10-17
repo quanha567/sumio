@@ -1,6 +1,8 @@
 import { ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { VoidFunction } from "@sumio/common";
+
 import { Button } from "./button";
 import { Card } from "./card";
 import { cn } from "./cn";
@@ -49,16 +51,16 @@ export function SectionCard({
 
 interface SectionLinkProps {
   label: string;
-  onPress?: () => void;
+  onPress?: VoidFunction;
 }
 
 /** "View all >" style header action (HeroUI Button). */
-export function SectionLink({ label, onPress }: SectionLinkProps) {
+export function SectionLink({ label, onPress }: SectionLinkProps): React.JSX.Element {
   return (
     <Button
       size="sm"
       intent="ghost"
-      onPress={onPress}
+      onPress={onPress ? () => onPress() : undefined}
       className="text-accent hover:text-accent-hover h-7 gap-0.5 px-2 font-medium"
     >
       {label}

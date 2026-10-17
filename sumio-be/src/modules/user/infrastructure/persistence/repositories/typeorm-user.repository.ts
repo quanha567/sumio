@@ -28,6 +28,7 @@ export class TypeOrmUserRepository implements IUserRepository {
     });
 
     if (!orm) return null;
+
     return UserMapper.toDomain(orm);
   }
 
@@ -40,6 +41,7 @@ export class TypeOrmUserRepository implements IUserRepository {
     });
 
     if (!identity?.user) return null;
+
     return UserMapper.toDomain(identity.user);
   }
 
@@ -52,6 +54,7 @@ export class TypeOrmUserRepository implements IUserRepository {
     });
 
     if (!orm) return null;
+
     return UserMapper.toDomain(orm);
   }
 
@@ -59,6 +62,7 @@ export class TypeOrmUserRepository implements IUserRepository {
     await this.ensureInitialized();
     const repo = this.dataSource.getRepository(UserOrmEntity);
     const orm = UserMapper.toOrm(user);
+
     await repo.save(orm);
   }
 }

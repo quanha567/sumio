@@ -35,6 +35,7 @@ function formatTooltipValue(
 ): string | number | null {
   if (value === undefined) return null;
   if (formatter) return formatter(Number(value));
+
   return value;
 }
 

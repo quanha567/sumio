@@ -1,10 +1,12 @@
 import { useCallback, useState } from "react";
 
+import type { OnChange, VoidFunction } from "@sumio/common";
+
 export interface TransactionSelectionResult {
   selectedIds: Set<string>;
-  toggleSelectAll: (isSelected: boolean) => void;
-  toggleSelectRow: (id: string, isSelected: boolean) => void;
-  clearSelection: () => void;
+  toggleSelectAll: OnChange<boolean>;
+  toggleSelectRow: OnChange<[id: string, isSelected: boolean]>;
+  clearSelection: VoidFunction;
 }
 
 export function useTransactionSelection(
@@ -26,11 +28,13 @@ export function useTransactionSelection(
   const toggleSelectRow = useCallback((id: string, isSelected: boolean) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
+
       if (isSelected) {
         next.add(id);
       } else {
         next.delete(id);
       }
+
       return next;
     });
   }, []);

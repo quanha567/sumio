@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
 
-import { cn, type Tone, toneStyles, Text } from "@/components/atoms";
+import { cn, Text, toneStyles, type Tone } from "@/components/atoms";
 
 export interface TrendBadgeProps {
   delta: string;

@@ -1,4 +1,4 @@
-import type { PaginatedResult, PaginationMetadata, PaginationParams } from "../types/common.types";
+import type { PaginatedResult, PaginationMetadata, PaginationParams } from "@sumio/common";
 
 export interface PaginationOptions {
   page: number;
@@ -24,20 +24,24 @@ export function calculatePagination(
   return { page, pageSize, skip, take };
 }
 
+export interface BuildPaginatedResultOptions {
+  page: number;
+  pageSize: number;
+}
+
 /**
  * Wraps items and total count into a standard PaginatedResult object.
  */
 export function buildPaginatedResult<T>(
   items: T[],
   total: number,
-  page: number,
-  pageSize: number,
+  pagination: BuildPaginatedResultOptions,
 ): PaginatedResult<T> {
   return {
     items,
     total,
-    page,
-    pageSize,
+    page: pagination.page,
+    pageSize: pagination.pageSize,
   };
 }
 
@@ -50,6 +54,7 @@ export function calculatePaginationMetadata(
   pageSize: number,
 ): PaginationMetadata {
   const totalPages = Math.ceil(total / pageSize);
+
   return {
     page,
     pageSize,

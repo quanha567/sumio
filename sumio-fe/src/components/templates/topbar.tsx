@@ -1,6 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Bell, LogOut } from "lucide-react";
 
+import type { AsyncVoidFunction, VoidFunction } from "@sumio/common";
+
 import {
   Avatar,
   AvatarFallback,
@@ -23,7 +25,7 @@ export interface TopbarUser {
 
 interface TopbarProps {
   user: TopbarUser;
-  onLogout?: () => void | Promise<void>;
+  onLogout?: VoidFunction | AsyncVoidFunction;
 }
 
 function initials(name: string) {

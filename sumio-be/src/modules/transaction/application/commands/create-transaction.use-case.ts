@@ -1,4 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
+
 import type { CreateTransactionDto } from "@sumio/contract";
 
 import type { IUseCase } from "../../../../shared/application/use-case.interface";
@@ -38,6 +39,7 @@ export class CreateTransactionUseCase implements IUseCase<
     dto,
   }: CreateTransactionCommand): Promise<TransactionRecord> {
     const category = await this.categories.findByIdAndUser(userId, dto.categoryId);
+
     if (category?.type !== dto.type) {
       throw new InvalidCategoryError();
     }

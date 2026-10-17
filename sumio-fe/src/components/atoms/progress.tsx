@@ -15,7 +15,7 @@ import {
 import type { ReactNode } from "react";
 
 import { cn } from "./cn";
-import { type UnifiedColor, mapProgressColor } from "./tone";
+import { mapProgressColor, type UnifiedColor } from "./tone";
 
 export {
   ProgressBar,

@@ -1,4 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
+
 import type { UpdateTransactionDto } from "@sumio/contract";
 
 import type { IUseCase } from "../../../../shared/application/use-case.interface";
@@ -34,6 +35,7 @@ export class UpdateTransactionUseCase implements IUseCase<
 
   public async execute({ userId, id, dto }: UpdateTransactionCommand): Promise<TransactionRecord> {
     const existing = await this.transactions.findById(userId, id);
+
     if (!existing) throw new TransactionNotFoundError();
 
     // The resulting (type, category) pair must stay consistent even if only one side changes.
@@ -41,13 +43,16 @@ export class UpdateTransactionUseCase implements IUseCase<
       const nextType = dto.type ?? existing.type;
       const nextCategoryId = dto.categoryId ?? existing.category.id;
       const category = await this.categories.findByIdAndUser(userId, nextCategoryId);
+
       if (category?.type !== nextType) {
         throw new InvalidCategoryError();
       }
     }
 
     const updated = await this.transactions.update(userId, id, dto);
+
     if (!updated) throw new TransactionNotFoundError();
+
     return updated;
   }
 }

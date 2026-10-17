@@ -22,12 +22,11 @@
   },
   "dependencies": {
     "dayjs": "^1.11.13",
-    "es-toolkit": "^1.31.0",
     "lodash-es": "^4.17.21",
     "nanoid": "^5.0.9"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
-    "typescript": "^5.8.2"
+    "typescript": "^7.0.2"
   }
 }

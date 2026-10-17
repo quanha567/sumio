@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 
-import { cn, type Tone, toneStyles } from "@/components/atoms";
+import { cn, toneStyles, type Tone } from "@/components/atoms";
 
 export interface IconBadgeProps {
   icon: LucideIcon;

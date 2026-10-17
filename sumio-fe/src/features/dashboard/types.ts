@@ -1,20 +1,15 @@
 import type { LucideIcon } from "lucide-react";
 
-export type TransactionType = "income" | "expense";
+import type { TransactionType } from "@sumio/contract";
 
-export interface Transaction {
+export type { TransactionType };
+
+export interface DashboardTransactionItem {
   id: string;
-  /** Display date, e.g. "Sep 8, 2025". */
   date: string;
   description: string;
   category: string;
-  /** Signed: negative for expenses. */
   amount: number;
   type: TransactionType;
   icon: LucideIcon;
-}
-
-export interface SpendingCategory {
-  name: string;
-  amount: number;
 }

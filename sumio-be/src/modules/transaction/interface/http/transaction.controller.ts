@@ -1,8 +1,9 @@
 import { Controller, Inject, UseGuards } from "@nestjs/common";
-import { transactionContract } from "@sumio/contract";
 import { tsRestHandler, TsRestHandler } from "@ts-rest/nest";
 
-import { type AuthenticatedUser, CurrentUser, FirebaseAuthGuard } from "@/modules/auth";
+import { transactionContract } from "@sumio/contract";
+
+import { CurrentUser, FirebaseAuthGuard, type AuthenticatedUser } from "@/modules/auth";
 import { CreateTransactionUseCase } from "@/modules/transaction/application/commands/create-transaction.use-case";
 import { DeleteTransactionUseCase } from "@/modules/transaction/application/commands/delete-transaction.use-case";
 import { UpdateTransactionUseCase } from "@/modules/transaction/application/commands/update-transaction.use-case";
@@ -38,6 +39,7 @@ export class TransactionController {
         userId: user.id,
         query,
       });
+
       return {
         status: 200,
         body: {
@@ -58,6 +60,7 @@ export class TransactionController {
         baseCurrency: user.baseCurrency,
         dto: body,
       });
+
       return { status: 201, body: toDto(created) };
     });
   }
@@ -70,6 +73,7 @@ export class TransactionController {
         id: params.id,
         dto: body,
       });
+
       return { status: 200, body: toDto(updated) };
     });
   }
@@ -78,6 +82,7 @@ export class TransactionController {
   public remove(@CurrentUser() user: AuthenticatedUser) {
     return tsRestHandler(transactionContract.remove, async ({ params }) => {
       await this.deleteTransaction.execute({ userId: user.id, id: params.id });
+
       return { status: 204, body: undefined };
     });
   }

@@ -4,7 +4,21 @@ export * from "./id";
 export * from "./number";
 export * from "./types";
 
-// Re-export dayjs, es-toolkit, and lodash-es for unified imports
+// Re-export dayjs
 export { dayjs } from "./date";
-export * as esToolkit from "es-toolkit";
-export * as lodash from "lodash-es";
+
+// Direct re-exports of common lodash-es utilities
+export {
+  chunk,
+  clamp,
+  cloneDeep,
+  debounce,
+  get,
+  isEmpty,
+  isEqual,
+  merge,
+  omit,
+  pick,
+  set,
+  throttle,
+} from "lodash-es";

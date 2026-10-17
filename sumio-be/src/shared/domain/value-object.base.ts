@@ -9,9 +9,11 @@ export abstract class ValueObject<TProps> {
     if (vo === null || vo === undefined) {
       return false;
     }
+
     if (vo.props === undefined) {
       return false;
     }
+
     return JSON.stringify(this.props) === JSON.stringify(vo.props);
   }
 }

@@ -11,7 +11,7 @@ export const Route = createRootRoute({
   errorComponent: RouteErrorBoundary,
 });
 
-function RootComponent() {
+function RootComponent(): React.JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

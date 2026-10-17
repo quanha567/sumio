@@ -1,4 +1,5 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+
 import type { UserProfileDto } from "@sumio/contract";
 
 import type { IUseCase } from "../../../../../shared/application/use-case.interface";

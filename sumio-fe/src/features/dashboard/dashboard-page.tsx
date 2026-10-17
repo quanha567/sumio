@@ -10,7 +10,7 @@ interface DashboardPageProps {
   userName: string;
 }
 
-export function DashboardPage({ userName }: DashboardPageProps) {
+export function DashboardPage({ userName }: DashboardPageProps): React.JSX.Element {
   const {
     totalIncome,
     totalExpense,

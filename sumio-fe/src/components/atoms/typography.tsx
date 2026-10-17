@@ -1,11 +1,7 @@
 import { cn } from "@heroui/react";
 import type { ElementType, HTMLAttributes, ReactNode } from "react";
 
-import { type Tone, toneStyles } from "./tone";
-
-/* -------------------------------------------------------------------------
- * Heading Primitive
- * ------------------------------------------------------------------------- */
+import { toneStyles, type Tone } from "./tone";
 
 export type HeadingVariant = "default" | "display";
 
@@ -38,7 +34,7 @@ export function Heading({
   children,
   className,
   ...props
-}: HeadingProps) {
+}: HeadingProps): React.JSX.Element {
   const Tag = (`h${level}` as ElementType) || "h2";
   const baseStyle = variant === "display" ? displayHeadingStyles[level] : headingStyles[level];
   const toneClass = tone ? toneStyles[tone].text : "";
@@ -49,10 +45,6 @@ export function Heading({
     </Tag>
   );
 }
-
-/* -------------------------------------------------------------------------
- * Text Primitive
- * ------------------------------------------------------------------------- */
 
 export type TextVariant = "body" | "body-sm" | "muted" | "caption" | "label" | "error";
 export type TextWeight = "normal" | "medium" | "semibold" | "bold";
@@ -98,7 +90,7 @@ export function Text({
   children,
   className,
   ...props
-}: TextProps) {
+}: TextProps): React.JSX.Element {
   const Tag = as;
   const defaultWeight =
     variant === "label" ? "font-semibold" : variant === "caption" ? "font-medium" : "font-normal";
@@ -111,10 +103,6 @@ export function Text({
     </Tag>
   );
 }
-
-/* -------------------------------------------------------------------------
- * Metric Primitive (Tabular Numbers for Financial Values)
- * ------------------------------------------------------------------------- */
 
 export type MetricSize = "lg" | "md" | "sm" | "xs";
 export type MetricTrend = "income" | "expense" | "neutral" | "pending";
@@ -141,7 +129,14 @@ const trendClasses: Record<MetricTrend, string> = {
   pending: "text-finance-pending",
 };
 
-export function Metric({ value, size = "md", tone, trend, className, ...props }: MetricProps) {
+export function Metric({
+  value,
+  size = "md",
+  tone,
+  trend,
+  className,
+  ...props
+}: MetricProps): React.JSX.Element {
   const toneClass = trend ? trendClasses[trend] : tone ? toneStyles[tone].text : "text-foreground";
 
   return (

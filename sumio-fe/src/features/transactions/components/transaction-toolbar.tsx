@@ -1,4 +1,3 @@
-import type { CategoryDto } from "@sumio/contract";
 import {
   ArrowDownLeft,
   ArrowUpDown,
@@ -9,8 +8,11 @@ import {
   Tag,
   X,
 } from "lucide-react";
-import type { RefObject } from "react";
 import { useEffect, useMemo, useRef } from "react";
+import type { RefObject } from "react";
+
+import type { VoidFunction } from "@sumio/common";
+import type { CategoryDto } from "@sumio/contract";
 
 import { Button, SearchField, SelectPill, Spinner, Toolbar } from "@/components/atoms";
 import type { SelectOption } from "@/components/atoms/select-pill";
@@ -21,8 +23,8 @@ export interface TransactionToolbarProps {
   filters: TransactionFiltersResult;
   categories: CategoryDto[];
   isLoading: boolean;
-  onRefresh: () => void;
-  onAddTransaction: () => void;
+  onRefresh: VoidFunction;
+  onAddTransaction: VoidFunction;
 }
 
 interface ToolbarFiltersProps {
@@ -34,17 +36,17 @@ const TYPE_OPTIONS: SelectOption[] = [
   {
     id: "all",
     label: "All types",
-    icon: <ArrowUpDown className="size-3.5" />,
+    icon: <ArrowUpDown className="h-3.5 w-3.5" />,
   },
   {
     id: "income",
     label: "Income",
-    icon: <ArrowDownLeft className="text-finance-income size-3.5" />,
+    icon: <ArrowDownLeft className="text-finance-income h-3.5 w-3.5" />,
   },
   {
     id: "expense",
     label: "Expense",
-    icon: <ArrowUpRight className="text-finance-expense size-3.5" />,
+    icon: <ArrowUpRight className="text-finance-expense h-3.5 w-3.5" />,
   },
 ];
 
@@ -68,6 +70,7 @@ function useSlashKeyFocus(inputRef: RefObject<HTMLInputElement | null>) {
     };
 
     window.addEventListener("keydown", handleKeyDown);
+
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [inputRef]);
 }
@@ -76,14 +79,17 @@ function resolveTypeIcon(typeFilter: "all" | "income" | "expense") {
   if (typeFilter === "income") {
     return <ArrowDownLeft className="text-finance-income size-3.5" />;
   }
+
   if (typeFilter === "expense") {
     return <ArrowUpRight className="text-finance-expense size-3.5" />;
   }
+
   return <ArrowUpDown className="size-3.5" />;
 }
 
 function ToolbarFilters({ filters, categories }: ToolbarFiltersProps) {
   const searchInputRef = useRef<HTMLInputElement>(null);
+
   useSlashKeyFocus(searchInputRef);
 
   const {
@@ -144,7 +150,7 @@ function ToolbarFilters({ filters, categories }: ToolbarFiltersProps) {
         value={categoryFilter}
         onChange={(val) => setCategoryFilter(val)}
         options={categoryOptions}
-        icon={<Tag className="size-3.5" />}
+        icon={<Tag className="h-3.5 w-3.5" />}
       />
 
       <SelectPill
@@ -153,12 +159,12 @@ function ToolbarFilters({ filters, categories }: ToolbarFiltersProps) {
         value={dateFilter}
         onChange={(val) => setDateFilter(val as "all" | "this-month" | "last-month")}
         options={DATE_OPTIONS}
-        icon={<Calendar className="size-3.5" />}
+        icon={<Calendar className="h-3.5 w-3.5" />}
       />
 
       {hasActiveFilters && (
         <Button variant="ghost" size="sm" onPress={resetFilters} className="h-8 px-2">
-          <X className="mr-1 size-3" />
+          <X className="mr-1 h-3 w-3" />
           Reset
         </Button>
       )}
@@ -172,7 +178,7 @@ export function TransactionToolbar({
   isLoading,
   onRefresh,
   onAddTransaction,
-}: TransactionToolbarProps) {
+}: TransactionToolbarProps): React.JSX.Element {
   return (
     <Toolbar
       variant="surface"
@@ -193,14 +199,14 @@ export function TransactionToolbar({
             <Spinner size="sm" />
           ) : (
             <>
-              <RefreshCw className="mr-1.5 size-3.5" />
+              <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
               <span>Refresh</span>
             </>
           )}
         </Button>
 
         <Button intent="primary" size="sm" onPress={onAddTransaction} className="h-8">
-          <Plus className="mr-1.5 size-3.5" />
+          <Plus className="mr-1.5 h-3.5 w-3.5" />
           <span>New</span>
         </Button>
       </div>

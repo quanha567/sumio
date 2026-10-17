@@ -1,13 +1,15 @@
+import { coreFeatures, FlexRender, useTable } from "@tanstack/react-table";
 import type {
   ColumnDef,
   RowData,
   Table as TableInstance,
   TableFeatures,
 } from "@tanstack/react-table";
-import { coreFeatures, FlexRender, useTable } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import type { ReactNode } from "react";
 import { useRef } from "react";
+import type { ReactNode } from "react";
+
+import { formatNumber, type OnPageChange } from "@sumio/common";
 
 import { Card, cn, Pagination, Spinner, Table, Text } from "@/components/atoms";
 
@@ -18,7 +20,7 @@ export interface DataTablePagination {
   pageSize?: number;
   totalPages: number;
   totalCount?: number;
-  onPageChange: (page: number) => void;
+  onPageChange: OnPageChange;
 }
 
 export interface DataTableProps<TData extends RowData> {
@@ -40,14 +42,14 @@ function DataTablePaginationView({ pagination }: { pagination: DataTablePaginati
     <Table.Footer>
       <Text variant="muted" size="xs">
         {pagination.totalCount === undefined
-          ? `Trang ${pagination.page} / ${pagination.totalPages}`
-          : `Tổng số: ${pagination.totalCount} bản ghi`}
+          ? `Trang ${formatNumber(pagination.page)} / ${formatNumber(pagination.totalPages)}`
+          : `Tổng số: ${formatNumber(pagination.totalCount)} bản ghi`}
       </Text>
 
       <Pagination
         page={pagination.page}
         total={pagination.totalPages}
-        onChange={pagination.onPageChange}
+        onChange={(page) => pagination.onPageChange(page)}
       />
     </Table.Footer>
   );

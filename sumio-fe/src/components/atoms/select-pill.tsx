@@ -1,5 +1,6 @@
-import type { OnChange, SelectOption as CommonSelectOption } from "@sumio/common";
 import type { ReactNode } from "react";
+
+import type { OnChange, SelectOption as CommonSelectOption } from "@sumio/common";
 
 import { cn } from "./cn";
 import { ListBox } from "./list-box";

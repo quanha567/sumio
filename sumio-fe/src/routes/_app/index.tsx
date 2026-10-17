@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_app/")({
   errorComponent: RouteErrorBoundary,
 });
 
-function DashboardRouteComponent() {
+function DashboardRouteComponent(): React.JSX.Element {
   const { profile, firebaseUser } = useAuth();
   const userName =
     profile?.displayName ||

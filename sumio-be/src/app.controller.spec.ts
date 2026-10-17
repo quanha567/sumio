@@ -1,5 +1,5 @@
-import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
+import type { TestingModule } from "@nestjs/testing";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -23,6 +23,7 @@ describe("AppController", () => {
 
     it("should return health status ok", () => {
       const health = appController.getHealth();
+
       expect(health.status).toBe("ok");
       expect(health.timestamp).toBeDefined();
     });

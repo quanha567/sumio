@@ -8,7 +8,7 @@ interface ForgotPasswordSuccessProps {
   email: string;
 }
 
-export function ForgotPasswordSuccess({ email }: ForgotPasswordSuccessProps) {
+export function ForgotPasswordSuccess({ email }: ForgotPasswordSuccessProps): React.JSX.Element {
   return (
     <div className="animate-entrance space-y-6 text-center">
       <IconBadge icon={CheckCircle2} tone="success" size="lg" shape="square" className="mx-auto" />
@@ -26,7 +26,7 @@ export function ForgotPasswordSuccess({ email }: ForgotPasswordSuccessProps) {
 
       <Link to="/login" className="block w-full">
         <Button type="button" intent="primary" size="lg" className="w-full gap-2">
-          <ArrowLeft className="size-4" />
+          <ArrowLeft className="h-4 w-4" />
           <span>Back to sign in</span>
         </Button>
       </Link>

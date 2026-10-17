@@ -1,5 +1,4 @@
 import { AnimatePresence, motion } from "motion/react";
-import type { ReactNode } from "react";
 import {
   useCallback,
   useEffect,
@@ -9,9 +8,14 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
+import type { OnChange, VoidFunction } from "@sumio/common";
+
 import { searchCommands } from "@/lib/command-search";
+import { useOnOpen } from "@/lib/hooks/use-on-open";
+import { useRowCursor } from "@/lib/hooks/use-row-cursor";
 import { useTouchCapable } from "@/lib/hooks/use-touch-capable";
 
 import { CommandDialogPanel, EASE_OUT } from "./command-palette-list";
@@ -25,7 +29,7 @@ export interface CommandItem {
   hint?: string;
   badge?: ReactNode;
   keywords?: string[];
-  onSelect: () => void;
+  onSelect: VoidFunction;
 }
 
 export interface CommandPaletteProps {
@@ -34,75 +38,29 @@ export interface CommandPaletteProps {
   placeholder?: string;
   emptyMessage?: string;
   open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+  onOpenChange?: OnChange<boolean>;
 }
 
 const emptySubscribe = () => () => {};
 
-function getNextRowIndex(currentIndex: number, delta: number, total: number): number {
-  if (currentIndex === -1) {
-    if (delta > 0) return 0;
-    return total - 1;
-  }
-  return (currentIndex + delta + total) % total;
-}
-
-function useRowCursor(rows: CommandItem[], query: string) {
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [prevQuery, setPrevQuery] = useState(query);
-
-  if (prevQuery !== query) {
-    setPrevQuery(query);
-    setActiveId(null);
-  }
-
-  const activeIndex = useMemo(() => {
-    if (rows.length === 0) return -1;
-    if (activeId === null) return 0;
-    const found = rows.findIndex((it) => it.id === activeId);
-    return found === -1 ? 0 : found;
-  }, [rows, activeId]);
-
-  const moveTo = useCallback((id: string | null) => {
-    setActiveId(id);
-  }, []);
-
-  const moveActive = useCallback(
-    (delta: number) => {
-      if (rows.length === 0) return;
-      const nextIndex = getNextRowIndex(activeIndex, delta, rows.length);
-      setActiveId(rows[nextIndex]?.id ?? null);
-    },
-    [rows, activeIndex],
-  );
-
-  return { activeIndex, moveTo, moveActive };
-}
-
-function useOnOpen(open: boolean, callback: () => void) {
-  const previousOpen = useRef(open);
-  useEffect(() => {
-    if (open && !previousOpen.current) {
-      callback();
-    }
-    previousOpen.current = open;
-  }, [open, callback]);
-}
-
-function useCommandShortcut(open: boolean, shortcut: string, setOpen: (v: boolean) => void) {
+function useCommandShortcut(open: boolean, shortcut: string, setOpen: OnChange<boolean>): void {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === shortcut.toLowerCase()) {
         e.preventDefault();
         setOpen(!open);
+
         return;
       }
+
       if (e.key === "Escape" && open) {
         e.preventDefault();
         setOpen(false);
       }
     };
+
     window.addEventListener("keydown", onKey);
+
     return () => window.removeEventListener("keydown", onKey);
   }, [open, shortcut, setOpen]);
 }
@@ -113,8 +71,10 @@ function useBodyScrollLock(open: boolean) {
     const root = document.documentElement;
     const previousRootOverflow = root.style.overflow;
     const previousBodyOverflow = document.body.style.overflow;
+
     root.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
+
     return () => {
       root.style.overflow = previousRootOverflow;
       document.body.style.overflow = previousBodyOverflow;
@@ -147,12 +107,15 @@ function useCommandPaletteManager(opts: CommandPaletteProps) {
 
   const grouped = useMemo(() => {
     const map = new Map<string, CommandItem[]>();
+
     filtered.forEach((it) => {
       const g = it.group ?? "Results";
       const groupItems = map.get(g) ?? [];
+
       groupItems.push(it);
       map.set(g, groupItems);
     });
+
     return Array.from(map.entries());
   }, [filtered]);
 
@@ -167,12 +130,14 @@ function useCommandPaletteManager(opts: CommandPaletteProps) {
   useEffect(() => {
     if (!open) return;
     const frame = requestAnimationFrame(() => inputRef.current?.focus());
+
     return () => cancelAnimationFrame(frame);
   }, [open]);
 
   useEffect(() => {
     if (!open) return;
     const el = listRef.current?.querySelector<HTMLButtonElement>(`[data-index="${active}"]`);
+
     el?.scrollIntoView({ block: "nearest" });
   }, [active, open]);
 
@@ -186,6 +151,7 @@ function useCommandPaletteManager(opts: CommandPaletteProps) {
     } else if (e.key === "Enter") {
       e.preventDefault();
       const it = rows[active];
+
       if (it) {
         it.onSelect();
         setOpen(false);
@@ -209,7 +175,7 @@ function useCommandPaletteManager(opts: CommandPaletteProps) {
   };
 }
 
-export function CommandPalette(props: CommandPaletteProps) {
+export function CommandPalette(props: CommandPaletteProps): React.JSX.Element | null {
   const { placeholder = "Type a command or search…", emptyMessage = "No results found." } = props;
   const mounted = useSyncExternalStore(
     emptySubscribe,

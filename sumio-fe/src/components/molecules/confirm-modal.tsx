@@ -1,12 +1,14 @@
-import type { ReactNode } from "react";
 import { useState } from "react";
+import type { ReactNode } from "react";
+
+import type { AsyncVoidFunction, VoidFunction } from "@sumio/common";
 
 import { Button, Modal, Spinner, Text } from "@/components/atoms";
 
 export interface ConfirmModalProps {
   isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void | Promise<void>;
+  onClose: VoidFunction;
+  onConfirm: VoidFunction | AsyncVoidFunction;
   title: string;
   description?: ReactNode;
   confirmText?: string;
@@ -27,7 +29,7 @@ export function ConfirmModal({
   confirmIntent = "danger",
   isLoading: externalIsLoading,
   children,
-}: ConfirmModalProps) {
+}: ConfirmModalProps): React.JSX.Element {
   const [internalIsLoading, setInternalIsLoading] = useState(false);
   const isLoading = externalIsLoading ?? internalIsLoading;
 

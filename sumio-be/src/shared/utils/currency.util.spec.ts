@@ -30,9 +30,11 @@ describe("currency.util", () => {
 
   it("should format currency amount correctly", () => {
     const formattedUsd = formatCurrencyAmount(1550n, "USD", "en-US");
+
     expect(formattedUsd).toContain("15.50");
 
     const formattedVnd = formatCurrencyAmount(50000n, "VND", "vi-VN");
+
     expect(formattedVnd).toContain("50.000");
   });
 });

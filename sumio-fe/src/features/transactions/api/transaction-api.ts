@@ -13,6 +13,7 @@ function getErrorMessage(body: unknown, fallback: string): string {
   if (body && typeof body === "object" && "message" in body && typeof body.message === "string") {
     return body.message;
   }
+
   return fallback;
 }
 

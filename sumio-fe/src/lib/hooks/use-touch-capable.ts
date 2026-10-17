@@ -19,8 +19,10 @@ export function useTouchCapable(): boolean {
     // iPadOS disguises its pointer media queries; maxTouchPoints it reports
     // honestly, which is what makes it the standard iPad tell.
     const update = () => setCanTouch(Boolean(mq?.matches) || navigator.maxTouchPoints > 0);
+
     update();
     mq?.addEventListener?.("change", update);
+
     return () => mq?.removeEventListener?.("change", update);
   }, []);
 

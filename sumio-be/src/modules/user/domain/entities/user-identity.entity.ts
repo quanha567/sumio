@@ -61,6 +61,7 @@ export class UserIdentity extends Entity<string> {
     },
   ): UserIdentity {
     const id = props.id ?? crypto.randomUUID();
+
     return new UserIdentity(id, {
       ...props,
       claims: props.claims ?? {},

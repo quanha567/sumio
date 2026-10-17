@@ -12,8 +12,8 @@ import {
   TransactionTableView,
   TransactionToolbar,
 } from "./components";
-import type { useTransactionList, useTransactionModals } from "./hooks";
 import { useTransactionList as useList, useTransactionModals as useModals } from "./hooks";
+import type { useTransactionList, useTransactionModals } from "./hooks";
 
 interface TransactionMainCardProps {
   list: ReturnType<typeof useTransactionList>;
@@ -29,7 +29,7 @@ function TransactionMainCard({
   baseCurrency,
   userLocale,
   totalPages,
-}: TransactionMainCardProps) {
+}: TransactionMainCardProps): React.JSX.Element {
   return (
     <Card padding="md">
       <div className="space-y-4">
@@ -43,7 +43,7 @@ function TransactionMainCard({
 
         <BatchActionBar
           selectedCount={list.selectedIds.size}
-          onClearSelection={list.clearSelection}
+          onClearSelection={() => list.clearSelection()}
           onDelete={list.handleBatchDelete}
           isDeleting={list.isBatchDeleting}
         />
@@ -57,8 +57,8 @@ function TransactionMainCard({
           selection={list}
           baseCurrency={baseCurrency}
           userLocale={userLocale}
-          onEdit={modals.openEdit}
-          onDelete={modals.openDelete}
+          onEdit={(tx) => modals.openEdit(tx)}
+          onDelete={(tx) => modals.openDelete(tx)}
         />
 
         {totalPages > 1 && (
@@ -74,7 +74,7 @@ function TransactionMainCard({
   );
 }
 
-export function TransactionsPage() {
+export function TransactionsPage(): React.JSX.Element {
   const { profile } = useAuth();
   const baseCurrency = profile?.settings?.baseCurrency || "USD";
   const userLocale = profile?.settings?.locale || "en-US";
@@ -91,7 +91,7 @@ export function TransactionsPage() {
         description="Monitor and manage your financial cash flow."
         action={
           <Button intent="primary" onPress={() => modals.openCreate("expense")} className="gap-2">
-            <Plus className="size-4" />
+            <Plus className="h-4 w-4" />
             <span>Add Transaction</span>
           </Button>
         }
@@ -120,7 +120,7 @@ export function TransactionsPage() {
 
       <TransactionFormModal
         isOpen={modals.isFormOpen}
-        onClose={modals.closeForm}
+        onClose={() => modals.closeForm()}
         categories={list.categories}
         defaultType={modals.formDefaultType}
         editingTransaction={modals.editingTx}
@@ -131,7 +131,7 @@ export function TransactionsPage() {
 
       <DeleteConfirmModal
         isOpen={modals.isDeleteOpen}
-        onClose={modals.closeDelete}
+        onClose={() => modals.closeDelete()}
         transaction={modals.deletingTx}
         onConfirm={modals.handleConfirmDelete}
         isDeleting={modals.isDeleting}
